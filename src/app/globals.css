@@ -1,0 +1,147 @@
+@import "tailwindcss";
+
+@theme {
+  --color-cyan: #00d4ff;
+  --color-cyan2: #00ffcc;
+  --color-pink: #ff2d78;
+  --color-dark: #030b18;
+  --color-dark2: #071020;
+  --color-dark3: #0a1628;
+  --color-card: #0d1f35;
+  --color-card2: #111f38;
+  --color-text: #e2eaf5;
+  --color-muted: #7a9bb5;
+  --color-border: #1a3050;
+
+  --font-space: "Space Grotesk", sans-serif;
+  --font-syne: "Syne", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  --animate-pulse-glow: pulseGlow 4s ease-in-out infinite;
+  --animate-blink: blink 1.5s ease-in-out infinite;
+  --animate-photo-float: photoFloat 4s ease-in-out infinite;
+  --animate-spin-slow: spin 12s linear infinite;
+  --animate-spin-slower: spin 18s linear infinite reverse;
+  --animate-spin-ring1: spinRing 10s linear infinite;
+  --animate-spin-ring2: spinRing 16s linear infinite reverse;
+  --animate-spin-ring3: spinRing 22s linear infinite;
+  --animate-tag-float1: tagFloat1 3s ease-in-out infinite;
+  --animate-tag-float2: tagFloat2 3.5s ease-in-out infinite;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  background: var(--color-dark);
+  color: var(--color-text);
+  font-family: var(--font-space);
+  overflow-x: hidden;
+  width: 100%;
+  position: relative;
+  cursor: none;
+}
+
+#cursor {
+  position: fixed;
+  width: 12px;
+  height: 12px;
+  background: var(--color-cyan);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: transform .1s, background .2s;
+  mix-blend-mode: difference;
+}
+
+#cursor-ring {
+  position: fixed;
+  width: 36px;
+  height: 36px;
+  border: 1.5px solid var(--color-cyan);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+  transition: all .15s ease;
+  opacity: .6;
+}
+
+body:hover #cursor {
+  opacity: 1;
+}
+
+a:hover ~ #cursor,
+button:hover ~ #cursor {
+  transform: translate(-50%, -50%) scale(2);
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-dark);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 212, 255, 0.3);
+  border-radius: 3px;
+}
+
+.hero-grid-bg {
+  background-image: linear-gradient(rgba(0, 212, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 212, 255, 0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+@keyframes photoFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes tagFloat1 {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes tagFloat2 {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(8px); }
+}
+
+@keyframes spinRing {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.skills-ring-glow {
+  filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.15));
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s, transform 0.7s;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}

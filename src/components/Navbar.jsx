@@ -29,7 +29,7 @@ export default function Navbar() {
         }`}
       >
         <Link href="#home" onClick={(e) => scrollToSection(e, "#home")} className="font-syne font-extrabold text-[1.5rem] text-cyan tracking-[-1px] no-underline">
-          &lt;<span className="text-white">F</span>arabi /&gt;
+          &lt;<span className="text-white">In</span>jamamul Hoq /&gt;
         </Link>
         <ul className="hidden md:flex items-center gap-8 list-none m-0 p-0">
           {["home", "about", "skills", "education", "projects", "contact"].map((item) => (

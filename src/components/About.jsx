@@ -18,12 +18,15 @@ export default function About() {
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center max-w-7xl mx-auto">
         
-        {/* LEFT SIDE - Profile Photo (Animates from Left) */}
+        {/* LEFT SIDE - Profile Photo (Animates on Scroll In & Out) */}
         <motion.div 
-          initial={{ opacity: 0, x: -100 }} // শুরুতে বামে থাকবে
-          whileInView={{ opacity: 1, x: 0 }} // স্ক্রিন আসলে সামনে আসবে
+          initial={{ opacity: 0, x: -100 }} // শুরুতে বামে এবং ইনভিজিবল থাকবে
+          whileInView={{ opacity: 1, x: 0 }} // স্ক্রিনে আসলে সামনে আসবে
+          exit={{ opacity: 0, x: -100 }} // স্ক্রিন থেকে চলে গেলে আবার বামে চলে যাবে (ঐচ্ছিক, কিছু ক্ষেত্রে দরকার হয়)
           transition={{ duration: 0.8, ease: "easeOut" }}
-          viewport={{ once: true }}
+          // key পরিবর্তন: once: false অ্যানিমেশনটিকে বারবার ট্রিগার করবে। 
+          // amount: 0.3 মানে এলিমেন্টের ৩০% স্ক্রিনে আসলে অ্যানিমেশন শুরু হবে।
+          viewport={{ once: false, amount: 0.3 }} 
           className="lg:col-span-5 flex justify-center relative"
         >
           <div className="relative w-[260px] h-[260px] sm:w-[320px] sm:h-[320px] md:w-[380px] md:h-[380px] lg:w-full lg:h-[450px]">
@@ -43,12 +46,13 @@ export default function About() {
           </div>
         </motion.div>
 
-        {/* RIGHT SIDE - Info Grid (Animates from Right) */}
+        {/* RIGHT SIDE - Info Grid (Animates on Scroll In & Out) */}
         <motion.div 
-          initial={{ opacity: 0, x: 100 }} // শুরুতে ডানে থাকবে
+          initial={{ opacity: 0, x: 100 }} // শুরুতে ডানে এবং ইনভিজিবল থাকবে
           whileInView={{ opacity: 1, x: 0 }} // স্ক্রিনে আসলে সামনে আসবে
           transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
-          viewport={{ once: true }}
+          // key পরিবর্তন: একবারের বদলে বারবার অ্যানিমেশন হবে
+          viewport={{ once: false, amount: 0.3 }} 
           className="lg:col-span-7 flex flex-col gap-6 text-left"
         >
           <div className="space-y-5">
@@ -68,7 +72,7 @@ export default function About() {
             </p>
           </div>
 
-          {/* Info Cards Grid - Fully Responsive */}
+          {/* Info Cards Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
             {[
               { title: "Name", value: "Md. Injamamul Hoq", icon: <FiUser /> },

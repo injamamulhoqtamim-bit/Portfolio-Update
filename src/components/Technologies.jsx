@@ -67,7 +67,7 @@ export default function Technologies() {
             My <span className="text-cyan">Skills</span> & Tools
           </h2>
           <span className="text-xs sm:text-sm uppercase tracking-[0.2em] text-cyan/70 font-semibold mt-2 block">
-            Technologies I Use
+            My Tech Stack
           </span>
         </div>
       </Reveal>

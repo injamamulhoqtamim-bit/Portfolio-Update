@@ -42,13 +42,10 @@ export default function Hero() {
   // Orbit Animation
   useEffect(() => {
     const orbitData = [
-      // Ring 1 (ভেতরের রিং - ৪টি নোড)
       { ring: 1, angle: 0 },
       { ring: 1, angle: Math.PI / 2 },
       { ring: 1, angle: Math.PI },
       { ring: 1, angle: (3 * Math.PI) / 2 },
-      
-      // Ring 2 (বাইরের রিং - ৫টি নোড)
       { ring: 2, angle: 0 },
       { ring: 2, angle: (2 * Math.PI) / 5 },
       { ring: 2, angle: (4 * Math.PI) / 5 },
@@ -76,7 +73,6 @@ export default function Hero() {
     return () => cancelAnimationFrame(animationFrameId);
   }, []);
 
-  // অরিজিনাল কালার SVG লোগো সহ টেকনোলজি নোডস
   const nodes = [
     {
       name: "React",
@@ -129,7 +125,7 @@ export default function Hero() {
       name: "Express",
       icon: (
         <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" className="text-white" xmlns="http://www.w3.org/2000/svg">
-          <path d="M24 10.15h-4.3c-.4 0-.7.3-.7.7v2.3c0 .4.3.7.7.7H24v1.5h-4.3c-1.2 0-2.2-1-2.2-2.2v-2.3c0-1.2 1-2.2 2.2-2.2H24v1.5zM15.4 8.65h-4.8v6.8h1.5v-2.3h3.3c1.2 0 2.2-1 2.2-2.2v-.1c0-1.2-1-2.2-2.2-2.2zm0 3H12.1v-1.5h3.3v1.5zM7.3 8.65H1v1.5h4.8v1.1H2.4c-1.2 0-2.2 1-2.2 2.2v.1c0 1.2 1 2.2 2.2 2.2H7.3v-1.5H2.4v-1.2h3.4c1.2 0 2.2-1 2.2-2.2v-.9c0-1.2-1-2.3-2.2-2.3z"/>
+          <path d="M24 10.15h-4.3c-.4 0-.7.3-.7.7v2.3c0 .4.3.7.7.7H24v1.5h-4.3c-1.2 0-2.2-1-2.2-2.2v-2.3c0-1.2 1-2.2 2.2-2.2H24v1.5zM15.4 8.65h-4.8v6.8h1.5v-2.3h3.3c1.2 0 2.2-1 2.2-2.2v-.1c0-1.2-1-2.2-2.2-2.2zm0 3H12.1v-1.5h3.3v1.5zM7.3 8.65H1v1.5h4.8v1.1H2.4c-1.2 0-2.2 1-2.2 2.2v.1c0 1.2 1 2.2 2.2 2.2H7.3v-1.5H2.4v-1.2h3.4c1.2 0-2.2-1-2.2-2.2v-.9c0-1.2-1-2.3-2.2-2.3z"/>
         </svg>
       ),
     },
@@ -167,11 +163,12 @@ export default function Hero() {
   ];
 
   return (
-    <section id="home" className="min-h-screen flex flex-col relative overflow-hidden pt-20 md:pt-[100px]">
+    <section id="home" className="min-h-screen flex flex-col justify-between relative overflow-hidden pt-20 md:pt-[100px]">
       <div className="hero-grid-bg absolute inset-0 pointer-events-none"></div>
       <div className="absolute top-[15%] right-[5%] md:right-[10%] w-[400px] h-[400px] bg-[radial-gradient(ellipse,rgba(0,212,255,0.12)_0%,transparent_70%)] pointer-events-none animate-pulse-glow hidden md:block"></div>
       
-      <div className="max-w-7xl mx-auto w-full grid md:grid-cols-2 gap-8 lg:gap-16 items-center px-4 md:px-[5%] flex-1">
+      {/* Main Grid Container - Added flex-grow to push things below */}
+      <div className="max-w-7xl mx-auto w-full grid md:grid-cols-2 gap-8 lg:gap-16 items-center px-4 md:px-[5%] flex-grow content-center py-8">
         
         {/* LEFT SIDE - Photo + Orbit Animation */}
         <div className="flex justify-center md:justify-start relative order-2 md:order-1 animate-slideInLeft">
@@ -212,10 +209,7 @@ export default function Hero() {
               </div>
             </div>
 
-            {/* Floating Tags */}
-            <div className="absolute bg-[rgba(13,31,53,0.9)] border border-[rgba(0,212,255,0.2)] rounded-[10px] px-4 py-2 text-[0.75rem] font-semibold text-cyan whitespace-nowrap backdrop-blur-[8px] top-[8%] right-[5%] animate-tag-float1 hidden sm:block">
-              ⚛ React
-            </div>
+           
 
             <div className="absolute bg-gradient-to-r from-[#0a1428] via-[#112244] to-[#0a1428] border border-cyan-400/40 rounded-2xl px-6 py-3 text-[0.82rem] font-medium text-white whitespace-nowrap backdrop-blur-xl shadow-[0_10px_30px_rgba(0,212,255,0.2)] bottom-[16%] sm:bottom-[18%] left-1/3 -translate-x-1/2 animate-tag-float2 z-20">
                <span className="font-bold text-[#00f0ff]">Modern</span> Web Developer
@@ -254,7 +248,6 @@ export default function Hero() {
           </div>
 
           <div className="flex gap-3 justify-center md:justify-start">
-            {/* Social Icons */}
             {[
               { icon: (<svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" /></svg>), url: "https://github.com/injamamulhoqtamim-bit" },
               { icon: (<svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" /></svg>), url: "https://www.linkedin.com/in/injamamul-hoq-tamim/" },
@@ -274,10 +267,10 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Moving Ticker */}
-      <div className="border-t border-b border-cyan-900/50 bg-black/60 backdrop-blur-md py-3.5 mt-auto">
-        <div className="overflow-hidden">
-          <div className="flex animate-marquee whitespace-nowrap gap-8 md:gap-12 text-sm md:text-base font-medium text-cyan-300">
+      {/* Moving Ticker - Now fixed completely at the bottom */}
+      <div className="w-full border-t border-b border-cyan-900/50 bg-black/60 backdrop-blur-md py-4 select-none pointer-events-none mt-auto">
+        <div className="overflow-hidden flex">
+          <div className="flex animate-marquee-continuous whitespace-nowrap gap-8 md:gap-12 text-sm md:text-base font-medium text-cyan-300 will-change-transform">
             {techs.map((tech, i) => (
               <span key={i} className="inline-flex items-center gap-1.5">
                 • {tech}
@@ -292,13 +285,15 @@ export default function Hero() {
         </div>
       </div>
 
+      {/* Tailwind & Custom Keyframes */}
       <style jsx>{`
-        @keyframes marquee {
-          from { transform: translateX(0); }
-          to { transform: translateX(-50%); }
+        @keyframes marqueeContinuous {
+          0% { transform: translate3d(0, 0, 0); }
+          100% { transform: translate3d(-50%, 0, 0); }
         }
-        .animate-marquee {
-          animation: marquee 30s linear infinite;
+        
+        .animate-marquee-continuous {
+          animation: marqueeContinuous 25s linear infinite !important;
         }
 
         @keyframes slideInLeft {

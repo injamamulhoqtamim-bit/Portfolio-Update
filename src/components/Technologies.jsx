@@ -64,7 +64,7 @@ export default function Technologies() {
       <Reveal>
         <div className="flex flex-col items-center mb-16 md:mb-24 text-center">
           <h2 className="font-syne text-[clamp(2.2rem,5vw,3.5rem)] font-extrabold text-white">
-            My <span className="text-cyan">Skills</span> & Tools
+            Tech <span className="text-cyan">nologies</span> 
           </h2>
           <span className="text-xs sm:text-sm uppercase tracking-[0.2em] text-cyan/70 font-semibold mt-2 block">
             My Tech Stack

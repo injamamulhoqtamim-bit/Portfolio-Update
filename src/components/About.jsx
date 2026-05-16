@@ -8,11 +8,14 @@ export default function About() {
   return (
     <section id="about" className="py-20 md:py-28 px-[5%] bg-dark2 overflow-hidden">
       <Reveal>
-        <div className="flex flex-col items-center mb-12 md:mb-20">
-          <h2 className="font-syne text-[clamp(2.2rem,5vw,3.5rem)] font-extrabold text-center">
+        <div className="flex flex-col items-center mb-12 md:mb-20 text-center">
+          <h2 className="font-syne text-[clamp(2.2rem,5vw,3.5rem)] font-extrabold">
             About <span className="text-cyan">Me</span>
           </h2>
-          <div className="w-[70px] h-[4px] bg-gradient-to-r from-cyan to-cyan2 rounded-full mt-4"></div>
+          {/* আন্ডারলাইন রিমুভ করে এখানে "My Introduction" টেক্সটটি বসানো হয়েছে */}
+          <span className="text-xs sm:text-sm uppercase tracking-[0.2em] text-cyan/70 font-semibold mt-2 block">
+            My Introduction
+          </span>
         </div>
       </Reveal>
 
@@ -20,12 +23,9 @@ export default function About() {
         
         {/* LEFT SIDE - Profile Photo (Animates on Scroll In & Out) */}
         <motion.div 
-          initial={{ opacity: 0, x: -100 }} // শুরুতে বামে এবং ইনভিজিবল থাকবে
-          whileInView={{ opacity: 1, x: 0 }} // স্ক্রিনে আসলে সামনে আসবে
-          exit={{ opacity: 0, x: -100 }} // স্ক্রিন থেকে চলে গেলে আবার বামে চলে যাবে (ঐচ্ছিক, কিছু ক্ষেত্রে দরকার হয়)
+          initial={{ opacity: 0, x: -100 }} 
+          whileInView={{ opacity: 1, x: 0 }} 
           transition={{ duration: 0.8, ease: "easeOut" }}
-          // key পরিবর্তন: once: false অ্যানিমেশনটিকে বারবার ট্রিগার করবে। 
-          // amount: 0.3 মানে এলিমেন্টের ৩০% স্ক্রিনে আসলে অ্যানিমেশন শুরু হবে।
           viewport={{ once: false, amount: 0.3 }} 
           className="lg:col-span-5 flex justify-center relative"
         >
@@ -48,10 +48,9 @@ export default function About() {
 
         {/* RIGHT SIDE - Info Grid (Animates on Scroll In & Out) */}
         <motion.div 
-          initial={{ opacity: 0, x: 100 }} // শুরুতে ডানে এবং ইনভিজিবল থাকবে
-          whileInView={{ opacity: 1, x: 0 }} // স্ক্রিনে আসলে সামনে আসবে
+          initial={{ opacity: 0, x: 100 }} 
+          whileInView={{ opacity: 1, x: 0 }} 
           transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
-          // key পরিবর্তন: একবারের বদলে বারবার অ্যানিমেশন হবে
           viewport={{ once: false, amount: 0.3 }} 
           className="lg:col-span-7 flex flex-col gap-6 text-left"
         >

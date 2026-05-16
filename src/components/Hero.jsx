@@ -136,7 +136,7 @@ export default function Hero() {
               ⚛ React
             </div>
 
-            <div className="absolute bg-gradient-to-r from-[#0a1428] via-[#112244] to-[#0a1428] border border-cyan-400/40 rounded-2xl px-6 py-3 text-[0.82rem] font-medium text-white whitespace-nowrap backdrop-blur-xl shadow-[0_10px_30px_rgba(0,212,255,0.2)] bottom-[15%] sm:bottom-[18%] left-1/2 -translate-x-1/2 animate-tag-float2 z-20">
+            <div className="absolute bg-gradient-to-r from-[#0a1428] via-[#112244] to-[#0a1428] border border-cyan-400/40 rounded-2xl px-6 py-3 text-[0.82rem] font-medium text-white whitespace-nowrap backdrop-blur-xl shadow-[0_10px_30px_rgba(0,212,255,0.2)] bottom-[16%] sm:bottom-[18%] left-1/3 -translate-x-1/2 animate-tag-float2 z-20">
                <span className="font-bold text-[#00f0ff]">Modern</span> Web Developer
             </div>
           </div>

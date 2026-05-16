@@ -11,7 +11,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr] gap-8 mb-10">
         <div>
           <a href="#home" className="font-syne font-extrabold text-[1.5rem] text-cyan tracking-[-1px] no-underline block mb-3">
-            &lt;<span className="text-white">F</span>arabi /&gt;
+            &lt;<span className="text-white">In</span>jamamul Hoq/&gt;
           </a>
           <p className="text-[0.82rem] text-muted leading-[1.65] max-w-[240px]">
             MERN Stack Developer passionate about creating amazing digital experiences.
@@ -44,8 +44,8 @@ export default function Footer() {
         <div>
           <h4 className="text-[0.85rem] font-semibold text-white uppercase tracking-[0.8px] mb-4">Get In Touch</h4>
           <ul className="list-none p-0 m-0">
-            <li className="mb-2"><a href="mailto:farabiahmed2005@gmail.com" className="text-muted text-[0.82rem] no-underline transition-colors hover:text-cyan">farabiahmed2005@gmail.com</a></li>
-            <li className="mb-2"><a href="tel:8801570203520" className="text-muted text-[0.82rem] no-underline transition-colors hover:text-cyan">+880 1570203520</a></li>
+            <li className="mb-2"><a href="mailto:farabiahmed2005@gmail.com" className="text-muted text-[0.82rem] no-underline transition-colors hover:text-cyan">injamamulhoqtamim@gmail.com</a></li>
+            <li className="mb-2"><a href="tel:8801570203520" className="text-muted text-[0.82rem] no-underline transition-colors hover:text-cyan">+880 1627178870</a></li>
             <li className="mb-2"><span className="text-muted text-[0.82rem]">Dhaka, Bangladesh</span></li>
             <li className="mb-2 mt-2">
               <a href="#contact" className="text-cyan text-[0.82rem] no-underline flex items-center gap-1.5">
@@ -59,7 +59,7 @@ export default function Footer() {
       
       <div className="max-w-7xl mx-auto border-t border-border pt-6 flex justify-between items-center flex-wrap gap-3">
         <p className="text-[0.78rem] text-muted">
-          © 2026 Farabi Ahmed. All rights reserved.
+          © 2026 Injamamul Hoq. All rights reserved.
         </p>
         <button onClick={scrollToTop} title="Back to top" className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan to-cyan2 border-none cursor-none flex items-center justify-center text-black text-[1.1rem] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_25px_rgba(0,212,255,0.35)]">
           ↑

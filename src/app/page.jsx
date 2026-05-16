@@ -4,6 +4,7 @@ import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import StatsSection from "@/components/stats"; // ১. এখানে স্ট্যাটস সেকশনটি ইমপোর্ট করা হয়েছে
 import About from "@/components/About";
+import Technologies from "@/components/Technologies";
 import Skills from "@/components/Skills";
 import Education from "@/components/Education";
 import Projects from "@/components/Projects";
@@ -23,6 +24,7 @@ export default function Home() {
         <StatsSection /> 
         
         <About />
+        <Technologies />
         <Skills />
         <Education />
         <Projects />

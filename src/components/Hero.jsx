@@ -2,6 +2,16 @@
 import { useEffect, useRef, useState } from "react";
 import { Download } from "lucide-react";
 import Image from "next/image";
+import { motion } from "framer-motion"; // বাবল অ্যানিমেশনের জন্য ইমপোর্ট করা হয়েছে
+import { 
+  SiHtml5, 
+  SiCss, // 👈 এখানে SiCss3 এর বদলে SiCss হবে
+  SiTailwindcss, 
+  SiGithub, 
+  SiJavascript, 
+  SiReact, 
+  SiNodedotjs 
+} from "react-icons/si";
 
 export default function Hero() {
   const orbitNodesRef = useRef([]);
@@ -15,6 +25,17 @@ export default function Hero() {
     { text: "UI/UX Designer", color: "text-pink-400" },
     { text: "Cyber Security Researcher", color: "text-red-400" },
   ];
+
+  // ব্যাকগ্রাউন্ড বাবলসের জন্য আইকন লিস্ট ও পজিশন ডেটা
+ const bubbleIcons = [
+  { icon: <SiHtml5 className="text-[#E34F26]" />, left: "10%", size: 30, delay: 0, duration: 12 },
+  { icon: <SiCss className="text-[#1572B6]" />, left: "40%", size: 24, delay: 3, duration: 14 }, // 👈 এখানেও SiCss হবে
+  { icon: <SiTailwindcss className="text-[#06B6D4]" />, left: "75%", size: 36, delay: 1, duration: 11 },
+  { icon: <SiGithub className="text-white" />, left: "25%", size: 28, delay: 5, duration: 15 },
+  { icon: <SiJavascript className="text-[#F7DF1E]" />, left: "60%", size: 32, delay: 2, duration: 13 },
+  { icon: <SiReact className="text-[#61DAFB]" />, left: "90%", size: 35, delay: 6, duration: 10 },
+  { icon: <SiNodedotjs className="text-[#339933]" />, left: "50%", size: 26, delay: 4, duration: 16 },
+];
 
   // Typing Animation
   useEffect(() => {
@@ -167,7 +188,7 @@ export default function Hero() {
       <div className="hero-grid-bg absolute inset-0 pointer-events-none"></div>
       <div className="absolute top-[15%] right-[5%] md:right-[10%] w-[400px] h-[400px] bg-[radial-gradient(ellipse,rgba(0,212,255,0.12)_0%,transparent_70%)] pointer-events-none animate-pulse-glow hidden md:block"></div>
       
-      {/* Main Grid Container - Added flex-grow to push things below */}
+      {/* Main Grid Container */}
       <div className="max-w-7xl mx-auto w-full grid md:grid-cols-2 gap-8 lg:gap-16 items-center px-4 md:px-[5%] flex-grow content-center py-8">
         
         {/* LEFT SIDE - Photo + Orbit Animation */}
@@ -209,16 +230,43 @@ export default function Hero() {
               </div>
             </div>
 
-           
-
             <div className="absolute bg-gradient-to-r from-[#0a1428] via-[#112244] to-[#0a1428] border border-cyan-400/40 rounded-2xl px-6 py-3 text-[0.82rem] font-medium text-white whitespace-nowrap backdrop-blur-xl shadow-[0_10px_30px_rgba(0,212,255,0.2)] bottom-[16%] sm:bottom-[18%] left-1/3 -translate-x-1/2 animate-tag-float2 z-20">
                <span className="font-bold text-[#00f0ff]">Modern</span> Web Developer
             </div>
           </div>
         </div>
 
-        {/* RIGHT SIDE - Text Content */}
-        <div className="flex-1 text-center md:text-left order-1 md:order-2 z-[2] pt-8 md:pt-0 animate-slideInRight">
+        {/* RIGHT SIDE - Text Content + 🌟 Floating Bubbles */}
+        <div className="flex-1 text-center md:text-left order-1 md:order-2 z-[2] pt-8 md:pt-0 animate-slideInRight relative min-h-[400px]">
+          
+          {/* 🌟 Bubble Container (ডানদিকের টেক্সটের ঠিক পেছনে থাকবে) */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none -z-10">
+            {bubbleIcons.map((bubble, index) => (
+              <motion.div
+                key={index}
+                className="absolute opacity-15 filter blur-[0.5px]"
+                style={{ 
+                  left: bubble.left, 
+                  bottom: "-50px", // স্ক্রিনের নিচ থেকে শুরু হবে
+                  fontSize: bubble.size 
+                }}
+                animate={{
+                  y: ["0px", "-500px"], // নিচ থেকে উপরে যাবে
+                  x: ["0px", index % 2 === 0 ? "25px" : "-25px", "0px"], // হালকা আঁকাবাঁকা (Sway) মোশন
+                  rotate: [0, 180, 360] // ভাসার সাথে সাথে আলতো ঘুরবে
+                }}
+                transition={{
+                  duration: bubble.duration,
+                  delay: bubble.delay,
+                  repeat: Infinity,
+                  ease: "linear"
+                }}
+              >
+                {bubble.icon}
+              </motion.div>
+            ))}
+          </div>
+
           <div className="inline-flex items-center gap-2 bg-[rgba(0,212,255,0.08)] border border-[rgba(0,212,255,0.2)] px-4 py-1.5 rounded-full text-[0.8rem] text-cyan mb-6 mx-auto md:mx-0">
             <span className="w-2 h-2 bg-[#00ff88] rounded-full animate-blink"></span> Available for work
           </div>
@@ -267,7 +315,7 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Moving Ticker - Now fixed completely at the bottom */}
+      {/* Moving Ticker */}
       <div className="w-full border-t border-b border-cyan-900/50 bg-black/60 backdrop-blur-md py-4 select-none pointer-events-none mt-auto">
         <div className="overflow-hidden flex">
           <div className="flex animate-marquee-continuous whitespace-nowrap gap-8 md:gap-12 text-sm md:text-base font-medium text-cyan-300 will-change-transform">

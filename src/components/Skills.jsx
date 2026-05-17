@@ -55,13 +55,6 @@ export default function Skills() {
       { ring: 3, angle: 5 * Math.PI / 6 + Math.PI },
     ];
     
-    // Original JS Radii logic (based on rings)
-    // .skills-ring-1 width:200 => radius ~100
-    // .skills-ring-2 width:330 => radius ~165
-    // .skills-ring-3 width:460 => radius ~230
-    // We adjust for mobile size using window width if needed, but since it's responsive CSS,
-    // we should use percentages or fixed values that match CSS. In original JS it used fixed radii: { 1: 90, 2: 145, 3: 200 }
-    
     const isMobile = window.innerWidth < 700;
     const radii = isMobile ? { 1: 70, 2: 110, 3: 155 } : { 1: 100, 2: 165, 3: 230 };
     
@@ -126,9 +119,17 @@ export default function Skills() {
   return (
     <section id="skills" className="py-24 px-[5%] bg-dark">
       <Reveal>
-        <h2 className="font-syne text-[clamp(2rem,4vw,3rem)] font-extrabold text-center mb-2">My <span className="text-cyan">Skills</span></h2>
+        <h2 className="font-syne text-[clamp(2rem,4vw,3rem)] font-extrabold text-center mb-2">
+          My <span className="text-cyan">Skills</span>
+        </h2>
       </Reveal>
-      <div className="w-[60px] h-[3px] bg-gradient-to-r from-cyan to-cyan2 rounded-sm mx-auto mt-3 mb-14"></div>
+      
+      {/* 🌟 আন্ডারলাইন রিমুভ করে টেক্সট সাব-হেডিং যোগ করা হয়েছে */}
+      <Reveal>
+        <p className="text-center text-muted font-medium tracking-[1px] text-[0.95rem] uppercase mt-1 mb-14">
+          My <span className="text-cyan2">Technical Levels</span>
+        </p>
+      </Reveal>
 
       <Reveal>
         <div className="relative w-[340px] h-[340px] md:w-[520px] md:h-[520px] mx-auto mb-12">
@@ -141,7 +142,7 @@ export default function Skills() {
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[310px] h-[310px] md:w-[460px] md:h-[460px]">
             <div className="w-full h-full rounded-full border border-[rgba(0,212,255,0.1)] animate-spin-ring3 skills-ring-glow"></div>
           </div>
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100px] h-[100px] rounded-full bg-gradient-to-br from-cyan to-cyan2 flex items-center justify-center font-syne font-extrabold text-[0.8rem] text-black text-center z-[5] shadow-[0_0_30px_rgba(0,212,255,0.4)]">MERN<br/>Stack</div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100px] h-[100px] rounded-full bg-gradient-to-br from-cyan to-cyan2 flex items-center justify-center font-syne font-extrabold text-[0.8rem] text-black text-center z-[5] shadow-[0_0_30px_rgba(0,212,255,0.4)]">Skills</div>
           
           {nodes.map((node, i) => (
             <div key={i} ref={el => orbitNodesRef.current[i] = el} className="absolute top-1/2 left-1/2 flex flex-col items-center gap-1 cursor-none group">
@@ -149,7 +150,7 @@ export default function Skills() {
                 className="w-[52px] h-[52px] rounded-[14px] bg-card2 border border-border flex items-center justify-center transition-all duration-300 shadow-[0_4px_15px_rgba(0,0,0,0.3)] group-hover:scale-115 group-hover:border-[var(--hover-color)] group-hover:shadow-[0_0_20px_var(--hover-color)]"
                 style={{ 
                   color: node.color,
-                  '--hover-color': `${node.color}66`, // Add transparency for the glow
+                  '--hover-color': `${node.color}66`,
                 }}
               >
                 {node.icon}

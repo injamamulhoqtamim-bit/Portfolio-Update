@@ -21,6 +21,9 @@ export default function Navbar() {
     document.querySelector(id)?.scrollIntoView({ behavior: "smooth" });
   };
 
+  // 🌟 নেভিগেশন আইটেম লিস্ট (এখানে "technologies" যোগ করা হয়েছে)
+  const navItems = ["home", "about", "skills", "technologies", "education", "projects", "contact"];
+
   return (
     <>
       <nav
@@ -31,8 +34,10 @@ export default function Navbar() {
         <Link href="#home" onClick={(e) => scrollToSection(e, "#home")} className="font-syne font-extrabold text-[1.5rem] text-cyan tracking-[-1px] no-underline">
           &lt;<span className="text-white">In</span>jamamul Hoq /&gt;
         </Link>
-        <ul className="hidden md:flex items-center gap-8 list-none m-0 p-0">
-          {["home", "about", "skills", "education", "projects", "contact"].map((item) => (
+        
+        {/* Desktop Menu */}
+        <ul className="hidden md:flex items-center gap-6 lg:gap-8 list-none m-0 p-0">
+          {navItems.map((item) => (
             <li key={item}>
               <a
                 href={`#${item}`}
@@ -45,31 +50,34 @@ export default function Navbar() {
             </li>
           ))}
         </ul>
+
         <button
           onClick={(e) => scrollToSection(e, "#contact")}
           className="hidden md:block bg-gradient-to-br from-cyan to-cyan2 text-black border-none px-[1.4rem] py-[0.55rem] rounded-full font-bold text-[0.85rem] cursor-none transition-all duration-200 hover:scale-105 hover:shadow-[0_0_20px_rgba(0,212,255,0.4)] tracking-[0.5px]"
         >
           Hire Me
         </button>
-        <div className="flex md:hidden flex-col gap-[5px] cursor-none p-1" onClick={toggleMenu}>
-          <span className="block w-6 h-[2px] bg-cyan rounded-[2px] transition-all duration-300"></span>
-          <span className="block w-6 h-[2px] bg-cyan rounded-[2px] transition-all duration-300"></span>
-          <span className="block w-6 h-[2px] bg-cyan rounded-[2px] transition-all duration-300"></span>
+
+        {/* 🌟 Hamburger Menu Icons (X Animation সহ) */}
+        <div className="flex md:hidden flex-col gap-[5px] cursor-none p-1 relative z-50" onClick={toggleMenu}>
+          <span className={`block w-6 h-[2px] bg-cyan rounded-[2px] transition-all duration-300 ${isOpen ? "rotate-45 translate-y-[7px]" : ""}`}></span>
+          <span className={`block w-6 h-[2px] bg-cyan rounded-[2px] transition-all duration-300 ${isOpen ? "opacity-0" : ""}`}></span>
+          <span className={`block w-6 h-[2px] bg-cyan rounded-[2px] transition-all duration-300 ${isOpen ? "-rotate-45 -translate-y-[7px]" : ""}`}></span>
         </div>
       </nav>
 
       {/* Mobile Menu */}
       <div
-        className={`md:hidden fixed top-[70px] left-0 right-0 bg-[rgba(7,16,32,0.98)] backdrop-blur-xl border-b border-border px-[5%] py-6 flex-col gap-5 z-[998] transition-all duration-300 ${
-          isOpen ? "flex" : "hidden"
+        className={`md:hidden fixed top-[70px] left-0 right-0 bg-[rgba(7,16,32,0.98)] backdrop-blur-xl border-b border-border px-[5%] py-6 flex-col gap-4 z-[998] transition-all duration-300 ${
+          isOpen ? "flex opacity-100 translate-y-0" : "hidden opacity-0 -translate-y-2"
         }`}
       >
-        {["home", "about", "skills", "education", "projects", "contact"].map((item) => (
+        {navItems.map((item) => (
           <a
             key={item}
             href={`#${item}`}
             onClick={(e) => scrollToSection(e, `#${item}`)}
-            className="text-muted no-underline text-base font-medium py-2 border-b border-border capitalize"
+            className="text-muted no-underline text-base font-medium py-2 border-b border-border capitalize hover:text-cyan transition-colors"
           >
             {item}
           </a>

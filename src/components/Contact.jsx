@@ -36,9 +36,9 @@ export default function Contact() {
 
           <div className="flex flex-col gap-3">
             {[
-              { icon: "📧", label: "Email", val: "farabiahmed2005@gmail.com", bg: "from-[rgba(0,212,255,0.2)] to-[rgba(0,212,255,0.05)]" },
-              { icon: "📞", label: "Phone", val: "+880 1570203520", bg: "from-[rgba(0,255,136,0.2)] to-[rgba(0,255,136,0.05)]" },
-              { icon: "💬", label: "WhatsApp", val: "+880 1570203520", bg: "from-[rgba(37,211,102,0.2)] to-[rgba(37,211,102,0.05)]" },
+              { icon: "📧", label: "Email", val: "injamamulhoqtamim@gmail.com", bg: "from-[rgba(0,212,255,0.2)] to-[rgba(0,212,255,0.05)]" },
+              { icon: "📞", label: "Phone", val: "+880 1627178870", bg: "from-[rgba(0,255,136,0.2)] to-[rgba(0,255,136,0.05)]" },
+              { icon: "💬", label: "WhatsApp", val: "+880 1511994008", bg: "from-[rgba(37,211,102,0.2)] to-[rgba(37,211,102,0.05)]" },
               { icon: "📍", label: "Location", val: "Dhaka, Bangladesh", bg: "from-[rgba(255,45,120,0.2)] to-[rgba(255,45,120,0.05)]" }
             ].map((ci, i) => (
               <Reveal key={i}>
@@ -63,11 +63,11 @@ export default function Contact() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div className="mb-4">
                   <label className="block text-[0.78rem] text-muted mb-1.5 font-medium">Your Name *</label>
-                  <input required type="text" placeholder="Farabi Ahmed" className="w-full bg-dark3 border border-border rounded-[10px] px-4 py-3 text-text font-space text-[0.88rem] transition-colors duration-300 outline-none cursor-none focus:border-[rgba(0,212,255,0.4)]" />
+                  <input required type="text" placeholder="Insert Your Name" className="w-full bg-dark3 border border-border rounded-[10px] px-4 py-3 text-text font-space text-[0.88rem] transition-colors duration-300 outline-none cursor-none focus:border-[rgba(0,212,255,0.4)]" />
                 </div>
                 <div className="mb-4">
                   <label className="block text-[0.78rem] text-muted mb-1.5 font-medium">Email Address *</label>
-                  <input required type="email" placeholder="farabi@example.com" className="w-full bg-dark3 border border-border rounded-[10px] px-4 py-3 text-text font-space text-[0.88rem] transition-colors duration-300 outline-none cursor-none focus:border-[rgba(0,212,255,0.4)]" />
+                  <input required type="email" placeholder="Insert Your Email" className="w-full bg-dark3 border border-border rounded-[10px] px-4 py-3 text-text font-space text-[0.88rem] transition-colors duration-300 outline-none cursor-none focus:border-[rgba(0,212,255,0.4)]" />
                 </div>
               </div>
               <div className="mb-4">

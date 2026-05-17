@@ -29,7 +29,7 @@ export default function Footer() {
             ))}
           </div>
         </div>
-        
+      
         <div>
           <h4 className="text-[0.85rem] font-semibold text-white uppercase tracking-[0.8px] mb-4">Quick Links</h4>
           <ul className="list-none p-0 m-0">

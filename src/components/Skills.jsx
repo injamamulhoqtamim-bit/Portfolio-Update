@@ -12,7 +12,7 @@ import {
   CodeXml, 
   Layers, 
   Layout, 
-  Send 
+  ShieldCheck 
 } from "lucide-react";
 import Reveal from "./Reveal";
 
@@ -90,7 +90,7 @@ export default function Skills() {
     { name: "Express.js", level: 78 },
     { name: "MongoDB", level: 75 },
     { name: "Firebase", level: 72 },
-    { name: "REST API", level: 82 },
+    { name: "Better Auth", level: 82 }, 
   ];
 
   const toolsSkills = [
@@ -113,25 +113,27 @@ export default function Skills() {
     { icon: <CodeXml size={24} />, name: 'JavaScript', color: '#F7DF1E' },
     { icon: <Layers size={24} />, name: 'Redux', color: '#764ABC' },
     { icon: <Layout size={24} />, name: 'HTML/CSS', color: '#E34F26' },
-    { icon: <Send size={24} />, name: 'Postman', color: '#FF6C37' },
+    { icon: <ShieldCheck size={24} />, name: 'Better Auth', color: '#FF4500' }, 
   ];
 
   return (
-    <section id="skills" className="py-24 px-[5%] bg-dark">
-      <Reveal>
+    <section id="skills" className="py-24 px-[5%] bg-dark overflow-x-hidden"> {/* 🌟 অ্যানিমেশনের সময় স্ক্রোলবার হাইড রাখার জন্য overflow-x-hidden দেওয়া হয়েছে */}
+      
+      {/* 🌟 মূল টাইটেল ও সাবটাইটেল উপর থেকে নিচে আসবে (ডিফল্ট বা কাস্টম) */}
+      <Reveal direction="down">
         <h2 className="font-syne text-[clamp(2rem,4vw,3rem)] font-extrabold text-center mb-2">
           My <span className="text-cyan">Skills</span>
         </h2>
       </Reveal>
       
-      {/* 🌟 আন্ডারলাইন রিমুভ করে টেক্সট সাব-হেডিং যোগ করা হয়েছে */}
-      <Reveal>
+      <Reveal direction="down">
         <p className="text-center text-muted font-medium tracking-[1px] text-[0.95rem] uppercase mt-1 mb-14">
           My <span className="text-cyan2">Technical Levels</span>
         </p>
       </Reveal>
 
-      <Reveal>
+      {/* 🌟 মাঝখানের অরবিট সার্কেলটি স্ক্রোল করলে ডান দিক (Right) থেকে আসবে */}
+      <Reveal direction="right">
         <div className="relative w-[340px] h-[340px] md:w-[520px] md:h-[520px] mx-auto mb-12">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140px] h-[140px] md:w-[200px] md:h-[200px]">
             <div className="w-full h-full rounded-full border border-[rgba(0,212,255,0.1)] animate-spin-ring1 skills-ring-glow"></div>
@@ -161,8 +163,11 @@ export default function Skills() {
         </div>
       </Reveal>
 
+      {/* 🌟 স্কিল বারগুলোর গ্রিড সেকশন */}
       <div ref={barsRef} className="max-w-[900px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
-        <Reveal>
+        
+        {/* FRONTEND বাম (Left) দিক থেকে আসবে */}
+        <Reveal direction="left">
           <h4 className="text-[0.82rem] text-cyan uppercase tracking-[1px] mb-4 font-semibold text-center md:text-left">Frontend</h4>
           <div className="flex flex-col gap-2">
             {frontendSkills.map((s, i) => (
@@ -176,7 +181,8 @@ export default function Skills() {
           </div>
         </Reveal>
 
-        <Reveal>
+        {/* BACKEND নিচ থেকে বা ফেড হয়ে আসবে ব্যালেন্সের জন্য */}
+        <Reveal direction="up">
           <h4 className="text-[0.82rem] text-pink uppercase tracking-[1px] mb-4 font-semibold text-center md:text-left">Backend</h4>
           <div className="flex flex-col gap-2">
             {backendSkills.map((s, i) => (
@@ -190,7 +196,8 @@ export default function Skills() {
           </div>
         </Reveal>
 
-        <Reveal>
+        {/* TOOLS ডান (Right) দিক থেকে আসবে */}
+        <Reveal direction="right">
           <h4 className="text-[0.82rem] text-[#a78bfa] uppercase tracking-[1px] mb-4 font-semibold text-center md:text-left">Tools</h4>
           <div className="flex flex-col gap-2">
             {toolsSkills.map((s, i) => (

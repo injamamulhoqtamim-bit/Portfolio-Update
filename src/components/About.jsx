@@ -36,7 +36,7 @@ export default function About() {
             {/* Actual Image */}
             <div className="w-full h-full relative z-10 transition-all duration-700 hover:scale-[1.03]">
               <Image 
-                src="/aboutme.jpg" 
+                src="/aboutme.png" 
                 alt="Md. Injamamul Hoq" 
                 fill 
                 className="object-contain drop-shadow-[0_20px_50px_rgba(0,212,255,0.2)]" 

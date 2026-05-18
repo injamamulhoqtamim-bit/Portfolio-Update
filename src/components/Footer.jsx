@@ -1,6 +1,15 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
 export default function Footer() {
+  const [isClient, setIsClient] = useState(false);
+
+  // Hydration state check - production and server validation bypass korar jonno
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -8,17 +17,20 @@ export default function Footer() {
   return (
     <footer className="relative bg-dark3 border-t border-border pt-12 pb-8 px-[5%] overflow-hidden">
       
-      {/* Background Video */}
-      <video 
-        autoPlay 
-        loop 
-        muted 
-        playsInline 
-        className="absolute top-0 left-0 w-full h-full object-cover z-0 pointer-events-none"
-      >
-        <source src="/footer.mp4" type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
+      {/* Background Video Block */}
+      {isClient && (
+        <video 
+          autoPlay 
+          loop 
+          muted 
+          playsInline 
+          className="absolute top-0 left-0 w-full h-full object-cover z-0 pointer-events-none"
+        >
+          {/* Direct server route call - eta error chara Vercel direct static asset runtime theke dhore nibe */}
+          <source src="/footer.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      )}
 
       {/* Dark Overlay for Text Readability */}
       <div className="absolute top-0 left-0 w-full h-full bg-black/60 z-10 pointer-events-none"></div>

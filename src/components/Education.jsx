@@ -37,7 +37,7 @@ export default function Education() {
             </div>
             
             <h3 className="font-syne text-[1.4rem] font-bold mb-1 text-white">Bachelor of Science in Computer Science</h3>
-            <p className="text-cyan text-[0.95rem] font-medium mb-3">Southeast University</p>
+            <p className="text-cyan text-[0.95rem] font-bold mb-3">Southeast University</p>
             <p className="text-[0.88rem] text-muted leading-relaxed">
               Studying core computer science concepts including web development, data structures, algorithms, and software engineering while building modern web applications.
             </p>
@@ -53,13 +53,13 @@ export default function Education() {
               <div className="w-[52px] h-[52px] rounded-[14px] bg-gradient-to-br from-cyan to-cyan2 flex items-center justify-center text-white text-[1.5rem] shadow-[0_0_15px_rgba(0,212,255,0.2)]">
                 <Code size={24} />
               </div>
-              <span className="bg-[rgba(255,107,157,0.12)] border border-[rgba(255,107,157,0.2)] text-pink px-[0.9rem] py-[0.3rem] rounded-full text-[0.75rem] font-semibold self-start md:self-auto">
-                2026 - Present
-              </span>
+              <span className="bg-[rgba(255,107,157,0.12)] border border-[rgba(255,107,157,0.2)] text-purple-500 px-[0.9rem] py-[0.3rem] rounded-full text-[0.75rem] font-semibold self-start md:self-auto">
+  2026 - Present
+</span>
             </div>
             
             <h3 className="font-syne text-[1.4rem] font-bold mb-1 text-white">Complete Web Development Course</h3>
-            <p className="text-pink text-[0.95rem] font-medium mb-4">Programming Hero</p>
+            <p className="text-purple-500 text-[0.95rem] font-bold mb-4">Programming Hero</p>
             
             <ul className="flex flex-col gap-2.5 text-[0.85rem] text-muted list-none pl-1">
               <li className="flex items-start gap-2">
@@ -91,13 +91,13 @@ export default function Education() {
               <div className="w-[52px] h-[52px] rounded-[14px] bg-gradient-to-br from-cyan to-cyan2 flex items-center justify-center text-white text-[1.5rem] shadow-[0_0_15px_rgba(0,212,255,0.2)]">
                 <ShieldAlert size={24} />
               </div>
-              <span className="bg-[rgba(167,139,250,0.12)] border border-[rgba(167,139,250,0.2)] text-[#a78bfa] px-[0.9rem] py-[0.3rem] rounded-full text-[0.75rem] font-semibold self-start md:self-auto">
+              <span className="bg-[rgba(255,107,157,0.12)] border border-[rgba(255,107,157,0.2)] text-pink px-[0.9rem] py-[0.3rem] rounded-full text-[0.75rem] font-semibold self-start md:self-auto">
                 2026 - Present
               </span>
             </div>
             
             <h3 className="font-syne text-[1.4rem] font-bold mb-1 text-white">Cybersecurity Research & Learning</h3>
-            <p className="text-[#a78bfa] text-[0.95rem] font-medium mb-4">Self Learning</p>
+            <p className="text-[#ef4444] text-[#ef4444]text-[0.95rem] font-medium mb-4">Self Learning</p>
             
             <ul className="flex flex-col gap-2.5 text-[0.85rem] text-muted list-none pl-1">
               <li className="flex items-start gap-2">

@@ -142,7 +142,7 @@ export default function Certificates() {
               <Award size={13} className="animate-pulse" /> My Achievements
             </span>
             <h2 className="font-syne text-[1.6rem] xs:text-[1.8rem] sm:text-[clamp(2rem,5vw,3rem)] font-extrabold mt-3 text-white leading-tight">
-              Certificates & <span className="text-cyan">Awards</span>
+              Certificates & <span className="text-cyan">Achievements</span>
             </h2>
           </div>
         </Reveal>

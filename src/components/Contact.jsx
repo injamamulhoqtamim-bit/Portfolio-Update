@@ -19,7 +19,7 @@ export default function Contact() {
     const MAIN_TEMPLATE_ID = "template_6ovj5dg"; 
     const PUBLIC_KEY = "imrQPuI2hAA9fAdXy";
 
-    // 🚀 মাত্র ১টি রিকোয়েস্ট পাঠানো হবে (বাকি কাজ ড্যাশবোর্ড অটোমেটিক করবে)
+    // 🚀 মাত্র ১টি রিকোয়েস্ট পাঠানো হবে (বাকি কাজ ড্যাশবোর্ড অটোমেটিক করবে)
     emailjs.sendForm(SERVICE_ID, MAIN_TEMPLATE_ID, formRef.current, PUBLIC_KEY)
       .then((result) => {
         setFormStatus({
@@ -86,49 +86,50 @@ export default function Contact() {
   ];
 
   return (
-    <section id="contact" className="py-24 px-[5%] bg-dark2">
+    <section id="contact" className="py-16 md:py-24 px-[5%] bg-dark2 overflow-hidden">
       <Reveal direction="down">
-        <h2 className="font-syne text-[clamp(2rem,4vw,3rem)] font-extrabold text-center mb-1">
+        <h2 className="font-syne text-[clamp(1.8rem,4vw,3rem)] font-extrabold text-center mb-1">
           Connected <span className="text-cyan">With </span> Me 
         </h2>
       </Reveal>
       
       <Reveal direction="down">
-        <p className="text-center text-muted font-medium tracking-[2px] text-[0.95rem] uppercase mt-1 mb-14">
+        <p className="text-center text-muted font-medium tracking-[2px] text-[0.85rem] md:text-[0.95rem] uppercase mt-1 mb-8 md:mb-14">
           Get In <span className="text-cyan2">Touch</span>
         </p>
       </Reveal>
 
       <Reveal>
-        <p className="text-muted text-[0.9rem] leading-[1.7] max-w-[520px] mx-auto text-center mt-[-2rem] mb-10">
+        <p className="text-muted text-[0.88rem] md:text-[0.9rem] leading-[1.7] max-w-[520px] mx-auto text-center mt-0 md:mt-[-2rem] mb-10 px-2">
           Have a project in mind? Let&apos;s work together to bring your ideas to life.
         </p>
       </Reveal>
 
-      <div className="grid grid-cols-1 md:grid-cols-[1fr_1.2fr] gap-12 items-start max-w-6xl mx-auto">
-        <div>
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.2fr] gap-8 md:gap-12 items-start max-w-6xl mx-auto">
+        {/* Left Side: Contact Info */}
+        <div className="w-full">
           <Reveal>
-            <h3 className="font-syne text-[1.4rem] font-bold mb-3">Let&apos;s Connect</h3>
-            <p className="text-muted text-[0.9rem] leading-[1.7] mb-6">
+            <h3 className="font-syne text-[1.25rem] md:text-[1.4rem] font-bold mb-3 text-center lg:text-left">Let&apos;s Connect</h3>
+            <p className="text-muted text-[0.88rem] md:text-[0.9rem] leading-[1.7] mb-6 text-center lg:text-left">
               I&apos;m always open to new opportunities and collaborations. Feel free to reach out!
             </p>
           </Reveal>
 
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-3 w-full">
             {contactItems.map((ci, i) => (
               <Reveal key={i}>
                 <a 
                   href={ci.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-4 bg-card border border-border rounded-[14px] p-4 transition-all duration-300 hover:border-[rgba(0,212,255,0.3)] hover:bg-gradient-to-r hover:from-card hover:to-border/20 hover:translate-x-2 block group"
+                  className="flex items-center gap-4 bg-card border border-border rounded-[14px] p-3 md:p-4 transition-all duration-300 hover:border-[rgba(0,212,255,0.3)] hover:bg-gradient-to-r hover:from-card hover:to-border/20 sm:hover:translate-x-2 block group"
                 >
-                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center bg-gradient-to-br ${ci.bg} group-hover:scale-105 transition-transform duration-300`}>
+                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center bg-gradient-to-br ${ci.bg} group-hover:scale-105 transition-transform duration-300 shrink-0`}>
                     {ci.icon}
                   </div>
-                  <div className="overflow-hidden w-full">
+                  <div className="overflow-hidden min-w-0 flex-1">
                     <div className="text-[0.72rem] text-muted mb-0.5 font-medium group-hover:text-cyan transition-colors">{ci.label}</div>
-                    <div className="text-[0.88rem] font-medium text-text truncate">{ci.val}</div>
+                    <div className="text-[0.82rem] md:text-[0.88rem] font-medium text-text truncate">{ci.val}</div>
                   </div>
                 </a>
               </Reveal>
@@ -136,17 +137,18 @@ export default function Contact() {
           </div>
         </div>
 
+        {/* Right Side: Form */}
         <Reveal>
-          <div className="bg-card border border-border rounded-[20px] p-8">
-            <h3 className="font-syne text-[1.3rem] font-bold mb-6">Send Message</h3>
+          <div className="bg-card border border-border rounded-[20px] p-5 md:p-8 w-full">
+            <h3 className="font-syne text-[1.2rem] md:text-[1.3rem] font-bold mb-6 text-center lg:text-left">Send Message</h3>
             
-            <form ref={formRef} onSubmit={handleSubmit}>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <div className="mb-4">
+            <form ref={formRef} onSubmit={handleSubmit} className="w-full">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                <div>
                   <label className="block text-[0.78rem] text-muted mb-1.5 font-medium">Your Name *</label>
                   <input required name="name" type="text" placeholder="Insert Your Name" className="w-full bg-dark3 border border-border rounded-[10px] px-4 py-3 text-text font-space text-[0.88rem] transition-colors duration-300 outline-none focus:border-[rgba(0,212,255,0.4)]" />
                 </div>
-                <div className="mb-4">
+                <div>
                   <label className="block text-[0.78rem] text-muted mb-1.5 font-medium">Email Address *</label>
                   <input required name="email" type="email" placeholder="Insert Your Email" className="w-full bg-dark3 border border-border rounded-[10px] px-4 py-3 text-text font-space text-[0.88rem] transition-colors duration-300 outline-none focus:border-[rgba(0,212,255,0.4)]" />
                 </div>
@@ -155,7 +157,7 @@ export default function Contact() {
                 <label className="block text-[0.78rem] text-muted mb-1.5 font-medium">Subject *</label>
                 <input required name="subject" type="text" placeholder="Project Discussion" className="w-full bg-dark3 border border-border rounded-[10px] px-4 py-3 text-text font-space text-[0.88rem] transition-colors duration-300 outline-none focus:border-[rgba(0,212,255,0.4)]" />
               </div>
-              <div className="mb-4">
+              <div className="mb-5">
                 <label className="block text-[0.78rem] text-muted mb-1.5 font-medium">Message *</label>
                 <textarea required name="message" placeholder="Tell me about your project..." className="w-full bg-dark3 border border-border rounded-[10px] px-4 py-3 text-text font-space text-[0.88rem] transition-colors duration-300 outline-none resize-y min-h-[110px] focus:border-[rgba(0,212,255,0.4)]"></textarea>
               </div>
@@ -163,7 +165,7 @@ export default function Contact() {
               <button 
                 type="submit" 
                 disabled={isSending}
-                className="w-full bg-gradient-to-br from-cyan to-cyan2 text-black border-none p-3 rounded-xl font-bold text-[0.95rem] transition-all duration-300 flex items-center justify-center gap-2 hover:opacity-90 hover:-translate-y-0.5 hover:shadow-[0_8px_25px_rgba(0,212,255,0.3)] disabled:opacity-50 disabled:pointer-events-none"
+                className="w-full bg-gradient-to-br from-cyan to-cyan2 text-black border-none p-3 rounded-xl font-bold text-[0.95rem] transition-all duration-300 flex items-center justify-center gap-2 hover:opacity-90 sm:hover:-translate-y-0.5 sm:hover:shadow-[0_8px_25px_rgba(0,212,255,0.3)] disabled:opacity-50 disabled:pointer-events-none"
               >
                 {isSending ? (
                   <>
@@ -179,7 +181,7 @@ export default function Contact() {
               </button>
 
               {formStatus.show && (
-                <div className={`px-4 py-3 rounded-[10px] text-[0.85rem] mt-3 text-center border ${
+                <div className={`px-4 py-3 rounded-[10px] text-[0.85rem] mt-4 text-center border ${
                   formStatus.success 
                     ? "bg-[rgba(0,255,136,0.1)] border-[rgba(0,255,136,0.25)] text-[#00ff88]" 
                     : "bg-[rgba(255,75,75,0.1)] border-[rgba(255,75,75,0.25)] text-[#ff4b4b]"

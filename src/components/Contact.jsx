@@ -14,10 +14,18 @@ export default function Contact() {
 
   return (
     <section id="contact" className="py-24 px-[5%] bg-dark2">
-      <Reveal>
-        <h2 className="font-syne text-[clamp(2rem,4vw,3rem)] font-extrabold text-center mb-2">Get In <span className="text-cyan">Touch</span></h2>
-      </Reveal>
-      <div className="w-[60px] h-[3px] bg-gradient-to-r from-cyan to-cyan2 rounded-sm mx-auto mt-3 mb-14"></div>
+      <Reveal direction="down">
+              <h2 className="font-syne text-[clamp(2rem,4vw,3rem)] font-extrabold text-center mb-1">
+                Connected  <span className="text-cyan">With </span> Me 
+              </h2>
+            </Reveal>
+            
+            {/* 🌟 আন্ডারলাইন সরিয়ে এখানে "My Journey" সাবটাইটেল যোগ করা হয়েছে */}
+            <Reveal direction="down">
+              <p className="text-center text-muted font-medium tracking-[2px] text-[0.95rem] uppercase mt-1 mb-14">
+                Get In <span className="text-cyan2">Touch</span>
+              </p>
+            </Reveal>
 
       <Reveal>
         <p className="text-muted text-[0.9rem] leading-[1.7] max-w-[520px] mx-auto text-center mt-[-2rem] mb-10">

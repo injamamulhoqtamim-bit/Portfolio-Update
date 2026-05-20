@@ -7,8 +7,10 @@ import About from "@/components/About";
 import Technologies from "@/components/Technologies";
 import Skills from "@/components/Skills";
 import Education from "@/components/Education";
+// 🤝 এখানে নামটা 'Certificates' করে দেওয়া হলো যাতে আপনার ফাইলের ভেতরের export default function Certificates-এর সাথে হুবহু মিলে যায়
+import Certificates from "@/components/Certificates"; 
 import Projects from "@/components/Projects";
-import UpcomingProject from "@/components/UpcomingProject"; // পারফেক্ট ইমপোর্ট
+import UpcomingProject from "@/components/UpcomingProject"; 
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 
@@ -25,8 +27,9 @@ export default function Home() {
         <Technologies />
         <Skills />
         <Education />
+        <Certificates /> {/* 👈 এখানেও ট্যাগটি পরিবর্তন করে Certificates দেওয়া হলো */}
         <Projects />
-        <UpcomingProject /> {/* প্রজেক্টস সেকশনের নিচে পারফেক্ট প্লেসমেন্ট */}
+        <UpcomingProject />
         <Contact />
       </main>
       <Footer />

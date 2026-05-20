@@ -1,20 +1,49 @@
 "use client";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Reveal from "./Reveal";
-// 🎨 এখন শুধু Mail, MessageCircle, এবং Send ল্যুসিড থেকে নেওয়া হচ্ছে
-import { Mail, MessageCircle, Send } from "lucide-react";
+import { Mail, MessageCircle, Send, Loader2 } from "lucide-react";
+import emailjs from "@emailjs/browser";
 
 export default function Contact() {
-  const [formSuccess, setFormSuccess] = useState(false);
+  const formRef = useRef();
+  const [isSending, setIsSending] = useState(false);
+  const [formStatus, setFormStatus] = useState({ show: false, success: false, message: "" });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setFormSuccess(true);
-    e.target.reset();
-    setTimeout(() => setFormSuccess(false), 4000);
+    setIsSending(true);
+    setFormStatus({ show: false, success: false, message: "" });
+
+    // ⚙️ EmailJS কনফিগারেশন 
+    const SERVICE_ID = "service_7vnmc1p"; 
+    const MAIN_TEMPLATE_ID = "template_6ovj5dg"; 
+    const PUBLIC_KEY = "imrQPuI2hAA9fAdXy";
+
+    // 🚀 মাত্র ১টি রিকোয়েস্ট পাঠানো হবে (বাকি কাজ ড্যাশবোর্ড অটোমেটিক করবে)
+    emailjs.sendForm(SERVICE_ID, MAIN_TEMPLATE_ID, formRef.current, PUBLIC_KEY)
+      .then((result) => {
+        setFormStatus({
+          show: true,
+          success: true,
+          message: "✓ Message sent successfully! An auto-reply has been sent to your email."
+        });
+        e.target.reset(); // ফর্ম ক্লিয়ার হবে
+      })
+      .catch((error) => {
+        setFormStatus({
+          show: true,
+          success: false,
+          message: "❌ Something went wrong. Please try again or contact directly via social links."
+        });
+        console.error("EmailJS Error:", error);
+      })
+      .finally(() => {
+        setIsSending(false);
+        setTimeout(() => setFormStatus({ show: false, success: false, message: "" }), 5000);
+      });
   };
 
-  // 🌐 কন্টাক্ট ডাটা লিস্ট (Facebook ও LinkedIn দুটোর জন্যই কাস্টম SVG ব্যবহার করা হয়েছে)
+  // 🌐 কন্টাক্ট ডাটা লিস্ট
   const contactItems = [
     { 
       icon: <Mail size={20} className="text-cyan" />, 
@@ -31,7 +60,6 @@ export default function Contact() {
       bg: "from-[rgba(37,211,102,0.15)] to-[rgba(37,211,102,0.02)]" 
     },
     { 
-      // 📘 কাস্টম ফেসবুক SVG আইকন
       icon: (
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#1877F2]">
           <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
@@ -43,7 +71,6 @@ export default function Contact() {
       bg: "from-[rgba(24,119,242,0.15)] to-[rgba(24,119,242,0.02)]" 
     },
     { 
-      // 💼 কাস্টম লিঙ্কডইন SVG আইকন (ল্যুসিডের অবিকল ডিজাইন)
       icon: (
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#0A66C2]">
           <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
@@ -79,7 +106,6 @@ export default function Contact() {
       </Reveal>
 
       <div className="grid grid-cols-1 md:grid-cols-[1fr_1.2fr] gap-12 items-start max-w-6xl mx-auto">
-        
         <div>
           <Reveal>
             <h3 className="font-syne text-[1.4rem] font-bold mb-3">Let&apos;s Connect</h3>
@@ -100,7 +126,6 @@ export default function Contact() {
                   <div className={`w-10 h-10 rounded-lg flex items-center justify-center bg-gradient-to-br ${ci.bg} group-hover:scale-105 transition-transform duration-300`}>
                     {ci.icon}
                   </div>
-                  
                   <div className="overflow-hidden w-full">
                     <div className="text-[0.72rem] text-muted mb-0.5 font-medium group-hover:text-cyan transition-colors">{ci.label}</div>
                     <div className="text-[0.88rem] font-medium text-text truncate">{ci.val}</div>
@@ -114,32 +139,52 @@ export default function Contact() {
         <Reveal>
           <div className="bg-card border border-border rounded-[20px] p-8">
             <h3 className="font-syne text-[1.3rem] font-bold mb-6">Send Message</h3>
-            <form onSubmit={handleSubmit}>
+            
+            <form ref={formRef} onSubmit={handleSubmit}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div className="mb-4">
                   <label className="block text-[0.78rem] text-muted mb-1.5 font-medium">Your Name *</label>
-                  <input required type="text" placeholder="Insert Your Name" className="w-full bg-dark3 border border-border rounded-[10px] px-4 py-3 text-text font-space text-[0.88rem] transition-colors duration-300 outline-none focus:border-[rgba(0,212,255,0.4)]" />
+                  <input required name="name" type="text" placeholder="Insert Your Name" className="w-full bg-dark3 border border-border rounded-[10px] px-4 py-3 text-text font-space text-[0.88rem] transition-colors duration-300 outline-none focus:border-[rgba(0,212,255,0.4)]" />
                 </div>
                 <div className="mb-4">
                   <label className="block text-[0.78rem] text-muted mb-1.5 font-medium">Email Address *</label>
-                  <input required type="email" placeholder="Insert Your Email" className="w-full bg-dark3 border border-border rounded-[10px] px-4 py-3 text-text font-space text-[0.88rem] transition-colors duration-300 outline-none focus:border-[rgba(0,212,255,0.4)]" />
+                  <input required name="email" type="email" placeholder="Insert Your Email" className="w-full bg-dark3 border border-border rounded-[10px] px-4 py-3 text-text font-space text-[0.88rem] transition-colors duration-300 outline-none focus:border-[rgba(0,212,255,0.4)]" />
                 </div>
               </div>
               <div className="mb-4">
                 <label className="block text-[0.78rem] text-muted mb-1.5 font-medium">Subject *</label>
-                <input required type="text" placeholder="Project Discussion" className="w-full bg-dark3 border border-border rounded-[10px] px-4 py-3 text-text font-space text-[0.88rem] transition-colors duration-300 outline-none focus:border-[rgba(0,212,255,0.4)]" />
+                <input required name="subject" type="text" placeholder="Project Discussion" className="w-full bg-dark3 border border-border rounded-[10px] px-4 py-3 text-text font-space text-[0.88rem] transition-colors duration-300 outline-none focus:border-[rgba(0,212,255,0.4)]" />
               </div>
               <div className="mb-4">
                 <label className="block text-[0.78rem] text-muted mb-1.5 font-medium">Message *</label>
-                <textarea required placeholder="Tell me about your project..." className="w-full bg-dark3 border border-border rounded-[10px] px-4 py-3 text-text font-space text-[0.88rem] transition-colors duration-300 outline-none resize-y min-h-[110px] focus:border-[rgba(0,212,255,0.4)]"></textarea>
+                <textarea required name="message" placeholder="Tell me about your project..." className="w-full bg-dark3 border border-border rounded-[10px] px-4 py-3 text-text font-space text-[0.88rem] transition-colors duration-300 outline-none resize-y min-h-[110px] focus:border-[rgba(0,212,255,0.4)]"></textarea>
               </div>
-              <button type="submit" className="w-full bg-gradient-to-br from-cyan to-cyan2 text-black border-none p-3 rounded-xl font-bold text-[0.95rem] transition-all duration-300 flex items-center justify-center gap-2 hover:opacity-90 hover:-translate-y-0.5 hover:shadow-[0_8px_25px_rgba(0,212,255,0.3)]">
-                <Send size={16} strokeWidth={2.5} />
-                Send Message
+              
+              <button 
+                type="submit" 
+                disabled={isSending}
+                className="w-full bg-gradient-to-br from-cyan to-cyan2 text-black border-none p-3 rounded-xl font-bold text-[0.95rem] transition-all duration-300 flex items-center justify-center gap-2 hover:opacity-90 hover:-translate-y-0.5 hover:shadow-[0_8px_25px_rgba(0,212,255,0.3)] disabled:opacity-50 disabled:pointer-events-none"
+              >
+                {isSending ? (
+                  <>
+                    <Loader2 size={16} className="animate-spin" />
+                    Sending...
+                  </>
+                ) : (
+                  <>
+                    <Send size={16} strokeWidth={2.5} />
+                    Send Message
+                  </>
+                )}
               </button>
-              {formSuccess && (
-                <div className="bg-[rgba(0,255,136,0.1)] border border-[rgba(0,255,136,0.25)] text-[#00ff88] px-4 py-3 rounded-[10px] text-[0.85rem] mt-3 text-center">
-                  ✓ Message sent! I&apos;ll get back to you soon.
+
+              {formStatus.show && (
+                <div className={`px-4 py-3 rounded-[10px] text-[0.85rem] mt-3 text-center border ${
+                  formStatus.success 
+                    ? "bg-[rgba(0,255,136,0.1)] border-[rgba(0,255,136,0.25)] text-[#00ff88]" 
+                    : "bg-[rgba(255,75,75,0.1)] border-[rgba(255,75,75,0.25)] text-[#ff4b4b]"
+                }`}>
+                  {formStatus.message}
                 </div>
               )}
             </form>

@@ -221,7 +221,7 @@ export default function Hero() {
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200px] h-[200px] sm:w-[230px] sm:h-[230px] md:w-[240px] md:h-[240px] z-10 flex items-center justify-center">
               <div className="w-full h-full rounded-full overflow-hidden border-[3px] border-[rgba(0,212,255,0.4)] shadow-[0_0_60px_rgba(0,212,255,0.25),inset_0_0_60px_rgba(0,212,255,0.05)] animate-photo-float relative">
                 <Image 
-                  src="/profile.jpg" 
+                  src="/injamam.jpg" 
                   alt="Injamamul Hoq" 
                   fill 
                   className="object-cover"

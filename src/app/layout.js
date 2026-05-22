@@ -1,5 +1,6 @@
 import { Space_Grotesk, Syne, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import ScrollToTop from "@/components/ScrollToTop"; // 🔘 নতুন বাটন কম্পোনেন্টটি ইমপোর্ট করা হলো
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
@@ -25,9 +26,12 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`${spaceGrotesk.variable} ${syne.variable} ${jetBrainsMono.variable} antialiased`}
+        className={`${spaceGrotesk.variable} ${syne.variable} ${jetBrainsMono.variable} antialiased relative`}
       >
         {children}
+        
+        {/* 🔘 এই বাটনটি এখন গ্লোবাল হিসেবে ব্যাকগ্রাউন্ডে সবসময় অ্যাক্টিভ থাকবে */}
+        <ScrollToTop />
       </body>
     </html>
   );

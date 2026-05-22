@@ -10,10 +10,6 @@ export default function Footer() {
     setIsClient(true);
   }, []);
 
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
   return (
     <footer className="relative bg-dark3 border-t border-border pt-12 pb-8 px-[5%] overflow-hidden">
       
@@ -89,9 +85,7 @@ export default function Footer() {
         <p className="text-[0.78rem] text-muted">
           © 2026 Injamamul Hoq. All rights reserved.
         </p>
-        <button onClick={scrollToTop} title="Back to top" className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan to-cyan2 border-none cursor-none flex items-center justify-center text-black text-[1.1rem] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_25px_rgba(0,212,255,0.35)]">
-          ↑
-        </button>
+        {/* 🔘 এখানে থাকা আগের বাটন এবং scrollToTop লজিকটি সম্পূর্ণ রিমুভ করা হয়েছে */}
       </div>
     </footer>
   );

@@ -6,33 +6,29 @@ export default function CustomCursor() {
   const ringRef = useRef(null);
 
   useEffect(() => {
-    let mx = 0, my = 0, rx = 0, ry = 0;
-    
     const onMouseMove = (e) => {
-      mx = e.clientX;
-      my = e.clientY;
+      const mx = e.clientX;
+      const my = e.clientY;
+      
+      // ডটটিকে মাউসের সাথে সাথে ইনস্ট্যান্টলি মুভ করাবে
       if (cursorRef.current) {
         cursorRef.current.style.left = mx + "px";
         cursorRef.current.style.top = my + "px";
       }
-    };
 
-    const animRing = () => {
-      rx += (mx - rx) * 0.12;
-      ry += (my - ry) * 0.12;
+      // রিংটিকেও কোনো ল্যাগ/অ্যানিমেশন ছাড়া সরাসরি মাউসের পজিশনে বসিয়ে দেবে
       if (ringRef.current) {
-        ringRef.current.style.left = rx + "px";
-        ringRef.current.style.top = ry + "px";
+        ringRef.current.style.left = mx + "px";
+        cursorRef.current.style.top = my + "px"; 
+        // Note: আপনার গ্লোবাল CSS-এ যদি রিংয়ের কোনো transition দেওয়া থাকে, তবে সেটিও বাদ দিতে পারেন।
+        ringRef.current.style.top = my + "px";
       }
-      requestAnimationFrame(animRing);
     };
 
     window.addEventListener("mousemove", onMouseMove);
-    const ringAnimFrame = requestAnimationFrame(animRing);
 
     return () => {
       window.removeEventListener("mousemove", onMouseMove);
-      cancelAnimationFrame(ringAnimFrame);
     };
   }, []);
 

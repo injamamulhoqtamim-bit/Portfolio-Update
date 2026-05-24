@@ -53,7 +53,7 @@ body {
   pointer-events: none;
   z-index: 9999;
   transform: translate(-50%, -50%);
-  transition: transform .1s, background .2s;
+  /* 🚫 transition: transform .1s, background .2s; -> এই লাইনটি রিমুভ করা হয়েছে */
   mix-blend-mode: difference;
 }
 
@@ -66,7 +66,7 @@ body {
   pointer-events: none;
   z-index: 9998;
   transform: translate(-50%, -50%);
-  transition: all .15s ease;
+  /* 🚫 transition: all .15s ease; -> এই লাইনটি রিমুভ করা হয়েছে */
   opacity: .6;
 }
 
@@ -74,6 +74,8 @@ body:hover #cursor {
   opacity: 1;
 }
 
+/* 💡 কার্সার ইনস্ট্যান্ট মুভ করার জন্য হোভারের স্কেল অ্যানিমেশনও রিমুভ করতে পারেন, 
+   নাহলে হোভারের সময় হালকা ১ সেকেন্ডের ল্যাগ তৈরি হতে পারে। নিচে এটি রাখা হয়েছে, প্রয়োজন না হলে ডিলিট করতে পারেন। */
 a:hover ~ #cursor,
 button:hover ~ #cursor {
   transform: translate(-50%, -50%) scale(2);

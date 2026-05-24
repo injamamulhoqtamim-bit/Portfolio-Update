@@ -85,9 +85,23 @@ export default function Footer() {
       </div>
       
       {/* Footer Bottom Portion */}
-      <div className="relative z-20 max-w-7xl mx-auto border-t border-border pt-6 flex flex-col sm:flex-row justify-between items-center gap-4 text-center sm:text-left">
-        <p className="text-[0.78rem] text-muted font-medium">
-          © 2026 Injamamul Hoq. All rights reserved.
+      <div className="relative z-20 max-w-7xl mx-auto border-t border-border pt-6 flex justify-center items-center text-center">
+        <p className="text-[0.78rem] text-muted font-medium flex items-center justify-center gap-1.5 flex-wrap">
+          <span>© 2026 Injamamul Hoq. Powered by</span>
+          <span className="inline-flex items-center gap-1 text-text group">
+            Coffee 
+            <svg className="w-4 h-4 text-[#ff8364] group-hover:animate-bounce transition-colors" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h14v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8zM6 2v3M10 2v3M14 2v3"/>
+            </svg>
+          </span>
+          <span>&</span>
+          <span className="inline-flex items-center gap-1 text-text group">
+            Code
+            <svg className="w-4 h-4 text-cyan group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M2 5a2 2 0 012-2h16a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V5z" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M2 19h20M9 21h6" />
+            </svg>
+          </span>
         </p>
       </div>
     </footer>

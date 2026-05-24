@@ -20,7 +20,7 @@ import {
 
 export default function UpcomingProject() {
   const upcomingProject = {
-    title: 'Ghuro Dekho',
+    title: 'Ghure Dekho',
     tagline: 'Explore the Beauty of Bangladesh',
     desc: 'Ghure Dekho! Ghuro Bangla is a modern Tour & Travel platform designed to help users explore the beautiful destinations across Bangladesh with ease. It simplifies vacation planning by offering an all-in-one ecosystem for travelers.',
     image: '/ghurobangla.png',

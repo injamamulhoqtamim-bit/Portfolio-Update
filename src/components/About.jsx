@@ -12,7 +12,7 @@ export default function About() {
           <h2 className="font-syne text-[clamp(2.2rem,5vw,3.5rem)] font-extrabold">
             About <span className="text-cyan">Me</span>
           </h2>
-          {/* আন্ডারলাইন রিমুভ করে এখানে "My Introduction" টেক্সটটি বসানো হয়েছে */}
+          {/* আন্ডারলাইন রিমুভ করে এখানে "My Introduction" টেক্সটটি বসানো হয়েছে */}
           <span className="text-xs sm:text-sm uppercase tracking-[0.2em] text-cyan/70 font-semibold mt-2 block">
             My Introduction
           </span>
@@ -75,7 +75,14 @@ export default function About() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
             {[
               { title: "Name", value: "Md. Injamamul Hoq", icon: <FiUser /> },
-              { title: "Location", value: "Banani BTCL Colony, Dhaka", icon: <FiMapPin /> },
+              { 
+                title: "Location", 
+                value: "Banani BTCL Colony, Dhaka", 
+                icon: <FiMapPin />, 
+                isLocation: true, 
+                // গুগল ম্যাপস এ সরাসরি সার্চ করার জন্য লিঙ্ক জেনারেট করা হয়েছে
+                mapUrl: "https://www.google.com/maps/search/?api=1&query=Banani+BTCL+Colony,+Dhaka" 
+              },
               { title: "Email", value: "injamamulhoqtamim@gmail.com", icon: <FiMail />, isEmail: true },
               { title: "Education", value: "BSc in CSE", icon: <FiBookOpen /> }
             ].map((info, i) => (
@@ -88,8 +95,14 @@ export default function About() {
                 </div>
                 <div className="flex-1 overflow-hidden">
                   <span className="text-xs text-gray-500 block uppercase tracking-widest font-bold mb-1">{info.title}</span>
+                  
                   {info.isEmail ? (
                     <a href={`mailto:${info.value}`} className="text-[0.95rem] text-white font-medium hover:text-cyan truncate block transition-colors">
+                      {info.value}
+                    </a>
+                  ) : info.isLocation ? (
+                    // লোকেশন এর জন্য ক্লিকেবল ম্যাপ লিঙ্ক
+                    <a href={info.mapUrl} target="_blank" rel="noopener noreferrer" className="text-[0.95rem] text-white font-medium hover:text-cyan truncate block transition-colors">
                       {info.value}
                     </a>
                   ) : (

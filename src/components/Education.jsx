@@ -13,7 +13,7 @@ export default function Education() {
         </h2>
       </Reveal>
       
-      {/* 🌟 আন্ডারলাইন সরিয়ে এখানে "My Journey" সাবটাইটেল যোগ করা হয়েছে */}
+      {/* 🌟 আন্ডারলাইন সরিয়ে এখানে "My Journey" সাবটাইটেল যোগ করা হয়েছে */}
       <Reveal direction="down">
         <p className="text-center text-muted font-medium tracking-[2px] text-[0.95rem] uppercase mt-1 mb-14">
           My <span className="text-cyan2">Journey</span>
@@ -22,9 +22,14 @@ export default function Education() {
 
       <div className="max-w-[760px] mx-auto flex flex-col gap-8">
         
-        {/* 🎓 1. Bachelor of Science in Computer Science */}
+        {/* 🎓 1. Bachelor of Science in Computer Science (ক্লিকেবল গুগল ম্যাপস/ওয়েবসাইট লিঙ্ক) */}
         <Reveal direction="left">
-          <div className="bg-card border border-border rounded-[20px] p-8 relative overflow-hidden group hover:border-[rgba(0,212,255,0.3)] transition-all duration-300">
+          <a 
+            href="https://seu.edu.bd" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="block bg-card border border-border rounded-[20px] p-8 relative overflow-hidden group hover:border-[rgba(0,212,255,0.3)] transition-all duration-300 cursor-pointer no-underline"
+          >
             <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-cyan via-cyan2 to-pink"></div>
             
             <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-4">
@@ -36,12 +41,17 @@ export default function Education() {
               </span>
             </div>
             
-            <h3 className="font-syne text-[1.4rem] font-bold mb-1 text-white">Bachelor of Science in Computer Science</h3>
-            <p className="text-cyan text-[0.95rem] font-bold mb-3">Southeast University</p>
+            <h3 className="font-syne text-[1.4rem] font-bold mb-1 text-white group-hover:text-cyan transition-colors">
+              Bachelor of Science in Computer Science
+            </h3>
+            <p className="text-cyan text-[0.95rem] font-bold mb-3 flex items-center gap-1.5">
+              Southeast University 
+              <span className="text-xs font-normal text-muted group-hover:text-cyan transition-colors">↗</span>
+            </p>
             <p className="text-[0.88rem] text-muted leading-relaxed">
               Studying core computer science concepts including web development, data structures, algorithms, and software engineering while building modern web applications.
             </p>
-          </div>
+          </a>
         </Reveal>
 
         {/* 💻 2. Complete Web Development Course With Programming Hero */}
@@ -54,8 +64,8 @@ export default function Education() {
                 <Code size={24} />
               </div>
               <span className="bg-[rgba(255,107,157,0.12)] border border-[rgba(255,107,157,0.2)] text-purple-500 px-[0.9rem] py-[0.3rem] rounded-full text-[0.75rem] font-semibold self-start md:self-auto">
-  2026 - Present
-</span>
+                2026 - Present
+              </span>
             </div>
             
             <h3 className="font-syne text-[1.4rem] font-bold mb-1 text-white">Complete Web Development Course</h3>
@@ -97,7 +107,7 @@ export default function Education() {
             </div>
             
             <h3 className="font-syne text-[1.4rem] font-bold mb-1 text-white">Cybersecurity Research & Learning</h3>
-            <p className="text-[#ef4444] text-[#ef4444]text-[0.95rem] font-medium mb-4">Self Learning</p>
+            <p className="text-[#ef4444] text-[0.95rem] font-medium mb-4">Self Learning</p>
             
             <ul className="flex flex-col gap-2.5 text-[0.85rem] text-muted list-none pl-1">
               <li className="flex items-start gap-2">

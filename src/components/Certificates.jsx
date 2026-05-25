@@ -3,7 +3,6 @@ import { useState } from "react";
 import Reveal from "./Reveal";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-// 🎨 থিমের সাথে মানানসই Lucide Icons
 import { Award, Calendar, ShieldCheck, ArrowUpRight, FileText, ChevronLeft, ChevronRight, Eye } from "lucide-react";
 
 export default function Certificates() {
@@ -36,12 +35,18 @@ export default function Certificates() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
-  // ⚡ ডকুমেন্ট ভিউ করার সময় লোডার ট্রিগার ফাংশন
+  // ⚡ ডকুমেন্ট ভিউ করার সময় লোডার ট্রিগার ফাংশন (ফিক্সড লজিক)
   const handleViewDocument = (e, link) => {
+    e.preventDefault(); // 🛑 সরাসরি পেজ ওপেন হওয়া আটকাতে
+    if (isLoading) return;
+
+    // ১. প্রথমে অ্যানিমেশন ওভারলে চালু হবে
     setIsLoading(true);
-    // ২ সেকেন্ড পর লোডারটি নিজে থেকেই বন্ধ হয়ে যাবে
+    
+    // ২. ২ সেকেন্ড সাকসেসফুলি অ্যানিমেশন দেখানোর পর লিঙ্কটি নতুন ট্যাবে ওপেন হবে
     setTimeout(() => {
-      setIsLoading(false);
+      window.open(link, "_blank", "noopener,noreferrer");
+      setIsLoading(false); // লোডার বন্ধ হবে
     }, 2000);
   };
 
@@ -79,7 +84,7 @@ export default function Certificates() {
   // 🎨 কমন কার্ড কন্টেন্ট রেন্ডারার ফাংশন
   const renderCardContent = (cert, idx) => (
     <>
-      {/* 📸 ১. রেস্পন্সিভ ইমেজ কন্টেইনার (Hover Effect যুক্ত করা হয়েছে) */}
+      {/* 📸 ১. রেস্পন্সিভ ইমেজ কন্টেইনার */}
       <div className="w-full h-[170px] xs:h-[200px] sm:h-[210px] md:h-[220px] relative bg-neutral-900 overflow-hidden border-b border-border/40 flex items-center justify-center group/img">
         {cert.image ? (
           <>
@@ -93,11 +98,8 @@ export default function Certificates() {
               priority={idx === 0}
             />
             
-            {/* 🌟 Hover Overlay: ছবি বা ডকুমেন্টের ওপর মাউস আনলে এটি দেখাবে */}
-            <a
-              href={cert.credentialLink}
-              target="_blank"
-              rel="noopener noreferrer"
+            {/* 🌟 Hover Overlay */}
+            <div
               onClick={(e) => handleViewDocument(e, cert.credentialLink)}
               className="absolute inset-0 bg-black/60 backdrop-blur-[3px] opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center gap-2 text-cyan font-bold text-sm z-20 cursor-pointer"
             >
@@ -105,21 +107,18 @@ export default function Certificates() {
                 <Eye size={20} />
               </div>
               <span className="tracking-[0.5px]">View Document</span>
-            </a>
+            </div>
           </>
         ) : (
-          <a
-            href={cert.credentialLink}
-            target="_blank"
-            rel="noopener noreferrer"
+          <div
             onClick={(e) => handleViewDocument(e, cert.credentialLink)}
-            className="w-full h-full bg-gradient-to-br from-cyan/10 via-transparent to-[#5b00ff]/10 flex flex-col items-center justify-center gap-3 text-cyan/40 hover:text-cyan/80 transition-colors duration-500 relative group/pdf"
+            className="w-full h-full bg-gradient-to-br from-cyan/10 via-transparent to-[#5b00ff]/10 flex flex-col items-center justify-center gap-3 text-cyan/40 hover:text-cyan/80 transition-colors duration-500 relative group/pdf cursor-pointer"
           >
             <div className="p-3.5 rounded-full bg-card border border-border/60 shadow-inner group-hover/pdf:border-cyan/50">
               <FileText size={28} strokeWidth={1.5} className="animate-pulse" />
             </div>
             <span className="text-[0.7rem] font-medium tracking-[1px] uppercase opacity-60">View PDF Document</span>
-          </a>
+          </div>
         )}
         
         {/* ভেরিফাইড ব্যাজ */}
@@ -149,16 +148,13 @@ export default function Certificates() {
 
         {/* 🔘 ৩. বটম অ্যাকশন বাটন */}
         <div className="border-t border-border/30 pt-3.5 mt-2">
-          <a
-            href={cert.credentialLink}
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
             onClick={(e) => handleViewDocument(e, cert.credentialLink)}
-            className="inline-flex items-center gap-1.5 text-[0.78rem] sm:text-[0.82rem] font-bold text-muted transition-all duration-300 group-hover:text-cyan hover:opacity-90"
+            className="inline-flex items-center gap-1.5 text-[0.78rem] sm:text-[0.82rem] font-bold text-muted transition-all duration-300 group-hover:text-cyan hover:opacity-90 bg-transparent border-none cursor-pointer"
           >
             View Document
             <ArrowUpRight size={13} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 text-cyan" />
-          </a>
+          </button>
         </div>
       </div>
     </>
@@ -167,7 +163,7 @@ export default function Certificates() {
   return (
     <section id="certificates" className="py-16 sm:py-24 px-4 xs:px-6 sm:px-[5%] bg-dark border-t border-border select-none relative overflow-hidden">
       
-      {/* 🐹 হ্যামস্টার হুইল লোডার ওভারলে (AnimatePresence দিয়ে স্মুথ করা হয়েছে) */}
+      {/* 🐹 হ্যামস্টার হুইল লোডার ওভারলে (AnimatePresence) */}
       <AnimatePresence>
         {isLoading && (
           <motion.div 

@@ -3,8 +3,8 @@ import { useState } from "react";
 import Reveal from "./Reveal";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-// 🎨 থিমের সাথে মানানসই Lucide Icons (Chevron icons যুক্ত করা হয়েছে)
-import { Award, Calendar, ShieldCheck, ArrowUpRight, FileText, ChevronLeft, ChevronRight } from "lucide-react";
+// 🎨 থিমের সাথে মানানসই Lucide Icons (Eye icon যুক্ত করা হয়েছে)
+import { Award, Calendar, ShieldCheck, ArrowUpRight, FileText, ChevronLeft, ChevronRight, Eye } from "lucide-react";
 
 export default function Certificates() {
   // 📜 আপনার সার্টিফিকেট ডাটা লিস্ট
@@ -59,44 +59,64 @@ export default function Certificates() {
     }),
   };
 
-  // 📱 মোবাইল স্লাইডের অ্যানিমেশন ভ্যারিয়েন্ট
+  // 📱 মোবাইল স্লাইডের অ্যানিমেশন ভ্যারিয়েন্ট
   const slideVariants = {
     enter: { x: 50, opacity: 0, scale: 0.95 },
     center: { x: 0, opacity: 1, scale: 1, transition: { duration: 0.3 } },
     exit: { x: -50, opacity: 0, scale: 0.95, transition: { duration: 0.2 } }
   };
 
-  // 🎨 কমন কার্ড কন্টেন্ট রেন্ডারার ফাংশন (যাতে কোড ডুপ্লিকেট না হয়)
+  // 🎨 কমন কার্ড কন্টেন্ট রেন্ডারার ফাংশন
   const renderCardContent = (cert, idx) => (
     <>
-      {/* 📸 ১. রেস্পন্সিভ ইমেজ কন্টেইনার */}
-      <div className="w-full h-[170px] xs:h-[200px] sm:h-[210px] md:h-[220px] relative bg-neutral-900 overflow-hidden border-b border-border/40 flex items-center justify-center">
+      {/* 📸 ১. রেস্পন্সিভ ইমেজ কন্টেইনার (Hover Effect যুক্ত করা হয়েছে) */}
+      <div className="w-full h-[170px] xs:h-[200px] sm:h-[210px] md:h-[220px] relative bg-neutral-900 overflow-hidden border-b border-border/40 flex items-center justify-center group/img">
         {cert.image ? (
-          <Image
-            className="transition-transform duration-700 group-hover:scale-105"
-            src={cert.image}
-            alt={cert.title}
-            fill
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            style={{ objectFit: "cover", objectPosition: "top" }}
-            priority={idx === 0}
-          />
+          <>
+            <Image
+              className="transition-transform duration-700 group-hover/img:scale-105"
+              src={cert.image}
+              alt={cert.title}
+              fill
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              style={{ objectFit: "cover", objectPosition: "top" }}
+              priority={idx === 0}
+            />
+            
+            {/* 🌟 নতুন যুক্ত করা Hover Overlay: ছবি বা ডকুমেন্টের ওপর মাউস আনলে এটি দেখাবে */}
+            <a
+              href={cert.credentialLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="absolute inset-0 bg-black/60 backdrop-blur-[3px] opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center gap-2 text-cyan font-bold text-sm z-20 cursor-pointer"
+            >
+              <div className="p-2.5 rounded-full bg-cyan/10 border border-cyan/30 shadow-[0_0_15px_rgba(0,212,255,0.2)] transform scale-75 group-hover/img:scale-100 transition-transform duration-300">
+                <Eye size={20} />
+              </div>
+              <span className="tracking-[0.5px]">View Document</span>
+            </a>
+          </>
         ) : (
-          <div className="w-full h-full bg-gradient-to-br from-cyan/10 via-transparent to-[#5b00ff]/10 flex flex-col items-center justify-center gap-3 text-cyan/40 group-hover:text-cyan/70 transition-colors duration-500">
-            <div className="p-3.5 rounded-full bg-card border border-border/60 shadow-inner">
+          <a
+            href={cert.credentialLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full h-full bg-gradient-to-br from-cyan/10 via-transparent to-[#5b00ff]/10 flex flex-col items-center justify-center gap-3 text-cyan/40 hover:text-cyan/80 transition-colors duration-500 relative group/pdf"
+          >
+            <div className="p-3.5 rounded-full bg-card border border-border/60 shadow-inner group-hover/pdf:border-cyan/50">
               <FileText size={28} strokeWidth={1.5} className="animate-pulse" />
             </div>
-            <span className="text-[0.7rem] font-medium tracking-[1px] uppercase opacity-60">PDF Document Included</span>
-          </div>
+            <span className="text-[0.7rem] font-medium tracking-[1px] uppercase opacity-60">View PDF Document</span>
+          </a>
         )}
         
         {/* ভেরিফাইড ব্যাজ */}
-        <div className="absolute bottom-2.5 left-2.5 bg-black/75 backdrop-blur-md border border-border/60 text-[0.65rem] text-cyan font-semibold px-2 py-0.5 sm:py-1 rounded-md flex items-center gap-1 z-10">
+        <div className="absolute bottom-2.5 left-2.5 bg-black/75 backdrop-blur-md border border-border/60 text-[0.65rem] text-cyan font-semibold px-2 py-0.5 sm:py-1 rounded-md flex items-center gap-1 z-10 pointer-events-none">
           <ShieldCheck size={12} strokeWidth={2.5} /> Verified
         </div>
       </div>
 
-      {/* 📝 ২. টেক্সট ও ডিটেইলস এরিয়া */}
+      {/* 📝 ২. টেক্সট ও ডিটেইলস এরিয়া */}
       <div className="p-4 xs:p-5 sm:p-6 flex flex-col flex-grow justify-between bg-gradient-to-b from-card to-card/70">
         <div>
           {/* অর্গানাইজেশন ও ডেট */}
@@ -147,7 +167,7 @@ export default function Certificates() {
           </div>
         </Reveal>
 
-        {/* 📱 ১. মোবাইল ভিউ স্লাইডার (শুধুমাত্র ছোট স্ক্রিনের জন্য - `sm:hidden`) */}
+        {/* 📱 ১. মোবাইল ভিউ স্লাইডার */}
         <div className="block sm:hidden relative w-full max-w-[360px] mx-auto">
           <div className="overflow-hidden min-h-[340px] flex flex-col justify-between">
             <AnimatePresence mode="wait">
@@ -166,7 +186,6 @@ export default function Certificates() {
 
           {/* 🔘 স্লাইডার নেভিগেশন বাটনসমূহ */}
           <div className="flex items-center justify-between mt-6 px-2">
-            {/* ডট ইন্ডিকেটর */}
             <div className="flex gap-1.5">
               {certificates.map((_, idx) => (
                 <div 
@@ -176,7 +195,6 @@ export default function Certificates() {
               ))}
             </div>
 
-            {/* Next / Prev বাটন */}
             <div className="flex gap-3">
               <button 
                 onClick={prevSlide}
@@ -196,7 +214,7 @@ export default function Certificates() {
           </div>
         </div>
 
-        {/* 💻 ২. ডেস্কটপ ও ট্যাবলেট ভিউ গ্রিড (বড় স্ক্রিনের জন্য - `hidden sm:grid`) */}
+        {/* 💻 ২. ডেস্কটপ ও ট্যাবলেট ভিউ গ্রিড */}
         <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {certificates.map((cert, idx) => (
             <motion.div

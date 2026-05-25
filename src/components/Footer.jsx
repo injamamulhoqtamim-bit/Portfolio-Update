@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 export default function Footer() {
   const [isClient, setIsClient] = useState(false);
@@ -9,6 +10,43 @@ export default function Footer() {
   useEffect(() => {
     setIsClient(true);
   }, []);
+
+  // 🔄 কলামগুলোর জন্য ৪-দিকের অ্যানিমেশন ভ্যারিয়েন্ট
+  const columnVariants = (direction) => {
+    const offsets = {
+      left: { x: -60, y: 0 },
+      right: { x: 60, y: 0 },
+      up: { x: 0, y: -50 },
+      down: { x: 0, y: 50 },
+    };
+
+    return {
+      hidden: {
+        opacity: 0,
+        x: offsets[direction]?.x || 0,
+        y: offsets[direction]?.y || 0,
+        scale: 0.95,
+      },
+      visible: {
+        opacity: 1,
+        x: 0,
+        y: 0,
+        scale: 1,
+        transition: {
+          type: "spring",
+          stiffness: 100,
+          damping: 15,
+          duration: 0.6,
+        },
+      },
+    };
+  };
+
+  // 📌 ভিউপোর্ট কনফিগারেশন (যাতে স্ক্রোল আউট করলে অ্যানিমেশন আবার রিসেট হয়)
+  const scrollViewport = { 
+    once: false,       // true দিলে শুধু একবার হতো, false দেওয়াতে স্ক্রোল করলে বারবার হবে
+    amount: 0.15       // ফুটারের ১৫% স্ক্রিনে আসলেই অ্যানিমেশন ট্রিগার হবে
+  };
 
   return (
     <footer className="relative bg-dark3 border-t border-border pt-12 pb-8 px-[5%] overflow-hidden">
@@ -22,7 +60,6 @@ export default function Footer() {
           playsInline 
           className="absolute top-0 left-0 w-full h-full object-cover z-0 pointer-events-none"
         >
-          {/* Direct server route call - eta error chara Vercel direct static asset runtime theke dhore nibe */}
           <source src="/footer.mp4" type="video/mp4" />
           Your browser does not support the video tag.
         </video>
@@ -34,8 +71,14 @@ export default function Footer() {
       {/* Main Content */}
       <div className="relative z-20 max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr] gap-10 md:gap-8 mb-10 text-center sm:text-left">
         
-        {/* Column 1: Brand & Bio */}
-        <div className="flex flex-col items-center sm:items-start col-span-1 sm:col-span-2 lg:col-span-1">
+        {/* Column 1: Brand & Bio -> Left (বাম) থেকে আসবে */}
+        <motion.div 
+          variants={columnVariants("left")}
+          initial="hidden"
+          whileInView="visible"
+          viewport={scrollViewport}
+          className="flex flex-col items-center sm:items-start col-span-1 sm:col-span-2 lg:col-span-1"
+        >
           <a href="#home" className="font-syne font-extrabold text-[1.5rem] text-cyan tracking-[-1px] no-underline block mb-3">
             &lt;<span className="text-white">In</span>jamamul Hoq/&gt;
           </a>
@@ -53,10 +96,15 @@ export default function Footer() {
               </a>
             ))}
           </div>
-        </div>
-      
-        {/* Column 2: Quick Links */}
-        <div>
+        </motion.div>
+        
+        {/* Column 2: Quick Links -> Up (ওপর) থেকে আসবে */}
+        <motion.div
+          variants={columnVariants("up")}
+          initial="hidden"
+          whileInView="visible"
+          viewport={scrollViewport}
+        >
           <h4 className="text-[0.88rem] font-semibold text-white uppercase tracking-[1px] mb-4">Quick Links</h4>
           <ul className="list-none p-0 m-0 flex flex-col gap-2.5">
             {["home", "about", "skills", "projects", "contact"].map(link => (
@@ -65,10 +113,15 @@ export default function Footer() {
               </li>
             ))}
           </ul>
-        </div>
+        </motion.div>
         
-        {/* Column 3: Get In Touch */}
-        <div>
+        {/* Column 3: Get In Touch -> Right (ডান) থেকে আসবে */}
+        <motion.div
+          variants={columnVariants("right")}
+          initial="hidden"
+          whileInView="visible"
+          viewport={scrollViewport}
+        >
           <h4 className="text-[0.88rem] font-semibold text-white uppercase tracking-[1px] mb-4">Get In Touch</h4>
           <ul className="list-none p-0 m-0 flex flex-col gap-2.5">
             <li><a href="mailto:injamamulhoqtamim@gmail.com" className="text-muted text-[0.85rem] md:text-[0.82rem] no-underline transition-colors hover:text-cyan break-all px-4 sm:px-0 block">injamamulhoqtamim@gmail.com</a></li>
@@ -81,11 +134,17 @@ export default function Footer() {
               </a>
             </li>
           </ul>
-        </div>
+        </motion.div>
       </div>
       
-      {/* Footer Bottom Portion */}
-      <div className="relative z-20 max-w-7xl mx-auto border-t border-border pt-6 flex justify-center items-center text-center">
+      {/* Footer Bottom Portion -> Down (নিচ) থেকে আসবে */}
+      <motion.div 
+        variants={columnVariants("down")}
+        initial="hidden"
+        whileInView="visible"
+        viewport={scrollViewport}
+        className="relative z-20 max-w-7xl mx-auto border-t border-border pt-6 flex justify-center items-center text-center"
+      >
         <p className="text-[0.78rem] text-muted font-medium flex items-center justify-center gap-1.5 flex-wrap">
           <span>© 2026 Injamamul Hoq. Powered by</span>
           <span className="inline-flex items-center gap-1 text-text group">
@@ -103,7 +162,7 @@ export default function Footer() {
             </svg>
           </span>
         </p>
-      </div>
+      </motion.div>
     </footer>
   );
 }

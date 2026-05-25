@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Award, Calendar, ShieldCheck, ArrowUpRight, FileText, ChevronLeft, ChevronRight, Eye } from "lucide-react";
 
 export default function Certificates() {
-  // 📜 আপনার সার্টিফিকেট ডাটা লিস্ট
+  // 📜 সার্টিফিকেট ডাটা লিস্ট
   const certificates = [
     {
       title: "Professional Online Digital Marketing",
@@ -35,18 +35,18 @@ export default function Certificates() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
-  // ⚡ ডকুমেন্ট ভিউ করার সময় লোডার ট্রিগার ফাংশন (ফিক্সড লজিক)
+  // ⚡ ডকুমেন্ট ভিউ করার সময় লোডার ট্রিগার ফাংশন
   const handleViewDocument = (e, link) => {
-    e.preventDefault(); // 🛑 সরাসরি পেজ ওপেন হওয়া আটকাতে
+    e.preventDefault(); 
     if (isLoading) return;
 
     // ১. প্রথমে অ্যানিমেশন ওভারলে চালু হবে
     setIsLoading(true);
     
-    // ২. ২ সেকেন্ড সাকসেসফুলি অ্যানিমেশন দেখানোর পর লিঙ্কটি নতুন ট্যাবে ওপেন হবে
+    // ২. ২ সেকেন্ড অ্যানিমেশন দেখানোর পর লিঙ্কটি নতুন ট্যাবে ওপেন হবে
     setTimeout(() => {
       window.open(link, "_blank", "noopener,noreferrer");
-      setIsLoading(false); // লোডার বন্ধ হবে
+      setIsLoading(false); 
     }, 2000);
   };
 
@@ -163,16 +163,16 @@ export default function Certificates() {
   return (
     <section id="certificates" className="py-16 sm:py-24 px-4 xs:px-6 sm:px-[5%] bg-dark border-t border-border select-none relative overflow-hidden">
       
-      {/* 🐹 হ্যামস্টার হুইল লোডার ওভারলে (AnimatePresence) */}
+      {/* 🐹 হ্যামস্টার হুইল লোডার ওভারলে */}
       <AnimatePresence>
         {isLoading && (
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-dark/80 backdrop-blur-md z-[99999] flex flex-col items-center justify-center gap-4"
+            className="fixed inset-0 bg-dark/85 backdrop-blur-md z-[99999] flex flex-col items-center justify-center gap-4"
           >
-            {/* From Uiverse.io by Nawsome */} 
+            {/* 🐹 পিউর Uiverse.io স্ট্রাকচার লোডার */} 
             <div aria-label="Orange and tan hamster running in a metal wheel" role="img" className="wheel-and-hamster">
               <div className="wheel"></div>
               <div className="hamster">
@@ -191,7 +191,8 @@ export default function Certificates() {
               </div>
               <div className="spoke"></div>
             </div>
-            <p className="text-cyan font-mono text-xs tracking-[2px] animate-pulse uppercase mt-2">
+            
+            <p className="text-cyan font-mono text-xs tracking-[2px] animate-pulse uppercase mt-4">
               Opening Document...
             </p>
           </motion.div>

@@ -224,7 +224,6 @@ export default function Hero() {
                   src="/injamam.jpg" 
                   alt="Injamamul Hoq" 
                   fill 
-                  /* 🌟 কনসোলের missing sizes prop ওয়ার্নিং দূর করার জন্য রেসপনসিভ sizes ডিফাইন করা হলো */
                   sizes="(max-width: 640px) 200px, (max-width: 768px) 230px, 240px"
                   className="object-cover"
                   priority
@@ -238,10 +237,10 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* RIGHT SIDE - Text Content + 🌟 Floating Bubbles */}
+        {/* RIGHT SIDE - Text Content + Floating Bubbles */}
         <div className="flex-1 text-center md:text-left order-1 md:order-2 z-[2] pt-8 md:pt-0 animate-slideInRight relative min-h-[400px]">
           
-          {/* 🌟 Bubble Container (ডানদিকের টেক্সটের ঠিক পেছনে থাকবে) */}
+          {/* Bubble Container */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none -z-10">
             {bubbleIcons.map((bubble, index) => (
               <motion.div
@@ -249,13 +248,13 @@ export default function Hero() {
                 className="absolute opacity-15 filter blur-[0.5px]"
                 style={{ 
                   left: bubble.left, 
-                  bottom: "-50px", // স্ক্রিনের নিচ থেকে শুরু হবে
+                  bottom: "-50px", 
                   fontSize: bubble.size 
                 }}
                 animate={{
-                  y: ["0px", "-500px"], // নিচ থেকে উপরে যাবে
-                  x: ["0px", index % 2 === 0 ? "25px" : "-25px", "0px"], // হালকা আঁকাবাঁকা (Sway) মোশন
-                  rotate: [0, 180, 360] // ভাসার সাথে সাথে আলতো ঘুরবে
+                  y: ["0px", "-500px"], 
+                  x: ["0px", index % 2 === 0 ? "25px" : "-25px", "0px"], 
+                  rotate: [0, 180, 360] 
                 }}
                 transition={{
                   duration: bubble.duration,
@@ -291,7 +290,14 @@ export default function Hero() {
             <a href="#projects" className="bg-gradient-to-br from-cyan to-cyan2 text-black px-7 py-[0.75rem] rounded-full font-bold transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(0,212,255,0.35)]">
               View My Work
             </a>
-            <a href="Portfolio CV.pdf" download className="bg-transparent text-text px-7 py-[0.75rem] rounded-full font-semibold border-[1.5px] border-[rgba(0,212,255,0.3)] transition-all duration-300 hover:border-cyan hover:text-cyan hover:-translate-y-0.5 flex items-center gap-2">
+            
+            {/* 🌟 এখানে পরিবর্তন করা হয়েছে: download অ্যাট্রিবিউট ফেলে target="_blank" দেওয়া হয়েছে */}
+            <a 
+              href="/Portfolio CV.pdf" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="bg-transparent text-text px-7 py-[0.75rem] rounded-full font-semibold border-[1.5px] border-[rgba(0,212,255,0.3)] transition-all duration-300 hover:border-cyan hover:text-cyan hover:-translate-y-0.5 flex items-center gap-2"
+            >
               <Download size={16} />
               View Resume
             </a>

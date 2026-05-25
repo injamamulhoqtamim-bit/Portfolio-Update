@@ -40,8 +40,20 @@ const projects = [
     improvements: 'Adding direct Figma/Adobe plugin integration, team workspaces, and real-time generation history logs.',
     longDesc: 'Digitools Platform is an all-in-one suite designed specifically for creators. It unlocks access to custom-trained AI generators, premium layout templates, and workflow boosters, making content creation faster and smarter.'
   },
-  {
+   {
     id: 4,
+    title: 'English জানালা',
+    desc: 'English Janala is an interactive English vocabulary and language learning web application. Users can navigate through various difficulty levels, search for specific terms, and hear correct pronunciations using the Web Speech API. ',
+    image: '/EnglilshJanala.jpg',
+    tech: ['HTML', 'CSS','TailwindCSS', 'JavaScript'],
+    live: 'https://english-janala-dusky.vercel.app/', 
+    code: '#',
+    challenges: 'Ensuring the custom brand logo scaled responsively across mobile layouts while seamlessly aligning its asymmetric elements alongside the text components.',
+    improvements: 'Backend and Database Integration: Migrate from mock static data/local JSON arrays to a secure backend database. ',
+    longDesc: 'English Janala is an interactive English vocabulary and language learning web application. It is designed to help users learn new words, improve their vocabulary across different levels, and enhance their English language skills in an engaging and user-friendly way.'
+  },
+  {
+    id: 5,
     title: 'Zyntrix Lab',
     desc: 'A polished, interactive corporate business website tailored to display professional services and drive enterprise growth.',
     image: '/zyntrixLab.jpg', 
@@ -53,7 +65,7 @@ const projects = [
     longDesc: 'Zyntrix Lab is a top-tier business ecosystem web application. It functions to establish a robust online presence through dynamic service showcase cards, interactive case studies, and responsive contact hooks.'
   },
   {
-    id: 5,
+    id: 6,
     title: 'GitHub Tracker',
     desc: 'A specialized developer productivity tool built to monitor, analyze, and manage active GitHub repositories and issues smoothly.',
     image: '/github tracker.jpg', 
@@ -65,7 +77,7 @@ const projects = [
     longDesc: 'GitHub Tracker streamlines open-source management by aggregating repository statistics. Developers can view real-time issue states, track assignment logs, and visual bug closure frequencies in a sleek unified interface.'
   },
   {
-    id: 6,
+    id: 7,
     title: 'Job Tracker',
     desc: 'An essential web dashboard designed for active job seekers to easily track, update, and manage their recruitment pipelines.',
     image: '/Job Application.jpg', 

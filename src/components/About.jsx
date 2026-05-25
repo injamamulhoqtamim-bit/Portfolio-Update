@@ -39,6 +39,8 @@ export default function About() {
                 src="/aboutme.png" 
                 alt="Md. Injamamul Hoq" 
                 fill 
+                /* 🌟 পারফরম্যান্স ইমপ্রুভমেন্ট এবং ওয়ার্নিং ফিক্স করার জন্য sizes প্রোপার্টি যোগ করা হলো */
+                sizes="(max-width: 640px) 260px, (max-width: 768px) 320px, (max-width: 1024px) 380px, 450px"
                 className="object-contain drop-shadow-[0_20px_50px_rgba(0,212,255,0.2)]" 
                 priority
               />
@@ -56,7 +58,7 @@ export default function About() {
         >
           <div className="space-y-5">
             <h3 className="text-2xl sm:text-3xl font-bold text-white leading-tight">
-              Hi, I&apos;m <span className="bg-gradient-to-r from-cyan via-cyan2 to-pink text-transparent bg-clip-text">Injamamul Hoq</span>
+              Hi, I'm <span className="bg-gradient-to-r from-cyan via-cyan2 to-pink text-transparent bg-clip-text">Injamamul Hoq</span>
               <span className="block text-gray-400 font-normal text-lg sm:text-xl mt-3">
                 a passionate Frontend Developer who loves building modern and responsive web applications.
               </span>
@@ -80,7 +82,7 @@ export default function About() {
                 value: "Banani BTCL Colony, Dhaka", 
                 icon: <FiMapPin />, 
                 isLocation: true, 
-                // গুগল ম্যাপস এ সরাসরি সার্চ করার জন্য লিঙ্ক জেনারেট করা হয়েছে
+                // গুগল ম্যাপস এ সরাসরি সার্চ করার জন্য লিঙ্ক জেনারেট করা হয়েছে
                 mapUrl: "https://www.google.com/maps/search/?api=1&query=Banani+BTCL+Colony,+Dhaka" 
               },
               { title: "Email", value: "injamamulhoqtamim@gmail.com", icon: <FiMail />, isEmail: true },

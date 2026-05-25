@@ -2,10 +2,10 @@
 import { useEffect, useRef, useState } from "react";
 import { Download } from "lucide-react";
 import Image from "next/image";
-import { motion } from "framer-motion"; // বাবল অ্যানিমেশনের জন্য ইমপোর্ট করা হয়েছে
+import { motion } from "framer-motion"; // বাবল অ্যানিমেশনের জন্য ইমপোর্ট করা হয়েছে
 import { 
   SiHtml5, 
-  SiCss, // 👈 এখানে SiCss3 এর বদলে SiCss হবে
+  SiCss, 
   SiTailwindcss, 
   SiGithub, 
   SiJavascript, 
@@ -27,15 +27,15 @@ export default function Hero() {
   ];
 
   // ব্যাকগ্রাউন্ড বাবলসের জন্য আইকন লিস্ট ও পজিশন ডেটা
- const bubbleIcons = [
-  { icon: <SiHtml5 className="text-[#E34F26]" />, left: "10%", size: 30, delay: 0, duration: 12 },
-  { icon: <SiCss className="text-[#1572B6]" />, left: "40%", size: 24, delay: 3, duration: 14 }, // 👈 এখানেও SiCss হবে
-  { icon: <SiTailwindcss className="text-[#06B6D4]" />, left: "75%", size: 36, delay: 1, duration: 11 },
-  { icon: <SiGithub className="text-white" />, left: "25%", size: 28, delay: 5, duration: 15 },
-  { icon: <SiJavascript className="text-[#F7DF1E]" />, left: "60%", size: 32, delay: 2, duration: 13 },
-  { icon: <SiReact className="text-[#61DAFB]" />, left: "90%", size: 35, delay: 6, duration: 10 },
-  { icon: <SiNodedotjs className="text-[#339933]" />, left: "50%", size: 26, delay: 4, duration: 16 },
-];
+  const bubbleIcons = [
+    { icon: <SiHtml5 className="text-[#E34F26]" />, left: "10%", size: 30, delay: 0, duration: 12 },
+    { icon: <SiCss className="text-[#1572B6]" />, left: "40%", size: 24, delay: 3, duration: 14 }, 
+    { icon: <SiTailwindcss className="text-[#06B6D4]" />, left: "75%", size: 36, delay: 1, duration: 11 },
+    { icon: <SiGithub className="text-white" />, left: "25%", size: 28, delay: 5, duration: 15 },
+    { icon: <SiJavascript className="text-[#F7DF1E]" />, left: "60%", size: 32, delay: 2, duration: 13 },
+    { icon: <SiReact className="text-[#61DAFB]" />, left: "90%", size: 35, delay: 6, duration: 10 },
+    { icon: <SiNodedotjs className="text-[#339933]" />, left: "50%", size: 26, delay: 4, duration: 16 },
+  ];
 
   // Typing Animation
   useEffect(() => {
@@ -224,6 +224,8 @@ export default function Hero() {
                   src="/injamam.jpg" 
                   alt="Injamamul Hoq" 
                   fill 
+                  /* 🌟 কনসোলের missing sizes prop ওয়ার্নিং দূর করার জন্য রেসপনসিভ sizes ডিফাইন করা হলো */
+                  sizes="(max-width: 640px) 200px, (max-width: 768px) 230px, 240px"
                   className="object-cover"
                   priority
                 />

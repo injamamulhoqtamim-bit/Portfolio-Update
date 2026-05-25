@@ -1,10 +1,28 @@
 "use client";
+import { useState } from "react";
 import Reveal from "./Reveal";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { FiUser, FiMapPin, FiMail, FiBookOpen } from "react-icons/fi";
 
 export default function About() {
+  const [showMapLoader, setShowMapLoader] = useState(false);
+
+  // 🗺️ লোকেশনে ক্লিক করলে থ্রিডি ম্যাপ অ্যানিমেশন দেখিয়ে ম্যাপ ওপেন করার হ্যান্ডলার
+  const handleLocationClick = (e, mapUrl) => {
+    e.preventDefault();
+    if (showMapLoader) return;
+
+    // ১. অ্যানিমেশন ওভারলে চালু হবে
+    setShowMapLoader(true);
+
+    // ২. ১.৫ সেকেন্ড ফোল্ডিং ম্যাপ অ্যানিমেশন দেখানোর পর নতুন ট্যাবে ম্যাপ ওপেন হবে
+    setTimeout(() => {
+      window.open(mapUrl, "_blank", "noopener,noreferrer");
+      setShowMapLoader(false);
+    }, 1500);
+  };
+
   const infoData = [
     { title: "Name", value: "Md. Injamamul Hoq", icon: <FiUser /> },
     { 
@@ -87,7 +105,10 @@ export default function About() {
             {infoData.map((info, i) => (
               <div 
                 key={i}
-                className="bg-white/5 border border-white/10 rounded-2xl p-5 flex gap-4 items-center transition-all duration-300 hover:border-cyan/40 hover:bg-white/10 group"
+                onClick={(e) => info.isLocation && handleLocationClick(e, info.mapUrl)}
+                className={`bg-white/5 border border-white/10 rounded-2xl p-5 flex gap-4 items-center transition-all duration-300 hover:border-cyan/40 hover:bg-white/10 group ${
+                  info.isLocation ? "cursor-pointer active:scale-[0.98]" : ""
+                }`}
               >
                 <div className="w-12 h-12 rounded-xl bg-cyan/10 border border-cyan/20 flex items-center justify-center text-xl text-cyan group-hover:bg-cyan group-hover:text-black transition-all duration-500 flex-shrink-0">
                   {info.icon}
@@ -100,9 +121,9 @@ export default function About() {
                       {info.value}
                     </a>
                   ) : info.isLocation ? (
-                    <a href={info.mapUrl} target="_blank" rel="noopener noreferrer" className="text-[0.95rem] text-white font-medium hover:text-cyan truncate block transition-colors">
+                    <span className="text-[0.95rem] text-white font-medium hover:text-cyan truncate block transition-colors">
                       {info.value}
-                    </a>
+                    </span>
                   ) : (
                     <span className="text-[0.95rem] text-white font-medium block truncate">{info.value}</span>
                   )}
@@ -112,6 +133,181 @@ export default function About() {
           </div>
         </motion.div>
       </div>
+
+      {/* 📍 ফুল-স্ক্রিন ম্যাপ অ্যানিমেশন ওভারলে (AnimatePresence দিয়ে স্মুথ করা হয়েছে) */}
+      <AnimatePresence>
+        {showMapLoader && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/70 z-[99999] flex flex-col items-center justify-center pointer-events-auto backdrop-blur-md"
+          >
+            {/* From Uiverse.io by dexter-st */} 
+            <div className="map-btn-wrapper">
+              <svg height="0" width="0">
+                <filter id="land">
+                  <feTurbulence
+                    result="turb"
+                    numOctaves="7"
+                    baseFrequency="0.006"
+                    type="fractalNoise"
+                  ></feTurbulence>
+                  <feDisplacementMap
+                    yChannelSelector="G"
+                    xChannelSelector="R"
+                    scale="700"
+                    in="SourceGraphic"
+                    in2="turb"
+                  ></feDisplacementMap>
+                </filter>
+              </svg>
+
+              {/* অটোপ্লে সিমুলেট করার জন্য ক্লাস ফোর্সমুক্ত অ্যানিমেশন ইফেক্ট করা হয়েছে */}
+              <div className="map-btn animated-state">Opening Map...</div>
+
+              <div className="pinpoint animated-state"></div>
+              <div className="map-container animated-state">
+                <div className="map fold-1"></div>
+                <div className="map fold-2"></div>
+                <div className="map fold-3"></div>
+                <div className="map fold-4"></div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* 🎨 ইন্টিগ্রেটেড কাস্টম সিএসএস */}
+      <style jsx global>{`
+        .map-btn-wrapper {
+          --btn-color: #00d4ff; /* নিয়ন সায়ান থিম */
+          --text-color: #000000;
+          --land-color: #ffdd9f;
+          --veg-color: #36ad5aa9;
+          --water-color: #b3e3ff;
+          --transition-dur: 0.3s;
+
+          position: relative;
+          display: flex;
+          font-size: 16px;
+          font-family: "Inter", sans-serif;
+          user-select: none;
+          overflow: hidden;
+          border-radius: 50ch;
+          box-shadow: 0px 10px 40px rgba(0, 212, 255, 0.2);
+        }
+
+        .map-btn {
+          padding: 1em 2em 1em 3.5em;
+          border-radius: 50ch;
+          background-color: var(--btn-color);
+          font-weight: 600;
+          color: var(--text-color);
+        }
+
+        /* অটোমেটিক অ্যানিমেশন রান করার জন্য কাস্টম কি-ফ্রেম ক্লাস */
+        .map-btn.animated-state {
+          animation: mapBtnPulse 1.5s ease-in-out infinite alternate;
+        }
+
+        .pinpoint.animated-state {
+          pointer-events: none;
+          position: absolute;
+          height: 60%;
+          aspect-ratio: 1;
+          top: 20%;
+          left: 0.75em;
+          background-color: #ff4747; /* লোকেশন পিন রেড */
+          z-index: 1;
+          mask-image: radial-gradient(circle at center, #0000 0%, #0000 32%, #fff 36%);
+          filter: blur(0.25px);
+          animation: pinpointMove 1.5s ease-in-out infinite alternate;
+        }
+
+        .map-container.animated-state {
+          pointer-events: none;
+          position: absolute;
+          left: 0px;
+          top: 115px;
+          perspective: 120px;
+          transform-origin: 3em 0.5em;
+          z-index: 0;
+          animation: mapFoldOpen 1.5s ease-in-out infinite alternate;
+        }
+
+        .map {
+          position: absolute;
+          bottom: 100px;
+          width: 120px;
+          height: 200px;
+          background-color: var(--water-color);
+          background-image: linear-gradient(to bottom, #fff2, 30%, #0000);
+          transform-origin: left bottom;
+        }
+
+        .map::after {
+          content: "";
+          top: -40px;
+          left: 12px;
+          width: 100%;
+          height: 200%;
+          background-color: var(--land-color);
+          position: absolute;
+          filter: url(#land);
+          box-shadow: inset 0 0 48px 24px var(--veg-color);
+          z-index: 0;
+        }
+
+        .fold-1, .fold-2, .fold-3, .fold-4 {
+          mask-image: linear-gradient(to top, #fff, 97%, #0000);
+          overflow: hidden;
+        }
+
+        .fold-1 { left: -60px; transform: rotateY(10deg) translateZ(30px); }
+        .fold-2 { left: 60px; transform: rotateY(-10deg) translateZ(10px); }
+        .fold-3 { left: -169px; transform: rotateY(-15deg) translateZ(-1px); }
+        .fold-4 { left: 166px; transform: rotateY(15deg) translateZ(31px); }
+
+        .fold-1::before, .fold-2::before, .fold-3::before, .fold-4::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          box-shadow: inset 0 10px 16px 3px #0004;
+          z-index: 1;
+        }
+
+        /* 🔄 অটোমেটিক অ্যানিমেশন কি-ফ্রেমসমূহ */
+        @keyframes mapFoldOpen {
+          0% {
+            transform: perspective(120px) rotateX(35deg) scaleX(0);
+            opacity: 0;
+          }
+          100% {
+            transform: perspective(100px) rotateX(35deg) scaleX(0.85);
+            opacity: 1;
+          }
+        }
+
+        @keyframes pinpointMove {
+          0% {
+            border-radius: 50%;
+            transform: rotateZ(45deg);
+          }
+          100% {
+            border-radius: 50% 50% 0 50%;
+            transform: rotateZ(45deg) translate(-0.3em, -0.3em);
+          }
+        }
+
+        @keyframes mapBtnPulse {
+          0% { background-color: var(--btn-color); color: var(--text-color); }
+          100% { background-color: #ffffff; color: #000000a6; }
+        }
+      `}</style>
     </section>
   );
 }

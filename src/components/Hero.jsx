@@ -19,6 +19,9 @@ export default function Hero() {
   const [currentText, setCurrentText] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
+  
+  // 🔄 লোডিং স্টেট ম্যানেজমেন্ট
+  const [isCvLoading, setIsCvLoading] = useState(false);
 
   const titles = [
     { text: "Web Developer", color: "text-green-400" },
@@ -26,7 +29,7 @@ export default function Hero() {
     { text: "Cyber Security Researcher", color: "text-red-400" },
   ];
 
-  // ব্যাকগ্রাউন্ড বাবলসের জন্য আইকন লিস্ট ও পজিশন ডেটা
+  // बैकग्रাউন্ড বাবলসের জন্য আইকন লিস্ট ও পজিশন ডেটা
   const bubbleIcons = [
     { icon: <SiHtml5 className="text-[#E34F26]" />, left: "10%", size: 30, delay: 0, duration: 12 },
     { icon: <SiCss className="text-[#1572B6]" />, left: "40%", size: 24, delay: 3, duration: 14 }, 
@@ -93,6 +96,20 @@ export default function Hero() {
 
     return () => cancelAnimationFrame(animationFrameId);
   }, []);
+
+  // 🛠 CV ওপেন করার হ্যান্ডলার ফাংশন
+  const handleViewResume = (e) => {
+    e.preventDefault(); // ডিফল্ট ইনস্ট্যান্ট ওপেন হওয়া আটকাবে
+    if (isCvLoading) return; // অলরেডি লোড হতে থাকলে দ্বিতীয়বার ক্লিক আটকাতে
+
+    setIsCvLoading(true);
+
+    // ১.৫ সেকেন্ড লোডার অ্যানিমেশন দেখিয়ে তারপর CV ওপেন হবে
+    setTimeout(() => {
+      window.open("/Portfolio CV.pdf", "_blank", "noopener,noreferrer");
+      setIsCvLoading(false); // ওপেন হওয়ার পর লোডার বন্ধ হবে
+    }, 1500); 
+  };
 
   const nodes = [
     {
@@ -286,21 +303,26 @@ export default function Hero() {
             Design. Build. Secure — From user experience to secure code — designing and building the modern web.
           </p>
 
-          <div className="flex gap-4 flex-wrap mb-8 justify-center md:justify-start">
+          <div className="flex gap-4 flex-wrap mb-8 justify-center md:justify-start items-center min-h-[50px]">
             <a href="#projects" className="bg-gradient-to-br from-cyan to-cyan2 text-black px-7 py-[0.75rem] rounded-full font-bold transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(0,212,255,0.35)]">
               View My Work
             </a>
             
-            {/* 🌟 এখানে পরিবর্তন করা হয়েছে: download অ্যাট্রিবিউট ফেলে target="_blank" দেওয়া হয়েছে */}
-            <a 
-              href="/Portfolio CV.pdf" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="bg-transparent text-text px-7 py-[0.75rem] rounded-full font-semibold border-[1.5px] border-[rgba(0,212,255,0.3)] transition-all duration-300 hover:border-cyan hover:text-cyan hover:-translate-y-0.5 flex items-center gap-2"
-            >
-              <Download size={16} />
-              View Resume
-            </a>
+            {/* 🌟 কন্ডিশনাল রেন্ডারিং: লোডিং ট্রু থাকলে অ্যানিমেশন দেখাবে, তা না হলে সাধারণ বাটনটি দেখাবে */}
+            {isCvLoading ? (
+              <div className="px-10 py-[0.75rem] flex items-center justify-center">
+                <div className="ping-pong-loader"></div>
+              </div>
+            ) : (
+              <a 
+                href="/Portfolio CV.pdf" 
+                onClick={handleViewResume} // 👈 এখানে কাস্টম ফাংশনটি ট্রিগার করা হয়েছে
+                className="bg-transparent text-text px-7 py-[0.75rem] rounded-full font-semibold border-[1.5px] border-[rgba(0,212,255,0.3)] transition-all duration-300 hover:border-cyan hover:text-cyan hover:-translate-y-0.5 flex items-center gap-2"
+              >
+                <Download size={16} />
+                View Resume
+              </a>
+            )}
           </div>
 
           <div className="flex gap-3 justify-center md:justify-start">
@@ -366,6 +388,43 @@ export default function Hero() {
         }
         .animate-slideInRight {
           animation: slideInRight 1s ease-out forwards;
+        }
+
+        /* 🏓 Uiverse.io Ping-Pong Loader Custom Styles */
+        .ping-pong-loader {
+          position: relative;
+          height: 40px;
+          width: 6px;
+          color: #FFF;
+          animation: paddles 0.75s ease-out infinite;
+        }
+
+        .ping-pong-loader:before {
+          content: "";
+          position: absolute;
+          margin: 0 auto;
+          left: 0;
+          right: 0;
+          top: 15px;
+          width: 12px;
+          height: 12px;
+          background-color: greenyellow;
+          border-radius: 50%;
+          animation: ballbounce 0.6s ease-out infinite;
+        }
+
+        @keyframes paddles {
+          0% { box-shadow: -25px -10px, 25px 10px }
+          50% { box-shadow: -25px 8px, 25px -10px }
+          100% { box-shadow: -25px -10px, 25px 10px }
+        }
+
+        @keyframes ballbounce {
+          0% { transform: translateX(-20px) scale(1, 1.2) }
+          25% { transform: scale(1.2, 1) }
+          50% { transform: translateX(15px) scale(1, 1.2) }
+          75% { transform: scale(1.2, 1) }
+          100% { transform: translateX(-20px) }
         }
       `}</style>
     </section>

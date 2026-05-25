@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import Reveal from "./Reveal";
 import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
 
 const projects = [
   {
@@ -40,7 +41,7 @@ const projects = [
     improvements: 'Adding direct Figma/Adobe plugin integration, team workspaces, and real-time generation history logs.',
     longDesc: 'Digitools Platform is an all-in-one suite designed specifically for creators. It unlocks access to custom-trained AI generators, premium layout templates, and workflow boosters, making content creation faster and smarter.'
   },
-   {
+  {
     id: 4,
     title: 'English জানালা',
     desc: 'English Janala is an interactive English vocabulary and language learning web application. Users can navigate through various difficulty levels, search for specific terms, and hear correct pronunciations using the Web Speech API. ',
@@ -81,12 +82,36 @@ const projects = [
     title: 'Job Tracker',
     desc: 'An essential web dashboard designed for active job seekers to easily track, update, and manage their recruitment pipelines.',
     image: '/Job Application.jpg', 
-    tech: ['HTmL', 'JavaScript', 'TailwindCSS'],
+    tech: ['HTML', 'JavaScript', 'TailwindCSS'], 
     live: 'https://job-application-tracker.injamamulhoqtamim.workers.dev/', 
     code: '#',
     challenges: 'Structuring a dynamic drag-and-drop or status-update flow for jobs shifting across various application cycles.',
     improvements: 'Integrating resume scanning matching scores, interview date calendar overlays, and automated offer comparison charts.',
     longDesc: 'Job Tracker relieves the chaos of career hunting. It allows users to store corporate postings, set current application statuses (Applied, Interviewing, Offered, Rejected), track custom notes, and monitor response time analytics.'
+  },
+  {
+    id: 8, 
+    title: 'Dream-11',
+    desc: 'Claim Free Credits instantly! Banan apnar Dream 11 Squad.',
+    image: '/Dream-11.jpg', 
+    tech: ['HTML5', 'TailwindCSS','React.js', ' DaisyUI','JavaScript(ES6+)', 'React-Toastify'],
+    live: 'https://dream-11-cricket.vercel.app/', 
+    code: '#',
+    challenges: 'Handling dynamic budget math alongside selection limits in real-time was a key challenge. Ensuring that the available players pool instantly updates (preventing duplicate selections) while keeping the coin balance accurately synced across a split-view dashboard required deep state architecture in React.',
+    improvements: 'Strategic Limits & Live Stats: Adding cricket-specific squad rules (e.g., mandatory wicketkeeper) and live player stats via API for analytical bidding.Persistent Storage & Drafting: Implementing LocalStorage to save teams on refresh and adding a real-time multiplayer mock draft system.',
+    longDesc: 'My Team Dream 11 is a highly interactive, responsive, and dynamic fantasy sports dashboard designed to replicate the strategic thrill of a real-world cricket tournament auction. Built using React.js and styled with Tailwind CSS & DaisyUI, the platform transforms the user into a team manager starting with a clean slate of zero coins.'
+  },
+  {
+    id: 9, 
+    title: 'Cleanliness--client',
+    desc: 'A public sanitation management interface allowing citizens to log active waste requests, coordinate field sweeps, and view tracking boards.',
+    image: '/cleanliness.jpg', 
+    tech: ['React', 'TailwindCSS', 'Node.js', 'MongoDB'],
+    live: '#', 
+    code: '#',
+    challenges: 'Managing precise geolocation payloads and multi-tier photo file attachments without introducing frontend performance latency.',
+    improvements: 'Deploying direct interactive map route optimization matrices for maintenance crews and adding a milestone reward token matrix.',
+    longDesc: 'Cleanliness--client serves as the proactive crowdsourcing end of a smart waste allocation ecosystem. The application offers robust multi-image file uploads, real-time ticket state transition logs, and responsive layout scaling.'
   }
 ];
 
@@ -97,7 +122,9 @@ export default function Projects() {
   const [currentPage, setCurrentPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(3);
 
-  // 📱 রেসপন্সিভ পেজিনেশন হ্যান্ডলার
+  // পেজিনেশন এনিমেশনের দিক (ডান/বাম) ট্র্যাক করার জন্য
+  const [direction, setDirection] = useState(0);
+
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 768) {
@@ -114,7 +141,6 @@ export default function Projects() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // পেজ সাইজ চেঞ্জ হলে কারেন্ট পেজ যাতে সীমার বাইরে না চলে যায়
   useEffect(() => {
     const totalPages = Math.ceil(projects.length / itemsPerPage);
     if (currentPage >= totalPages && totalPages > 0) {
@@ -138,11 +164,22 @@ export default function Projects() {
   const visibleProjects = projects.slice(startIndex, startIndex + itemsPerPage);
 
   const handlePrev = () => {
-    if (currentPage > 0) setCurrentPage(prev => prev - 1);
+    if (currentPage > 0) {
+      setDirection(-1);
+      setCurrentPage(prev => prev - 1);
+    }
   };
 
   const handleNext = () => {
-    if (currentPage < totalPages - 1) setCurrentPage(prev => prev + 1);
+    if (currentPage < totalPages - 1) {
+      setDirection(1);
+      setCurrentPage(prev => prev + 1);
+    }
+  };
+
+  const handleDotClick = (index) => {
+    setDirection(index > currentPage ? 1 : -1);
+    setCurrentPage(index);
   };
 
   const openModal = (p) => {
@@ -155,9 +192,27 @@ export default function Projects() {
     setTimeout(() => setSelectedProject(null), 400);
   };
 
+  // পেজিনেশন স্লাইড করার ভেরিয়েন্টস
+  const slideVariants = {
+    enter: (dir) => ({
+      x: dir > 0 ? 50 : -50,
+      opacity: 0
+    }),
+    center: {
+      x: 0,
+      opacity: 1,
+      transition: { duration: 0.4, ease: "easeOut" }
+    },
+    exit: (dir) => ({
+      x: dir > 0 ? -50 : 50,
+      opacity: 0,
+      transition: { duration: 0.3, ease: "easeIn" }
+    })
+  };
+
   return (
     <>
-      <section id="projects" className="py-16 md:py-24 px-[5%] bg-dark select-none">
+      <section id="projects" className="py-16 md:py-24 px-[5%] bg-dark select-none overflow-hidden">
         <Reveal direction="down">
           <h2 className="font-syne text-[clamp(2rem,4vw,3rem)] font-extrabold text-center mb-2 text-white">
             My <span className="text-cyan">Projects</span>
@@ -165,133 +220,177 @@ export default function Projects() {
         </Reveal>
         
         <Reveal direction="down">
-                <p className="text-center text-muted font-medium tracking-[1px] text-[0.95rem] uppercase mt-1 mb-14">
-                  My <span className="text-cyan2">Favourite Work</span>
-                </p>
-              </Reveal>
+          <p className="text-center text-muted font-medium tracking-[1px] text-[0.95rem] uppercase mt-1 mb-14">
+            My <span className="text-cyan2">Favourite Work</span>
+          </p>
+        </Reveal>
 
-        {/* 📦 রেসপন্সিভ প্রজেক্ট গ্রিড লেআউট */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-[1200px] mx-auto min-h-[auto] md:min-h-[530px]">
-          {visibleProjects.map((p, i) => (
-            <div key={p.id} className="transition-all duration-500 transform opacity-100 scale-100 h-full">
-              <Reveal direction="up">
-                <div className="bg-card border border-border rounded-[20px] overflow-hidden transition-all duration-300 relative group hover:border-[rgba(0,212,255,0.25)] hover:-translate-y-1.5 hover:shadow-[0_20px_60px_rgba(0,0,0,0.4)] flex flex-col h-full">
-                  <div className="h-[200px] sm:h-[240px] relative overflow-hidden bg-white w-full">
-                    <Image 
-                      className="transition-transform duration-400 group-hover:scale-105 p-2" 
-                      src={p.image} 
-                      alt={p.title} 
-                      fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      style={{ objectFit: 'contain', objectPosition: 'center' }}
-                    />
-                    <div className="absolute top-3 left-3 bg-[rgba(0,212,255,0.12)] border border-[rgba(0,212,255,0.25)] text-cyan w-8 h-8 rounded-lg flex items-center justify-center text-[0.75rem] font-bold backdrop-blur-sm z-10">
-                      0{startIndex + i + 1}
+        {/* এনিমেটেড গ্রিড কন্টেইনার - AnimatePresence দিয়ে পেজ চেঞ্জ স্মুথ করা হয়েছে */}
+        <div className="relative max-w-[1200px] mx-auto min-h-[530px]">
+          <AnimatePresence mode="wait" custom={direction}>
+            <motion.div 
+              key={currentPage}
+              custom={direction}
+              variants={slideVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full h-full"
+            >
+              {visibleProjects.map((p, i) => (
+                <div key={p.id} className="h-full">
+                  <Reveal direction="up">
+                    <div className="bg-card border border-border rounded-[20px] overflow-hidden transition-all duration-300 relative group hover:border-[rgba(0,212,255,0.25)] hover:-translate-y-1.5 hover:shadow-[0_20px_60px_rgba(0,0,0,0.4)] flex flex-col h-full">
+                      <div className="h-[200px] sm:h-[240px] relative overflow-hidden bg-white w-full">
+                        <Image 
+                          className="transition-transform duration-400 group-hover:scale-105 p-2" 
+                          src={p.image} 
+                          alt={p.title} 
+                          fill
+                          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                          style={{ objectFit: 'contain', objectPosition: 'center' }}
+                        />
+                        <div className="absolute top-3 left-3 bg-[rgba(0,212,255,0.12)] border border-[rgba(0,212,255,0.25)] text-cyan w-8 h-8 rounded-lg flex items-center justify-center text-[0.75rem] font-bold backdrop-blur-sm z-10">
+                          0{startIndex + i + 1}
+                        </div>
+                      </div>
+                      <div className="p-[1.2rem] md:p-[1.4rem] flex flex-col flex-grow">
+                        <h3 className="font-syne text-[1.1rem] md:text-[1.15rem] font-bold mb-2 text-white">{p.title}</h3>
+                        <p className="text-[0.8rem] md:text-[0.83rem] text-muted leading-[1.65] mb-4 line-clamp-3">{p.desc}</p>
+                        <div className="flex flex-wrap gap-1.5 mb-5 mt-auto">
+                          {p.tech.map(t => (
+                            <span key={t} className="bg-[rgba(0,212,255,0.08)] border border-[rgba(0,212,255,0.15)] text-cyan px-[0.55rem] py-[0.2rem] rounded-full text-[0.68rem] font-medium">
+                              {t}
+                            </span>
+                          ))}
+                        </div>
+                        
+                        <div className="flex flex-wrap xs:flex-nowrap gap-2">
+                          <a 
+                            href={p.live} 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            className="flex-1 min-w-[75px] px-2 py-2 rounded-lg text-center text-[0.72rem] md:text-[0.78rem] font-semibold bg-gradient-to-br from-cyan to-cyan2 text-black hover:opacity-85 transition-all flex items-center justify-center gap-1"
+                          >
+                            <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 12 10 10-4.477 10-12S17.523 2 12 2zm-1 14.5v-9l6 4.5-6 4.5z"/>
+                            </svg>
+                            Live
+                          </a>
+                          
+                          <button onClick={() => openModal(p)} className="flex-1 min-w-[75px] px-2 py-2 rounded-lg text-center text-[0.72rem] md:text-[0.78rem] font-semibold bg-[rgba(255,255,255,0.05)] text-text border border-border hover:text-cyan hover:border-[rgba(0,212,255,0.3)] transition-all">👁 Details</button>
+                          <a href={p.code} target="_blank" rel="noopener noreferrer" className="flex-1 min-w-[75px] px-2 py-2 rounded-lg text-center text-[0.72rem] md:text-[0.78rem] font-semibold bg-[rgba(255,255,255,0.05)] text-text border border-border hover:text-pink hover:border-[rgba(255,45,120,0.3)] transition-all">&lt;/&gt; Code</a>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                  <div className="p-[1.2rem] md:p-[1.4rem] flex flex-col flex-grow">
-                    <h3 className="font-syne text-[1.1rem] md:text-[1.15rem] font-bold mb-2 text-white">{p.title}</h3>
-                    <p className="text-[0.8rem] md:text-[0.83rem] text-muted leading-[1.65] mb-4 line-clamp-3">{p.desc}</p>
-                    <div className="flex flex-wrap gap-1.5 mb-5 mt-auto">
-                      {p.tech.map(t => (
-                        <span key={t} className="bg-[rgba(0,212,255,0.08)] border border-[rgba(0,212,255,0.15)] text-cyan px-[0.55rem] py-[0.2rem] rounded-full text-[0.68rem] font-medium">
-                          {t}
-                        </span>
-                      ))}
-                    </div>
-                    {/* বাটনের রেসপন্সিভ ফ্লেক্স লেআউট */}
-                    <div className="flex flex-wrap xs:flex-nowrap gap-2">
-                      <a href={p.live} target="_blank" rel="noopener noreferrer" className="flex-1 min-w-[75px] px-2 py-2 rounded-lg text-center text-[0.72rem] md:text-[0.78rem] font-semibold bg-gradient-to-br from-cyan to-cyan2 text-black hover:opacity-85 transition-all">🔴 Live</a>
-                      <button onClick={() => openModal(p)} className="flex-1 min-w-[75px] px-2 py-2 rounded-lg text-center text-[0.72rem] md:text-[0.78rem] font-semibold bg-[rgba(255,255,255,0.05)] text-text border border-border hover:text-cyan hover:border-[rgba(0,212,255,0.3)] transition-all">👁 Details</button>
-                      <a href={p.code} target="_blank" rel="noopener noreferrer" className="flex-1 min-w-[75px] px-2 py-2 rounded-lg text-center text-[0.72rem] md:text-[0.78rem] font-semibold bg-[rgba(255,255,255,0.05)] text-text border border-border hover:text-pink hover:border-[rgba(255,45,120,0.3)] transition-all">&lt;/&gt; Code</a>
-                    </div>
-                  </div>
+                  </Reveal>
                 </div>
-              </Reveal>
-            </div>
-          ))}
+              ))}
+            </motion.div>
+          </AnimatePresence>
         </div>
 
-        {/* 🔘 রেসপন্সিভ PREV / NEXT এবং ডটস কন্ট্রোলার */}
+        {/* কন্ট্রোল বাটন ও ডটস */}
         <div className="flex flex-wrap sm:flex-nowrap items-center justify-center gap-4 sm:gap-8 mt-12 md:mt-16 w-full">
-          {/* PREV BUTTON */}
           <button 
             onClick={handlePrev}
             disabled={currentPage === 0}
             className={`order-1 sm:order-none px-4 md:px-6 py-2 md:py-2.5 rounded-xl border font-bold text-[0.78rem] md:text-[0.85rem] transition-all duration-300 flex items-center justify-center bg-transparent ${currentPage === 0 ? 'border-dashed border-gray-600 text-gray-500 opacity-40 cursor-not-allowed' : 'border-white text-white hover:bg-white hover:text-black cursor-pointer'}`}
           >
-            ← PREV
+            &larr; PREV
           </button>
 
-          {/* DOTS INDICATORS */}
           <div className="flex items-center gap-2 w-full sm:w-auto justify-center my-2 sm:my-0 order-none">
             {[...Array(totalPages)].map((_, index) => (
               <button
-                key={index}
-                onClick={() => setCurrentPage(index)}
+                key={`dot-${index}`}
+                onClick={() => handleDotClick(index)}
+                aria-label={`Go to page ${index + 1}`}
                 className={`h-2.5 rounded-full transition-all duration-400 ${index === currentPage ? 'w-6 md:w-7 bg-cyan shadow-[0_0_10px_rgba(0,212,255,0.5)]' : 'w-2.5 bg-gray-500 hover:bg-gray-400'}`}
               />
             ))}
           </div>
 
-          {/* NEXT BUTTON */}
           <button 
             onClick={handleNext}
             disabled={currentPage === totalPages - 1}
             className={`order-2 sm:order-none px-4 md:px-6 py-2 md:py-2.5 rounded-xl font-bold text-[0.78rem] md:text-[0.85rem] transition-all duration-300 flex items-center justify-center ${currentPage === totalPages - 1 ? 'bg-gray-700 text-gray-500 opacity-40 cursor-not-allowed' : 'bg-[#5b00ff] text-white hover:bg-[#4b00d1] shadow-[0_4px_15px_rgba(91,0,255,0.4)] cursor-pointer'}`}
           >
-            NEXT →
+            NEXT &rarr;
           </button>
         </div>
       </section>
 
-      {/* 📱 ফুলি রেসপন্সিভ ডিটেইলস মোডাল পপআপ */}
-      <div
-        className={`fixed inset-0 bg-[rgba(3,11,24,0.95)] z-[9990] flex items-center justify-center p-4 md:p-8 backdrop-blur-md transition-opacity duration-300 ${modalOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
-        onClick={(e) => { if (e.target === e.currentTarget) closeModal(); }}
-      >
-        {selectedProject && (
-          <div className={`bg-card border border-border rounded-[20px] md:rounded-[24px] w-full max-w-[720px] max-h-[90vh] overflow-y-auto relative transition-transform duration-400 ${modalOpen ? 'scale-100 translate-y-0' : 'scale-95 translate-y-5'}`}>
-            <button onClick={closeModal} className="absolute top-3 right-3 md:top-4 md:right-4 bg-[rgba(255,255,255,0.06)] border border-border text-text w-8 h-8 md:w-9 md:h-9 rounded-full text-[1rem] md:text-[1.2rem] flex items-center justify-center transition-all z-[10] hover:border-pink hover:text-pink">✕</button>
-            <div className="w-full h-[220px] sm:h-[300px] md:h-[400px] relative bg-white">
-              <Image 
-                className="rounded-t-[20px] md:rounded-t-[24px] p-4" 
-                src={selectedProject.image} 
-                alt={selectedProject.title} 
-                fill
-                sizes="(max-width: 768px) 100vw, 720px"
-                style={{ objectFit: 'contain', objectPosition: 'center' }}
-              />
-            </div>
-            <div className="p-5 md:p-8">
-              <h2 className="font-syne text-[1.3rem] md:text-[1.6rem] font-extrabold mb-2 text-white">{selectedProject.title}</h2>
-              <div className="flex flex-wrap gap-1.5 mb-4">
-                {selectedProject.tech.map(t => (
-                  <span key={t} className="bg-[rgba(0,212,255,0.08)] border border-[rgba(0,212,255,0.15)] text-cyan px-[0.55rem] py-[0.2rem] rounded-full text-[0.68rem] font-medium">
-                    {t}
-                  </span>
-                ))}
+      {/* 🌟 প্রিমিয়াম এনিমেটেড মডাল (AnimatePresence ব্যাকড্রপ ও স্কেল ইন-আউট হ্যান্ডেল করে) */}
+      <AnimatePresence>
+        {modalOpen && selectedProject && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 bg-[rgba(3,11,24,0.85)] z-[9990] flex items-center justify-center p-4 md:p-8 backdrop-blur-md"
+            onClick={(e) => { if (e.target === e.currentTarget) closeModal(); }}
+          >
+            <motion.div 
+              initial={{ scale: 0.9, y: 20, opacity: 0 }}
+              animate={{ scale: 1, y: 0, opacity: 1 }}
+              exit={{ scale: 0.9, y: 20, opacity: 0 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="bg-card border border-border rounded-[20px] md:rounded-[24px] w-full max-w-[720px] max-h-[90vh] overflow-y-auto relative"
+            >
+              <button onClick={closeModal} className="absolute top-3 right-3 md:top-4 md:right-4 bg-[rgba(255,255,255,0.06)] border border-border text-text w-8 h-8 md:w-9 md:h-9 rounded-full text-[1rem] md:text-[1.2rem] flex items-center justify-center transition-all z-[10] hover:border-pink hover:text-pink">✕</button>
+              <div className="w-full h-[220px] sm:h-[300px] md:h-[400px] relative bg-white">
+                <Image 
+                  className="rounded-t-[20px] md:rounded-t-[24px] p-4" 
+                  src={selectedProject.image} 
+                  alt={selectedProject.title} 
+                  fill
+                  sizes="(max-width: 768px) 100vw, 720px"
+                  style={{ objectFit: 'contain', objectPosition: 'center' }}
+                />
               </div>
-              <p className="text-muted leading-[1.7] mb-6 text-[0.85rem] md:text-[0.9rem]">{selectedProject.longDesc}</p>
+              <div className="p-5 md:p-8">
+                <h2 className="font-syne text-[1.3rem] md:text-[1.6rem] font-extrabold mb-2 text-white">{selectedProject.title}</h2>
+                <div className="flex flex-wrap gap-1.5 mb-4">
+                  {selectedProject.tech.map(t => (
+                    <span key={t} className="bg-[rgba(0,212,255,0.08)] border border-[rgba(0,212,255,0.15)] text-cyan px-[0.55rem] py-[0.2rem] rounded-full text-[0.68rem] font-medium">
+                      {t}
+                    </span>
+                  ))}
+                </div>
+                <p className="text-muted leading-[1.7] mb-6 text-[0.85rem] md:text-[0.9rem]">{selectedProject.longDesc}</p>
 
-              <div className="mb-5">
-                <h4 className="text-[0.78rem] md:text-[0.82rem] font-semibold text-cyan uppercase tracking-[0.8px] mb-2">⚡ Challenges Faced</h4>
-                <p className="text-muted text-[0.82rem] md:text-[0.85rem] leading-[1.6]">{selectedProject.challenges}</p>
-              </div>
+                <div className="mb-5">
+                  <h4 className="text-[0.78rem] md:text-[0.82rem] font-semibold text-cyan uppercase tracking-[0.8px] mb-2">⚡ Challenges Faced</h4>
+                  <p className="text-muted text-[0.82rem] md:text-[0.85rem] leading-[1.6]">{selectedProject.challenges}</p>
+                </div>
 
-              <div className="mb-5">
-                <h4 className="text-[0.78rem] md:text-[0.82rem] font-semibold text-cyan uppercase tracking-[0.8px] mb-2">🚀 Future Improvements</h4>
-                <p className="text-muted text-[0.82rem] md:text-[0.85rem] leading-[1.6]">{selectedProject.improvements}</p>
-              </div>
+                <div className="mb-5">
+                  <h4 className="text-[0.78rem] md:text-[0.82rem] font-semibold text-cyan uppercase tracking-[0.8px] mb-2">🚀 Future Improvements</h4>
+                  <p className="text-muted text-[0.82rem] md:text-[0.85rem] leading-[1.6]">{selectedProject.improvements}</p>
+                </div>
 
-              <div className="flex gap-3 flex-wrap mt-6">
-                <a href={selectedProject.live} target="_blank" rel="noopener noreferrer" className="px-4 py-2 md:px-5 md:py-2.5 rounded-[10px] text-[0.78rem] md:text-[0.82rem] font-semibold bg-gradient-to-br from-cyan to-cyan2 text-black hover:scale-105 transition-all text-center flex-1 sm:flex-none">🔴 Live Project</a>
-                <a href={selectedProject.code} target="_blank" rel="noopener noreferrer" className="px-4 py-2 md:px-5 md:py-2.5 rounded-[10px] text-[0.78rem] md:text-[0.82rem] font-semibold bg-[rgba(255,255,255,0.05)] text-text border border-border hover:border-cyan hover:text-cyan transition-all text-center flex-1 sm:flex-none">&lt;/&gt; GitHub Repository</a>
+                <div className="flex gap-3 flex-wrap mt-6">
+                  <a 
+                    href={selectedProject.live} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="px-4 py-2 md:px-5 md:py-2.5 rounded-[10px] text-[0.78rem] md:text-[0.82rem] font-semibold bg-gradient-to-br from-cyan to-cyan2 text-black hover:scale-105 transition-all text-center flex-1 sm:flex-none flex items-center justify-center gap-1.5"
+                  >
+                    <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 12 10 10-4.477 10-12S17.523 2 12 2zm-1 14.5v-9l6 4.5-6 4.5z"/>
+                    </svg>
+                    Live Project
+                  </a>
+                  
+                  <a href={selectedProject.code} target="_blank" rel="noopener noreferrer" className="px-4 py-2 md:px-5 md:py-2.5 rounded-[10px] text-[0.78rem] md:text-[0.82rem] font-semibold bg-[rgba(255,255,255,0.05)] text-text border border-border hover:border-cyan hover:text-cyan transition-all text-center flex-1 sm:flex-none">&lt;/&gt; GitHub Repository</a>
+                </div>
               </div>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         )}
-      </div>
+      </AnimatePresence>
     </>
   );
 }

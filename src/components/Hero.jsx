@@ -22,6 +22,7 @@ export default function Hero() {
   
   // 🔄 লোডিং স্টেট ম্যানেজমেন্ট
   const [isCvLoading, setIsCvLoading] = useState(false);
+  const [isWorkLoading, setIsWorkLoading] = useState(false); // 👈 নতুন লোডিং স্টেট
 
   const titles = [
     { text: "Web Developer", color: "text-green-400" },
@@ -29,7 +30,7 @@ export default function Hero() {
     { text: "Cyber Security Researcher", color: "text-red-400" },
   ];
 
-  // बैकग्रাউন্ড বাবলসের জন্য আইকন লিস্ট ও পজিশন ডেটা
+  // बैकग्रारखंड बाबलस के लिए आइकन लिस्ट और पोजीशन डेटा
   const bubbleIcons = [
     { icon: <SiHtml5 className="text-[#E34F26]" />, left: "10%", size: 30, delay: 0, duration: 12 },
     { icon: <SiCss className="text-[#1572B6]" />, left: "40%", size: 24, delay: 3, duration: 14 }, 
@@ -99,16 +100,32 @@ export default function Hero() {
 
   // 🛠 CV ওপেন করার হ্যান্ডলার ফাংশন
   const handleViewResume = (e) => {
-    e.preventDefault(); // ডিফল্ট ইনস্ট্যান্ট ওপেন হওয়া আটকাবে
-    if (isCvLoading) return; // অলরেডি লোড হতে থাকলে দ্বিতীয়বার ক্লিক আটকাতে
+    e.preventDefault();
+    if (isCvLoading) return;
 
     setIsCvLoading(true);
 
-    // ১.৫ সেকেন্ড লোডার অ্যানিমেশন দেখিয়ে তারপর CV ওপেন হবে
     setTimeout(() => {
       window.open("/Portfolio CV.pdf", "_blank", "noopener,noreferrer");
-      setIsCvLoading(false); // ওপেন হওয়ার পর লোডার বন্ধ হবে
+      setIsCvLoading(false);
     }, 1500); 
+  };
+
+  // 🛠 View My Work হ্যান্ডলার ফাংশন
+  const handleViewWork = (e) => {
+    e.preventDefault();
+    if (isWorkLoading) return;
+
+    setIsWorkLoading(true);
+
+    // ১.৫ সেকেন্ড অ্যানিমেশন দেখিয়ে তারপর স্ক্রল করবে
+    setTimeout(() => {
+      setIsWorkLoading(false);
+      const projectSection = document.getElementById("projects");
+      if (projectSection) {
+        projectSection.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 1500);
   };
 
   const nodes = [
@@ -304,11 +321,23 @@ export default function Hero() {
           </p>
 
           <div className="flex gap-4 flex-wrap mb-8 justify-center md:justify-start items-center min-h-[50px]">
-            <a href="#projects" className="bg-gradient-to-br from-cyan to-cyan2 text-black px-7 py-[0.75rem] rounded-full font-bold transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(0,212,255,0.35)]">
-              View My Work
-            </a>
+            {/* 🌟 কন্ডিশনাল রেন্ডারিং: View My Work বাটন লোডিং স্টেট */}
+            {isWorkLoading ? (
+              <div className="bg-gradient-to-br from-cyan/80 to-cyan2/80 text-black px-8 py-[0.75rem] rounded-full font-bold flex items-center gap-2 shadow-[0_8px_30px_rgba(0,212,255,0.2)] animate-pulse">
+                <div className="work-spinner"></div>
+                Loading Projects...
+              </div>
+            ) : (
+              <a 
+                href="#projects" 
+                onClick={handleViewWork} // 👈 এখানে কাস্টম ফাংশনটি ট্রিগার করা হয়েছে
+                className="bg-gradient-to-br from-cyan to-cyan2 text-black px-7 py-[0.75rem] rounded-full font-bold transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(0,212,255,0.35)]"
+              >
+                View My Work
+              </a>
+            )}
             
-            {/* 🌟 কন্ডিশনাল রেন্ডারিং: লোডিং ট্রু থাকলে অ্যানিমেশন দেখাবে, তা না হলে সাধারণ বাটনটি দেখাবে */}
+            {/* CV লোডিং স্টেট */}
             {isCvLoading ? (
               <div className="px-10 py-[0.75rem] flex items-center justify-center">
                 <div className="ping-pong-loader"></div>
@@ -316,7 +345,7 @@ export default function Hero() {
             ) : (
               <a 
                 href="/Portfolio CV.pdf" 
-                onClick={handleViewResume} // 👈 এখানে কাস্টম ফাংশনটি ট্রিগার করা হয়েছে
+                onClick={handleViewResume} 
                 className="bg-transparent text-text px-7 py-[0.75rem] rounded-full font-semibold border-[1.5px] border-[rgba(0,212,255,0.3)] transition-all duration-300 hover:border-cyan hover:text-cyan hover:-translate-y-0.5 flex items-center gap-2"
               >
                 <Download size={16} />
@@ -388,6 +417,22 @@ export default function Hero() {
         }
         .animate-slideInRight {
           animation: slideInRight 1s ease-out forwards;
+        }
+
+        /* 🔄 "View My Work" Spinner */
+        .work-spinner {
+          width: 18px;
+          height: 18px;
+          border: 2px solid #000;
+          border-bottom-color: transparent;
+          border-radius: 50%;
+          display: inline-block;
+          animation: rotation 1s linear infinite;
+        }
+
+        @keyframes rotation {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
         }
 
         /* 🏓 Uiverse.io Ping-Pong Loader Custom Styles */

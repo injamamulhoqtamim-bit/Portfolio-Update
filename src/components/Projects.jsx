@@ -103,15 +103,15 @@ const projects = [
   },
   {
     id: 9, 
-    title: 'Cleanliness--client',
-    desc: 'A public sanitation management interface allowing citizens to log active waste requests, coordinate field sweeps, and view tracking boards.',
-    image: '/cleanliness.jpg', 
-    tech: ['React', 'TailwindCSS', 'Node.js', 'MongoDB'],
-    live: '#', 
+    title: 'Green-Earth',
+    desc: 'Green Earth is a modern, responsive web application designed to help users browse, filter, and purchase various types of plants.',
+    image: '/GreenEarth.jpg', 
+    tech: ['HTML5', 'CSS', 'JavaScript(ES6+)'],
+    live: 'https://green-earth-three.vercel.app/', 
     code: '#',
-    challenges: 'Managing precise geolocation payloads and multi-tier photo file attachments without introducing frontend performance latency.',
-    improvements: 'Deploying direct interactive map route optimization matrices for maintenance crews and adding a milestone reward token matrix.',
-    longDesc: 'Cleanliness--client serves as the proactive crowdsourcing end of a smart waste allocation ecosystem. The application offers robust multi-image file uploads, real-time ticket state transition logs, and responsive layout scaling.'
+    challenges: 'Dynamic State Management: Implementing the shopping cart logic required careful handling of array methods to ensure that items could be added or removed dynamically without causing UI desynchronization.Asynchronous Data Handling: Managing multiple API endpoints for categories and individual product details required efficient use of async/await to ensure that data loaded smoothly while preventing errors during rapid user interactions.UI/UX Synchronization: Ensuring the "Active" state of the category filter buttons remained consistent with the displayed content required precise DOM manipulation to avoid class conflicts.',
+    improvements: 'Persistent Cart: Implement localStorage so that a users cart items remain saved even if they refresh the browser page.Search Functionality: Add a search bar to allow users to quickly find specific plants by name regardless of their category.Advanced Filtering: Include price-range sliders or sorting options  to enhance the shopping experience.Checkout Validation: Integrate a form-based checkout process with validation to simulate a real-world purchasing flow.',
+    longDesc: 'Green Earth is a modern, responsive web application designed to help users browse, filter, and purchase various types of plants. By integrating a dynamic API, the platform provides a seamless shopping experience where users can categorize plants, view detailed product information through interactive modals, and manage their selections in real-time via a functional shopping cart.'
   }
 ];
 
@@ -122,6 +122,7 @@ export default function Projects() {
   const [currentPage, setCurrentPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(3);
   const [direction, setDirection] = useState(0);
+  const [isLoading, setIsLoading] = useState(false); // লোডিং অ্যানিমেশনের নতুন স্টেট
 
   useEffect(() => {
     const handleResize = () => {
@@ -161,24 +162,33 @@ export default function Projects() {
   const startIndex = currentPage * itemsPerPage;
   const visibleProjects = projects.slice(startIndex, startIndex + itemsPerPage);
 
+  // লোডিং ট্রিগার করার জন্য হেল্পার ফাংশন
+  const triggerPageChange = (action) => {
+    setIsLoading(true);
+    setTimeout(() => {
+      action();
+      setIsLoading(false);
+    }, 500); // ৫০০ মিলি-সেকেন্ডের একটি সুন্দর লোডিং টাইমিং
+  };
+
   const handlePrev = () => {
     if (currentPage > 0) {
       setDirection(-1);
-      setCurrentPage(prev => prev - 1);
+      triggerPageChange(() => setCurrentPage(prev => prev - 1));
     }
   };
 
   const handleNext = () => {
     if (currentPage < totalPages - 1) {
       setDirection(1);
-      setCurrentPage(prev => prev + 1);
+      triggerPageChange(() => setCurrentPage(prev => prev + 1));
     }
   };
 
   const handleDotClick = (index) => {
     if (index !== currentPage) {
       setDirection(index > currentPage ? 1 : -1);
-      setCurrentPage(index);
+      triggerPageChange(() => setCurrentPage(index));
     }
   };
 
@@ -226,73 +236,103 @@ export default function Projects() {
 
         <div className="relative max-w-[1200px] mx-auto min-h-[530px] flex items-center justify-center">
           <AnimatePresence mode="wait" custom={direction}>
-            <motion.div 
-              key={currentPage}
-              custom={direction}
-              variants={slideVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full h-full"
-            >
-              {visibleProjects.map((p, i) => (
-                <div key={p.id} className="h-full">
-                  <Reveal direction="up">
-                    <div className="bg-card border border-border rounded-[20px] overflow-hidden transition-all duration-300 relative group hover:border-[rgba(0,212,255,0.25)] hover:-translate-y-1.5 hover:shadow-[0_20px_60px_rgba(0,0,0,0.4)] flex flex-col h-full">
-                      <div className="h-[200px] sm:h-[240px] relative overflow-hidden bg-white w-full">
-                        <Image 
-                          className="transition-transform duration-400 group-hover:scale-105 p-2" 
-                          src={p.image} 
-                          alt={p.title} 
-                          fill
-                          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                          style={{ objectFit: 'contain', objectPosition: 'center' }}
-                        />
-                        <div className="absolute top-3 left-3 bg-[rgba(0,212,255,0.12)] border border-[rgba(0,212,255,0.25)] text-cyan w-8 h-8 rounded-lg flex items-center justify-center text-[0.75rem] font-bold backdrop-blur-sm z-10">
-                          0{startIndex + i + 1}
-                        </div>
-                      </div>
-                      <div className="p-[1.2rem] md:p-[1.4rem] flex flex-col flex-grow">
-                        <h3 className="font-syne text-[1.1rem] md:text-[1.15rem] font-bold mb-2 text-white">{p.title}</h3>
-                        <p className="text-[0.8rem] md:text-[0.83rem] text-muted leading-[1.65] mb-4 line-clamp-3">{p.desc}</p>
-                        <div className="flex flex-wrap gap-1.5 mb-5 mt-auto">
-                          {p.tech.map(t => (
-                            <span key={t} className="bg-[rgba(0,212,255,0.08)] border border-[rgba(0,212,255,0.15)] text-cyan px-[0.55rem] py-[0.2rem] rounded-full text-[0.68rem] font-medium">
-                              {t}
-                            </span>
-                          ))}
-                        </div>
-                        
-                        <div className="flex flex-wrap xs:flex-nowrap gap-2">
-                          <a 
-                            href={p.live} 
-                            target="_blank" 
-                            rel="noopener noreferrer" 
-                            className="flex-1 min-w-[75px] px-2 py-2 rounded-lg text-center text-[0.72rem] md:text-[0.78rem] font-semibold bg-gradient-to-br from-cyan to-cyan2 text-black hover:opacity-85 transition-all flex items-center justify-center gap-1"
-                          >
-                            <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 12 10 10-4.477 10-12S17.523 2 12 2zm-1 14.5v-9l6 4.5-6 4.5z"/>
-                            </svg>
-                            Live
-                          </a>
-                          
-                          <button onClick={() => openModal(p)} className="flex-1 min-w-[75px] px-2 py-2 rounded-lg text-center text-[0.72rem] md:text-[0.78rem] font-semibold bg-[rgba(255,255,255,0.05)] text-text border border-border hover:text-cyan hover:border-[rgba(0,212,255,0.3)] transition-all">👁 Details</button>
-                          <a href={p.code} target="_blank" rel="noopener noreferrer" className="flex-1 min-w-[75px] px-2 py-2 rounded-lg text-center text-[0.72rem] md:text-[0.78rem] font-semibold bg-[rgba(255,255,255,0.05)] text-text border border-border hover:text-pink hover:border-[rgba(255,45,120,0.3)] transition-all">&lt;/&gt; Code</a>
-                        </div>
-                      </div>
+            {isLoading ? (
+              /* --- লোডিং অ্যানিমেশন (Skeleton Layer) --- */
+              <motion.div
+                key="loader"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full h-full"
+              >
+                {[...Array(itemsPerPage)].map((_, idx) => (
+                  <div key={`skeleton-${idx}`} className="bg-card border border-border rounded-[20px] p-5 flex flex-col h-[510px] animate-pulse">
+                    <div className="h-[220px] bg-gray-800 rounded-[15px] w-full mb-4"></div>
+                    <div className="h-6 bg-gray-800 rounded w-2/3 mb-3"></div>
+                    <div className="h-4 bg-gray-800 rounded w-full mb-2"></div>
+                    <div className="h-4 bg-gray-800 rounded w-5/6 mb-5"></div>
+                    <div className="flex gap-2 mb-6 mt-auto">
+                      <div className="h-5 bg-gray-800 rounded-full w-14"></div>
+                      <div className="h-5 bg-gray-800 rounded-full w-16"></div>
                     </div>
-                  </Reveal>
-                </div>
-              ))}
-            </motion.div>
+                    <div className="flex gap-2">
+                      <div className="h-9 bg-gray-800 rounded-lg flex-1"></div>
+                      <div className="h-9 bg-gray-800 rounded-lg flex-1"></div>
+                    </div>
+                  </div>
+                ))}
+              </motion.div>
+            ) : (
+              /* --- আসল প্রজেক্ট লিস্ট --- */
+              <motion.div 
+                key={currentPage}
+                custom={direction}
+                variants={slideVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full h-full"
+              >
+                {visibleProjects.map((p, i) => (
+                  <div key={p.id} className="h-full">
+                    <Reveal direction="up">
+                      <div className="bg-card border border-border rounded-[20px] overflow-hidden transition-all duration-300 relative group hover:border-[rgba(0,212,255,0.25)] hover:-translate-y-1.5 hover:shadow-[0_20px_60px_rgba(0,0,0,0.4)] flex flex-col h-full">
+                        <div className="h-[200px] sm:h-[240px] relative overflow-hidden bg-white w-full">
+                          <Image 
+                            className="transition-transform duration-400 group-hover:scale-105 p-2" 
+                            src={p.image} 
+                            alt={p.title} 
+                            fill
+                            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                            style={{ objectFit: 'contain', objectPosition: 'center' }}
+                          />
+                          <div className="absolute top-3 left-3 bg-[rgba(0,212,255,0.12)] border border-[rgba(0,212,255,0.25)] text-cyan w-8 h-8 rounded-lg flex items-center justify-center text-[0.75rem] font-bold backdrop-blur-sm z-10">
+                            0{startIndex + i + 1}
+                          </div>
+                        </div>
+                        <div className="p-[1.2rem] md:p-[1.4rem] flex flex-col flex-grow">
+                          <h3 className="font-syne text-[1.1rem] md:text-[1.15rem] font-bold mb-2 text-white">{p.title}</h3>
+                          <p className="text-[0.8rem] md:text-[0.83rem] text-muted leading-[1.65] mb-4 line-clamp-3">{p.desc}</p>
+                          <div className="flex flex-wrap gap-1.5 mb-5 mt-auto">
+                            {p.tech.map(t => (
+                              <span key={t} className="bg-[rgba(0,212,255,0.08)] border border-[rgba(0,212,255,0.15)] text-cyan px-[0.55rem] py-[0.2rem] rounded-full text-[0.68rem] font-medium">
+                                {t}
+                              </span>
+                            ))}
+                          </div>
+                          
+                          <div className="flex flex-wrap xs:flex-nowrap gap-2">
+                            <a 
+                              href={p.live} 
+                              target="_blank" 
+                              rel="noopener noreferrer" 
+                              className="flex-1 min-w-[75px] px-2 py-2 rounded-lg text-center text-[0.72rem] md:text-[0.78rem] font-semibold bg-gradient-to-br from-cyan to-cyan2 text-black hover:opacity-85 transition-all flex items-center justify-center gap-1"
+                            >
+                              <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 12 10 10-4.477 10-12S17.523 2 12 2zm-1 14.5v-9l6 4.5-6 4.5z"/>
+                              </svg>
+                              Live
+                            </a>
+                            
+                            <button onClick={() => openModal(p)} className="flex-1 min-w-[75px] px-2 py-2 rounded-lg text-center text-[0.72rem] md:text-[0.78rem] font-semibold bg-[rgba(255,255,255,0.05)] text-text border border-border hover:text-cyan hover:border-[rgba(0,212,255,0.3)] transition-all">👁 Details</button>
+                            <a href={p.code} target="_blank" rel="noopener noreferrer" className="flex-1 min-w-[75px] px-2 py-2 rounded-lg text-center text-[0.72rem] md:text-[0.78rem] font-semibold bg-[rgba(255,255,255,0.05)] text-text border border-border hover:text-pink hover:border-[rgba(255,45,120,0.3)] transition-all">&lt;/&gt; Code</a>
+                          </div>
+                        </div>
+                      </div>
+                    </Reveal>
+                  </div>
+                ))}
+              </motion.div>
+            )}
           </AnimatePresence>
         </div>
 
+        {/* --- Pagination Buttons --- */}
         <div className="flex flex-wrap sm:flex-nowrap items-center justify-center gap-4 sm:gap-8 mt-12 md:mt-16 w-full">
           <button 
             onClick={handlePrev}
-            disabled={currentPage === 0}
-            className={`order-1 sm:order-none px-4 md:px-6 py-2 md:py-2.5 rounded-xl border font-bold text-[0.78rem] md:text-[0.85rem] transition-all duration-300 flex items-center justify-center bg-transparent ${currentPage === 0 ? 'border-dashed border-gray-600 text-gray-500 opacity-40 cursor-not-allowed' : 'border-white text-white hover:bg-white hover:text-black cursor-pointer'}`}
+            disabled={currentPage === 0 || isLoading}
+            className={`order-1 sm:order-none px-4 md:px-6 py-2 md:py-2.5 rounded-xl border font-bold text-[0.78rem] md:text-[0.85rem] transition-all duration-300 flex items-center justify-center bg-transparent ${currentPage === 0 || isLoading ? 'border-dashed border-gray-600 text-gray-500 opacity-40 cursor-not-allowed' : 'border-white text-white hover:bg-white hover:text-black cursor-pointer'}`}
           >
             &larr; PREV
           </button>
@@ -302,22 +342,24 @@ export default function Projects() {
               <button
                 key={`dot-${index}`}
                 onClick={() => handleDotClick(index)}
+                disabled={isLoading}
                 aria-label={`Go to page ${index + 1}`}
-                className={`h-2.5 rounded-full transition-all duration-400 ${index === currentPage ? 'w-6 md:w-7 bg-cyan shadow-[0_0_10px_rgba(0,212,255,0.5)]' : 'w-2.5 bg-gray-500 hover:bg-gray-400'}`}
+                className={`h-2.5 rounded-full transition-all duration-400 ${isLoading ? 'cursor-not-allowed opacity-50' : ''} ${index === currentPage ? 'w-6 md:w-7 bg-cyan shadow-[0_0_10px_rgba(0,212,255,0.5)]' : 'w-2.5 bg-gray-500 hover:bg-gray-400'}`}
               />
             ))}
           </div>
 
           <button 
             onClick={handleNext}
-            disabled={currentPage === totalPages - 1}
-            className={`order-2 sm:order-none px-4 md:px-6 py-2 md:py-2.5 rounded-xl font-bold text-[0.78rem] md:text-[0.85rem] transition-all duration-300 flex items-center justify-center ${currentPage === totalPages - 1 ? 'bg-gray-700 text-gray-500 opacity-40 cursor-not-allowed' : 'bg-[#5b00ff] text-white hover:bg-[#4b00d1] shadow-[0_4px_15px_rgba(91,0,255,0.4)] cursor-pointer'}`}
+            disabled={currentPage === totalPages - 1 || isLoading}
+            className={`order-2 sm:order-none px-4 md:px-6 py-2 md:py-2.5 rounded-xl font-bold text-[0.78rem] md:text-[0.85rem] transition-all duration-300 flex items-center justify-center ${currentPage === totalPages - 1 || isLoading ? 'bg-gray-700 text-gray-500 opacity-40 cursor-not-allowed' : 'bg-[#5b00ff] text-white hover:bg-[#4b00d1] shadow-[0_4px_15px_rgba(91,0,255,0.4)] cursor-pointer'}`}
           >
-            NEXT &rarr;
+            {isLoading ? "LOADING..." : "NEXT →"}
           </button>
         </div>
       </section>
 
+      {/* --- Modal Window --- */}
       <AnimatePresence>
         {modalOpen && selectedProject && (
           <motion.div

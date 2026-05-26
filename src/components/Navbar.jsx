@@ -1,11 +1,12 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image"; // 👈 লোগো ইমেজ রেন্ডার করার জন্য ইমপোর্ট করা হয়েছে
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [isHireLoading, setIsHireLoading] = useState(false); // 👈 নতুন লোডিং স্টেট
+  const [isHireLoading, setIsHireLoading] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -22,14 +23,13 @@ export default function Navbar() {
     document.querySelector(id)?.scrollIntoView({ behavior: "smooth" });
   };
 
-  // 🛠 "Hire Me" বাটনের হ্যান্ডলার ফাংশন
+  // 🛠 "Hire Me" বাটনের হ্যান্ডলার ফাংশน
   const handleHireMe = (e) => {
     e.preventDefault();
-    if (isHireLoading) return; // অলরেডি লোড হতে থাকলে দ্বিতীয় ক্লিক আটকাবে
+    if (isHireLoading) return;
 
     setIsHireLoading(true);
 
-    // ১.৫ সেকেন্ড অ্যানিমেশন দেখিয়ে তারপর contact সেকশনে স্ক্রল করবে
     setTimeout(() => {
       setIsHireLoading(false);
       const contactSection = document.querySelector("#contact");
@@ -45,12 +45,21 @@ export default function Navbar() {
   return (
     <>
       <nav
-        className={`fixed top-0 left-0 right-0 z-[999] px-[5%] py-[1.2rem] flex items-center justify-between backdrop-blur-xl border-b border-[rgba(0,212,255,0.08)] transition-all duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-[999] px-[5%] py-[0.6rem] flex items-center justify-between backdrop-blur-xl border-b border-[rgba(0,212,255,0.08)] transition-all duration-300 ${
           scrolled ? "bg-[rgba(3,11,24,0.95)]" : "bg-[rgba(3,11,24,0.85)]"
         }`}
       >
-        <Link href="#home" onClick={(e) => scrollToSection(e, "#home")} className="font-syne font-extrabold text-[1.5rem] text-cyan tracking-[-1px] no-underline">
-          &lt;<span className="text-white">In</span>jamamul Hoq /&gt;
+        {/* 🖼️ PNG Logo Section */}
+        <Link href="#home" onClick={(e) => scrollToSection(e, "#home")} className="flex items-center no-underline py-1">
+          <Image 
+            src="/NavbarLogo.png" 
+            alt="Injamamul Hoq Logo" 
+            width={180}         // 👈 লোগো চওড়া সাইজ ১৪০ থেকে বাড়িয়ে ১৮০ করা হয়েছে
+            height={58}         // 👈 লোগো উচ্চতা ৪৫ থেকে বাড়িয়ে ৫৮ করা হয়েছে যাতে নিখুঁত দেখায়
+            className="object-contain transition-transform duration-300 hover:scale-[1.03]" 
+            priority            // দ্রুত লোড হওয়ার জন্য প্রায়োরিটি দেওয়া হয়েছে
+            unoptimized         // 👈 ইমেজ কম্প্রেশন অফ করা হয়েছে যাতে লোগো ক্রিস্টাল ক্লিয়ার দেখায়
+          />
         </Link>
         
         {/* Desktop Menu */}

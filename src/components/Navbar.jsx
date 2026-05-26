@@ -5,6 +5,7 @@ import Link from "next/link";
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [isHireLoading, setIsHireLoading] = useState(false); // 👈 নতুন লোডিং স্টেট
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -21,7 +22,24 @@ export default function Navbar() {
     document.querySelector(id)?.scrollIntoView({ behavior: "smooth" });
   };
 
-  // 🌟 নেভিগেশন আইটেম লিস্ট (এখানে "technologies" যোগ করা হয়েছে)
+  // 🛠 "Hire Me" বাটনের হ্যান্ডলার ফাংশন
+  const handleHireMe = (e) => {
+    e.preventDefault();
+    if (isHireLoading) return; // অলরেডি লোড হতে থাকলে দ্বিতীয় ক্লিক আটকাবে
+
+    setIsHireLoading(true);
+
+    // ১.৫ সেকেন্ড অ্যানিমেশন দেখিয়ে তারপর contact সেকশনে স্ক্রল করবে
+    setTimeout(() => {
+      setIsHireLoading(false);
+      const contactSection = document.querySelector("#contact");
+      if (contactSection) {
+        contactSection.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 1500);
+  };
+
+  // 🌟 নেভিগেশন আইটেম লিস্ট
   const navItems = ["home", "about", "skills", "technologies", "education", "projects", "contact"];
 
   return (
@@ -51,11 +69,22 @@ export default function Navbar() {
           ))}
         </ul>
 
+        {/* 🌟 কন্ডিশনাল রেন্ডারিং: Hire Me বাটন লোডিং স্টেট */}
         <button
-          onClick={(e) => scrollToSection(e, "#contact")}
-          className="hidden md:block bg-gradient-to-br from-cyan to-cyan2 text-black border-none px-[1.4rem] py-[0.55rem] rounded-full font-bold text-[0.85rem] cursor-none transition-all duration-200 hover:scale-105 hover:shadow-[0_0_20px_rgba(0,212,255,0.4)] tracking-[0.5px]"
+          onClick={handleHireMe}
+          disabled={isHireLoading}
+          className={`hidden md:flex items-center justify-center gap-2 bg-gradient-to-br from-cyan to-cyan2 text-black border-none px-[1.4rem] py-[0.55rem] rounded-full font-bold text-[0.85rem] cursor-none transition-all duration-200 tracking-[0.5px] ${
+            isHireLoading ? "opacity-90 scale-95" : "hover:scale-105 hover:shadow-[0_0_20px_rgba(0,212,255,0.4)]"
+          }`}
         >
-          Hire Me
+          {isHireLoading ? (
+            <>
+              <div className="hire-spinner"></div>
+              <span>Connecting...</span>
+            </>
+          ) : (
+            "Hire Me"
+          )}
         </button>
 
         {/* 🌟 Hamburger Menu Icons (X Animation সহ) */}
@@ -83,6 +112,24 @@ export default function Navbar() {
           </a>
         ))}
       </div>
+
+      {/* 🔄 Custom Spinner Style */}
+      <style jsx>{`
+        .hire-spinner {
+          width: 14px;
+          height: 14px;
+          border: 2px solid #000;
+          border-bottom-color: transparent;
+          border-radius: 50%;
+          display: inline-block;
+          animation: hireRotation 0.8s linear infinite;
+        }
+
+        @keyframes hireRotation {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+      `}</style>
     </>
   );
 }

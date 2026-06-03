@@ -54,8 +54,8 @@ export default function Navbar() {
           <Image 
             src="/NavbarLogo.png" 
             alt="Injamamul Hoq Logo" 
-            width={180}         // 👈 লোগো চওড়া সাইজ ১৪০ থেকে বাড়িয়ে ১৮০ করা হয়েছে
-            height={58}         // 👈 লোগো উচ্চতা ৪৫ থেকে বাড়িয়ে ৫৮ করা হয়েছে যাতে নিখুঁত দেখায়
+            width={200}         // 👈 লোগো চওড়া সাইজ ১৪০ থেকে বাড়িয়ে ১৮০ করা হয়েছে
+            height={60}         // 👈 লোগো উচ্চতা ৪৫ থেকে বাড়িয়ে ৫৮ করা হয়েছে যাতে নিখুঁত দেখায়
             className="object-contain transition-transform duration-300 hover:scale-[1.03]" 
             priority            // দ্রুত লোড হওয়ার জন্য প্রায়োরিটি দেওয়া হয়েছে
             unoptimized         // 👈 ইমেজ কম্প্রেশন অফ করা হয়েছে যাতে লোগো ক্রিস্টাল ক্লিয়ার দেখায়

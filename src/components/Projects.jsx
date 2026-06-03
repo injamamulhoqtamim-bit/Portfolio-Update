@@ -7,6 +7,18 @@ import { motion, AnimatePresence } from "framer-motion";
 const projects = [
   {
     id: 1,
+    title: 'Teachers Finding Platform',
+    desc: 'A modern and user-friendly Teachers Finding Platform helps students easily find suitable home tutors based on subject, budget, and teacher preferences.',
+    image: '/teachersfinding.jpg',
+    tech: ['React.js', 'TailwindCSS',  'Vite', 'PostCSS', 'Node.js', 'Vercel' ],
+    live: 'https://teachersfinding.vercel.app/', 
+    code: '#',
+    challenges: 'Designing an intuitive UI to represent relationship "tending" milestones without cluttering the screen.',
+    improvements: ' Add secure Authentication & Authorization system- Implement Teacher Reviews and Ratings feature- Add Real-time Chat between students and teachers- Integrate Online Payment Gateway- Create an Admin Dashboard for platform management- Add Profile Image Upload system- Improve Search & Advanced Filtering options- Add Location-based tutor searching- Implement Favorite/Bookmark Teachers feature- Add Tuition Request Posting system- Add Email Notification and Booking Confirmation- Improve Website SEO optimization- Add Dark Mode support- Implement Pagination for better performance- Add Firebase or JWT Authentication- Improve Loading Speed and Performance Optimization- Add Multi-language Support (Bangla & English)- Create Mobile App version in future- Add Teacher Verification System- Implement Availability Scheduling System',
+    longDesc: 'A modern and user-friendly Teachers Finding Platform built with React.js, Vite, and Tailwind CSS.This platform helps students easily find suitable home tutors based on subject, budget, and teacher preferences.The main goal of this project is to create a platform similar to BD JOBS, but focused on finding and booking home tutors in Bangladesh.'
+  },
+  {
+    id: 2,
     title: 'Sun Cart',
     desc: 'A modern e-commerce web application where users can seamlessly browse products, manage profiles, and access secure, protected pages.',
     image: '/suncart.jpg',
@@ -18,7 +30,7 @@ const projects = [
     longDesc: 'SunCart is a fully functional e-commerce web platform designed for a seamless shopping experience. It features user authentication, a dynamic profile management system, an interactive product catalog, and strictly protected detail pages accessible only to registered members.'
   },
   {
-    id: 2,
+    id: 3,
     title: 'Keen Keeper',
     desc: 'A simple and intuitive friendship management app that helps you organize and keep track of meaningful personal relationships.',
     image: '/keenkeeper.jpg',
@@ -30,7 +42,7 @@ const projects = [
     longDesc: 'KeenKeeper serves as a dedicated personal CRM. In today’s busy digital era, this application provides a focused space to track interactions, log shared memories, and nurture the connections that matter most to you.'
   },
   {
-    id: 3,
+    id: 4,
     title: 'Digitools Platform',
     desc: 'An elite SaaS hub offering access to premium AI tools and high-quality digital assets to supercharge your creative workflow.',
     image: '/digitools.jpg',
@@ -42,7 +54,7 @@ const projects = [
     longDesc: 'Digitools Platform is an all-in-one suite designed specifically for creators. It unlocks access to custom-trained AI generators, premium layout templates, and workflow boosters, making content creation faster and smarter.'
   },
   {
-    id: 4,
+    id: 5,
     title: 'English জানালা',
     desc: 'English Janala is an interactive English vocabulary and language learning web application. Users can navigate through various difficulty levels, search for specific terms, and hear correct pronunciations using the Web Speech API. ',
     image: '/EnglilshJanala.jpg',
@@ -54,7 +66,7 @@ const projects = [
     longDesc: 'English Janala is an interactive English vocabulary and language learning web application. It is designed to help users learn new words, improve their vocabulary across different levels, and enhance their English language skills in an engaging and user-friendly way.'
   },
   {
-    id: 5,
+    id: 6,
     title: 'Zyntrix Lab',
     desc: 'A polished, interactive corporate business website tailored to display professional services and drive enterprise growth.',
     image: '/zyntrixLab.jpg', 
@@ -66,7 +78,7 @@ const projects = [
     longDesc: 'Zyntrix Lab is a top-tier business ecosystem web application. It functions to establish a robust online presence through dynamic service showcase cards, interactive case studies, and responsive contact hooks.'
   },
   {
-    id: 6,
+    id: 7,
     title: 'GitHub Tracker',
     desc: 'A specialized developer productivity tool built to monitor, analyze, and manage active GitHub repositories and issues smoothly.',
     image: '/github tracker.jpg', 
@@ -78,7 +90,7 @@ const projects = [
     longDesc: 'GitHub Tracker streamlines open-source management by aggregating repository statistics. Developers can view real-time issue states, track assignment logs, and visual bug closure frequencies in a sleek unified interface.'
   },
   {
-    id: 7,
+    id: 8,
     title: 'Job Tracker',
     desc: 'An essential web dashboard designed for active job seekers to easily track, update, and manage their recruitment pipelines.',
     image: '/Job Application.jpg', 
@@ -90,7 +102,7 @@ const projects = [
     longDesc: 'Job Tracker relieves the chaos of career hunting. It allows users to store corporate postings, set current application statuses (Applied, Interviewing, Offered, Rejected), track custom notes, and monitor response time analytics.'
   },
   {
-    id: 8, 
+    id: 9, 
     title: 'Dream-11',
     desc: 'Claim Free Credits instantly! Banan apnar Dream 11 Squad.',
     image: '/Dream-11.jpg', 
@@ -102,7 +114,7 @@ const projects = [
     longDesc: 'My Team Dream 11 is a highly interactive, responsive, and dynamic fantasy sports dashboard designed to replicate the strategic thrill of a real-world cricket tournament auction. Built using React.js and styled with Tailwind CSS & DaisyUI, the platform transforms the user into a team manager starting with a clean slate of zero coins.'
   },
   {
-    id: 9, 
+    id: 10, 
     title: 'Green-Earth',
     desc: 'Green Earth is a modern, responsive web application designed to help users browse, filter, and purchase various types of plants.',
     image: '/GreenEarth.jpg', 

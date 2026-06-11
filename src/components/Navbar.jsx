@@ -67,7 +67,7 @@ export default function Navbar() {
           <Image 
             src="/NavbarLogo.png" 
             alt="Injamamul Hoq Logo" 
-            width={200}         
+            width={220}         
             height={60}         
             className="object-contain transition-transform duration-300 hover:scale-[1.03]" 
             priority            

@@ -47,29 +47,29 @@ export default function Navbar() {
           scrolled ? "bg-[rgba(3,11,24,0.95)]" : "bg-[rgba(3,11,24,0.85)]"
         }`}
       >
-        {/* 🖼️ Logo Section (বাম পাশে নতুন লোগোসহ) */}
+        {/* 🖼️ Logo Section */}
         <Link 
           href="#home" 
           onClick={(e) => scrollToSection(e, "#home")} 
           className="flex items-center gap-3 no-underline py-1"
         >
-          {/* 👈 নতুন বাম পাশের লোগো (আপনার ফাইলের নাম ও সাইজ অনুযায়ী src, width, height পরিবর্তন করে নিবেন) */}
+          {/* 👈 বাম পাশের লোগো - h-auto যুক্ত করা হয়েছে */}
           <Image 
             src="/navL.png" 
             alt="Left Icon Logo" 
             width={60} 
             height={60} 
-            className="object-contain"
+            className="w-[60px] h-auto object-contain"
             priority
           />
 
-          {/* প্রধান লোগো */}
+          {/* প্রধান লোগো - h-auto যুক্ত করা হয়েছে */}
           <Image 
             src="/NavbarLogo.png" 
             alt="Injamamul Hoq Logo" 
             width={220}         
             height={60}         
-            className="object-contain transition-transform duration-300 hover:scale-[1.03]" 
+            className="w-[220px] h-auto object-contain transition-transform duration-300 hover:scale-[1.03]" 
             priority            
             unoptimized         
           />

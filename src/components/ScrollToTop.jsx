@@ -3,9 +3,8 @@ import { useEffect, useState } from "react";
 
 export default function ScrollToTop() {
   const [isVisible, setIsVisible] = useState(false);
-  const [isOpen, setIsOpen] = useState(false); // 👈 সোশ্যাল মেনু ওপেন/ক্লোজ স্টেট
+  const [isOpen, setIsOpen] = useState(false); 
 
-  // 📜 ইউজার অন্তত ৩০০ পিক্সেল স্ক্রল করলে বামদিকের "Scroll to Top" বাটনটি দেখাবে
   useEffect(() => {
     const toggleVisibility = () => {
       if (window.scrollY > 300) {
@@ -28,12 +27,42 @@ export default function ScrollToTop() {
     }
   };
 
+  // 🤖 চ্যাটবট ওপেন করার শতভাগ সফল ও নিরাপদ ফলব্যাক ফাংশন
+  const toggleChatbase = () => {
+    if (typeof window !== "undefined") {
+      // ১. যদি চ্যাটবেসের গ্লোবাল অবজেক্ট সরাসরি রেডি থাকে
+      if (window.chatbase) {
+        console.log("Opening Chatbase via window object...");
+        window.chatbase("open");
+        return;
+      }
+      
+      // ২. যদি অবজেক্ট না মেলে, তবে চ্যাটবেসের আইফ্রেমকে নিখুঁতভাবে খুঁজে ক্লিক করানো হবে
+      const chatbaseIframe = document.getElementById("chatbase-message-bubbles-iframe") || 
+                             document.querySelector('iframe[src*="chatbase.co"]') ||
+                             document.querySelector('iframe[id*="chatbase"]');
+                             
+      if (chatbaseIframe) {
+        console.log("Opening Chatbase via Iframe fallback...");
+        chatbaseIframe.click();
+      } else {
+        // 🚀 ৩. লোকালহোস্টে স্ক্রিপ্ট ব্লক থাকলে সরাসরি Chatbase-এর সঠিক চ্যাট উইন্ডোটি চালু করবে (Fixes 404 Error)
+        console.log("Script blocked on localhost, opening standalone working window.");
+        window.open(
+          "https://www.chatbase.co/chatbot/MAETekmoTgWjEk9Irlvy1", 
+          "ChatbaseBot", 
+          "width=450,height=650,resizable=yes,scrollbars=yes"
+        );
+      }
+    }
+  };
+
   return (
     <>
       {/* 🔵 ডান দিকে থাকা সোশ্যাল বাটন কন্টেইনার (Right Side) */}
       <div className="fixed bottom-6 right-6 z-50 flex flex-col gap-3 items-center">
         
-        {/* 📱 সোশ্যাল বাটনগুলোর কন্টেইনার (অ্যানিমেশনসহ) */}
+        {/* 📱 সোশ্যাল ও চ্যাটবট বাটনগুলোর কন্টেইনার */}
         <div 
           className={`flex flex-col gap-3 items-center transition-all duration-500 origin-bottom ${
             isOpen 
@@ -41,10 +70,20 @@ export default function ScrollToTop() {
               : "opacity-0 scale-75 translate-y-10 pointer-events-none"
           }`}
         >
+          {/* 🤖 AI Chatbot Button */}
+          <button
+            onClick={toggleChatbase}
+            title="Chat with AI Assistant"
+            className="w-12 h-12 rounded-full bg-gradient-to-tr from-purple-600 to-indigo-600 cursor-pointer flex items-center justify-center text-white shadow-[0_4px_20px_rgba(99,102,241,0.4)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_8px_25px_rgba(99,102,241,0.6)] active:scale-90 group"
+          >
+            <svg className="w-full h-full p-2.5 fill-none stroke-current stroke-2 transition-transform duration-300 group-hover:scale-110" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 3h6M12 3v2M4 9h16M4 9a2 2 0 00-2 2v5a2 2 0 002 2h16a2 2 0 002-2v-5a2 2 0 00-2-2M4 9V7a2 2 0 012-2h12a2 2 0 012 2v2M10 13h.01M14 13h.01M9 16h6" />
+            </svg>
+          </button>
+
           {/* ✈️ Telegram Button */}
-          {/* t.me/username ফরম্যাটটি সরাসরি চ্যাট ওপেন করার জন্য সবচেয়ে বেস্ট */}
           <a
-            href="https://t.me/+8801627178870" // 👈 এখানে আপনার সঠিক টেলিগ্রাম ইউজারনেম (যেমন: Injamam_Tamim) বসিয়ে দিন
+            href="https://t.me/+8801627178870" 
             target="_blank"
             rel="noopener noreferrer"
             title="Message on Telegram"
@@ -56,7 +95,6 @@ export default function ScrollToTop() {
           </a>
 
           {/* 📧 Gmail Button */}
-          {/* mailto: ব্যবহারের ফলে মোবাইল ও ডেস্কটপ উভয় ডিভাইসের ডিফল্ট ইমেইল অ্যাপে ডিরেক্ট কম্পোজ স্ক্রিন চলে আসবে */}
           <a
             href="https://mail.google.com/mail/?view=cm&fs=1&to=injamamulhoqtamim@gmail.com&su=Hello&body=Hi Tamim," 
             target="_blank"
@@ -70,7 +108,6 @@ export default function ScrollToTop() {
           </a>
 
           {/* 🟢 WhatsApp Button */}
-          {/* wa.me লিঙ্কে text প্যারামিটার যুক্ত করায় চ্যাট স্ক্রিন ওপেন হয়ে মেসেজও রেডি থাকবে */}
           <a
             href="https://wa.me/8801511994008?text=Hello!%20I%20want%20to%20contact%20you." 
             target="_blank"
@@ -84,7 +121,7 @@ export default function ScrollToTop() {
           </a>
         </div>
 
-        {/* 💬 "Contact Me" অটো অ্যানিমেটেড টেক্সট বাবল */}
+        {/* 💬 "Contact Me" বাবল */}
         <div className="relative flex items-center justify-center">
           <span 
             className={`absolute right-16 whitespace-nowrap bg-gray-900 text-white text-xs font-medium px-2.5 py-1.5 rounded-lg shadow-lg pointer-events-none transition-all duration-300 origin-right ${
@@ -97,7 +134,7 @@ export default function ScrollToTop() {
             <span className="absolute top-1/2 -right-1 -translate-y-1/2 w-2 h-2 bg-gray-900 rotate-45"></span>
           </span>
 
-          {/* 🛠️ Main Toggle/Cross Button */}
+          {/* 🛠️ Main Toggle Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
             title={isOpen ? "Minimize Menu" : "Contact Me"}

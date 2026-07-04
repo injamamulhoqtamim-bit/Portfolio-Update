@@ -42,8 +42,9 @@ export default function ScrollToTop() {
           }`}
         >
           {/* ✈️ Telegram Button */}
+          {/* t.me/username ফরম্যাটটি সরাসরি চ্যাট ওপেন করার জন্য সবচেয়ে বেস্ট */}
           <a
-            href="https://t.me/+8801627178870" 
+            href="https://t.me/+8801627178870" // 👈 এখানে আপনার সঠিক টেলিগ্রাম ইউজারনেম (যেমন: Injamam_Tamim) বসিয়ে দিন
             target="_blank"
             rel="noopener noreferrer"
             title="Message on Telegram"
@@ -55,8 +56,9 @@ export default function ScrollToTop() {
           </a>
 
           {/* 📧 Gmail Button */}
+          {/* mailto: ব্যবহারের ফলে মোবাইল ও ডেস্কটপ উভয় ডিভাইসের ডিফল্ট ইমেইল অ্যাপে ডিরেক্ট কম্পোজ স্ক্রিন চলে আসবে */}
           <a
-            href="https://mail.google.com/mail/?view=cm&fs=1&to=injamamulhoqtamim@gmail.com" 
+            href="https://mail.google.com/mail/?view=cm&fs=1&to=injamamulhoqtamim@gmail.com&su=Hello&body=Hi Tamim," 
             target="_blank"
             rel="noopener noreferrer"
             title="Send an Email"
@@ -68,8 +70,9 @@ export default function ScrollToTop() {
           </a>
 
           {/* 🟢 WhatsApp Button */}
+          {/* wa.me লিঙ্কে text প্যারামিটার যুক্ত করায় চ্যাট স্ক্রিন ওপেন হয়ে মেসেজও রেডি থাকবে */}
           <a
-            href="https://wa.me/8801511994008" 
+            href="https://wa.me/8801511994008?text=Hello!%20I%20want%20to%20contact%20you." 
             target="_blank"
             rel="noopener noreferrer"
             title="Chat on WhatsApp"
@@ -81,10 +84,8 @@ export default function ScrollToTop() {
           </a>
         </div>
 
-        {/* 💬 "Contact Me" অটো অ্যানিমেটেড টেক্সট বাবল (নিচে মেইন বাটনের সাথে যুক্ত করা হলো) */}
+        {/* 💬 "Contact Me" অটো অ্যানিমেটেড টেক্সট বাবল */}
         <div className="relative flex items-center justify-center">
-          
-          {/* এই টেক্সটটি বাটন বন্ধ থাকলে ডানে-বামে হালকা দুলবে (animate-bounce বা custom pulse) */}
           <span 
             className={`absolute right-16 whitespace-nowrap bg-gray-900 text-white text-xs font-medium px-2.5 py-1.5 rounded-lg shadow-lg pointer-events-none transition-all duration-300 origin-right ${
               isOpen 
@@ -93,7 +94,6 @@ export default function ScrollToTop() {
             }`}
           >
             Contact Me
-            {/* ছোট একটি তীর বা ট্রায়াঙ্গেল চিহ্নের জন্য */}
             <span className="absolute top-1/2 -right-1 -translate-y-1/2 w-2 h-2 bg-gray-900 rotate-45"></span>
           </span>
 
@@ -108,12 +108,10 @@ export default function ScrollToTop() {
             }`}
           >
             {isOpen ? (
-              /* ✕ Cross Icon */
               <svg className="w-5 h-5 fill-none stroke-current stroke-2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
               </svg>
             ) : (
-              /* 💬 Message/Chat Icon */
               <svg className="w-6 h-6 fill-none stroke-current stroke-2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
               </svg>
@@ -122,7 +120,7 @@ export default function ScrollToTop() {
         </div>
       </div>
 
-      {/* 📜 বাম দিকে থাকা স্ক্রল-টু-টপ বাটন (Left Side) */}
+      {/* 📜 বাম দিকে থাকা স্ক্রল-টু-টপ বাটন */}
       {isVisible && (
         <div className="fixed bottom-6 left-6 z-50">
           <button

@@ -96,7 +96,7 @@ export default function Contact() {
     { 
       icon: <Phone size={20} className="text-[#FFB800]" />, 
       label: "Phone", 
-      val: "+880 1511994008", 
+      val: "+880 1627178870", 
       isCopyable: true, // কপি ফিচারের জন্য ফ্ল্যাগ
       bg: "from-[rgba(255,184,0,0.15)] to-[rgba(255,184,0,0.02)]" 
     }

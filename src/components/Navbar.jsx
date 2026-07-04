@@ -6,7 +6,6 @@ import Image from "next/image";
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [isHireLoading, setIsHireLoading] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -25,17 +24,10 @@ export default function Navbar() {
 
   const handleHireMe = (e) => {
     e.preventDefault();
-    if (isHireLoading) return;
-
-    setIsHireLoading(true);
-
-    setTimeout(() => {
-      setIsHireLoading(false);
-      const contactSection = document.querySelector("#contact");
-      if (contactSection) {
-        contactSection.scrollIntoView({ behavior: "smooth" });
-      }
-    }, 1500);
+    const contactSection = document.querySelector("#contact");
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   const navItems = ["home", "about", "skills", "technologies", "education", "projects", "contact"];
@@ -53,7 +45,7 @@ export default function Navbar() {
           onClick={(e) => scrollToSection(e, "#home")} 
           className="flex items-center gap-3 no-underline py-1"
         >
-          {/* 👈 বাম পাশের লোগো - h-auto যুক্ত করা হয়েছে */}
+          {/* 👈 বাম পাশের লোগো */}
           <Image 
             src="/navL.png" 
             alt="Left Icon Logo" 
@@ -63,7 +55,7 @@ export default function Navbar() {
             priority
           />
 
-          {/* প্রধান লোগো - h-auto যুক্ত করা হয়েছে */}
+          {/* প্রধান লোগো */}
           <Image 
             src="/NavbarLogo.png" 
             alt="Injamamul Hoq Logo" 
@@ -94,19 +86,9 @@ export default function Navbar() {
         {/* Hire Me Button */}
         <button
           onClick={handleHireMe}
-          disabled={isHireLoading}
-          className={`hidden md:flex items-center justify-center gap-2 bg-gradient-to-br from-cyan to-cyan2 text-black border-none px-[1.4rem] py-[0.55rem] rounded-full font-bold text-[0.85rem] cursor-none transition-all duration-200 tracking-[0.5px] ${
-            isHireLoading ? "opacity-90 scale-95" : "hover:scale-105 hover:shadow-[0_0_20px_rgba(0,212,255,0.4)]"
-          }`}
+          className="hidden md:flex items-center justify-center gap-2 bg-gradient-to-br from-cyan to-cyan2 text-black border-none px-[1.4rem] py-[0.55rem] rounded-full font-bold text-[0.85rem] cursor-none transition-all duration-200 tracking-[0.5px] hover:scale-105 hover:shadow-[0_0_20px_rgba(0,212,255,0.4)]"
         >
-          {isHireLoading ? (
-            <>
-              <div className="hire-spinner"></div>
-              <span>Connecting...</span>
-            </>
-          ) : (
-            "Hire Me"
-          )}
+          Hire Me
         </button>
 
         {/* Hamburger Menu Icons */}
@@ -134,24 +116,6 @@ export default function Navbar() {
           </a>
         ))}
       </div>
-
-      {/* Custom Spinner Style */}
-      <style jsx>{`
-        .hire-spinner {
-          width: 14px;
-          height: 14px;
-          border: 2px solid #000;
-          border-bottom-color: transparent;
-          border-radius: 50%;
-          display: inline-block;
-          animation: hireRotation 0.8s linear infinite;
-        }
-
-        @keyframes hireRotation {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        }
-      `}</style>
     </>
   );
 }

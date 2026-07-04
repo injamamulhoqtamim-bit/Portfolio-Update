@@ -1,7 +1,6 @@
 import { Space_Grotesk, Syne, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import ScrollToTop from "@/components/ScrollToTop"; 
-import Script from "next/script"; 
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
@@ -33,22 +32,6 @@ export default function RootLayout({ children }) {
         
         {/* 🔘 গ্লোবাল বাটন কন্টেইনার */}
         <ScrollToTop />
-
-        {/* 🤖 Chatbase অফিশিয়াল স্ক্রিপ্ট কনফিগারেশন */}
-        <Script id="chatbase-config" strategy="afterInteractive">
-          {`
-            window.chatbaseConfig = {
-              chatbotId: "MAETekmoTgWjEk9Irlvy1",
-            };
-          `}
-        </Script>
-        <Script
-          src="https://www.chatbase.co/embed.min.js"
-          id="MAETekmoTgWjEk9Irlvy1"
-          domain="www.chatbase.co"
-          strategy="afterInteractive"
-          defer
-        />
       </body>
     </html>
   );

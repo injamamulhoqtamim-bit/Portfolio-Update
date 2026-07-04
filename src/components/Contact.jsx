@@ -1,25 +1,35 @@
 "use client";
 import { useState, useRef } from "react";
 import Reveal from "./Reveal";
-import { Mail, MessageCircle, Send, Loader2 } from "lucide-react";
+import { Mail, MessageCircle, Send, Loader2, Phone, Copy, Check } from "lucide-react";
 import emailjs from "@emailjs/browser";
 
 export default function Contact() {
   const formRef = useRef();
   const [isSending, setIsSending] = useState(false);
   const [formStatus, setFormStatus] = useState({ show: false, success: false, message: "" });
+  const [copiedText, setCopiedText] = useState(false);
+
+  // 📋 কপি করার ফাংশন
+  const handleCopy = async (text) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedText(true);
+      setTimeout(() => setCopiedText(false), 2000); // ২ সেকেন্ড পর আবার নরমাল হয়ে যাবে
+    } catch (err) {
+      console.error("Failed to copy: ", err);
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsSending(true);
     setFormStatus({ show: false, success: false, message: "" });
 
-    // ⚙️ EmailJS কনফিগারেশন 
     const SERVICE_ID = "service_7vnmc1p"; 
     const MAIN_TEMPLATE_ID = "template_6ovj5dg"; 
     const PUBLIC_KEY = "imrQPuI2hAA9fAdXy";
 
-    // 🚀 মাত্র ১টি রিকোয়েস্ট পাঠানো হবে (বাকি কাজ ড্যাশবোর্ড অটোমেটিক করবে)
     emailjs.sendForm(SERVICE_ID, MAIN_TEMPLATE_ID, formRef.current, PUBLIC_KEY)
       .then((result) => {
         setFormStatus({
@@ -27,7 +37,7 @@ export default function Contact() {
           success: true,
           message: "✓ Message sent successfully! An auto-reply has been sent to your email."
         });
-        e.target.reset(); // ফর্ম ক্লিয়ার হবে
+        e.target.reset(); 
       })
       .catch((error) => {
         setFormStatus({
@@ -43,7 +53,7 @@ export default function Contact() {
       });
   };
 
-  // 🌐 কন্টাক্ট ডাটা লিস্ট
+  // 🌐 কন্টাক্ট ডাটা লিস্ট (ফোন নাম্বারসহ)
   const contactItems = [
     { 
       icon: <Mail size={20} className="text-cyan" />, 
@@ -55,8 +65,8 @@ export default function Contact() {
     { 
       icon: <MessageCircle size={20} className="text-[#25D366]" />, 
       label: "WhatsApp", 
-      val: "+880 1511994008", 
       link: "https://wa.me/8801511994008", 
+      val: "+880 1511994008", 
       bg: "from-[rgba(37,211,102,0.15)] to-[rgba(37,211,102,0.02)]" 
     },
     { 
@@ -82,6 +92,13 @@ export default function Contact() {
       val: "Injamamul Hoq Tamim", 
       link: "https://www.linkedin.com/in/injamamul-hoq-tamim/", 
       bg: "from-[rgba(10,102,194,0.15)] to-[rgba(10,102,194,0.02)]" 
+    },
+    { 
+      icon: <Phone size={20} className="text-[#FFB800]" />, 
+      label: "Phone", 
+      val: "+880 1511994008", 
+      isCopyable: true, // কপি ফিচারের জন্য ফ্ল্যাগ
+      bg: "from-[rgba(255,184,0,0.15)] to-[rgba(255,184,0,0.02)]" 
     }
   ];
 
@@ -116,14 +133,9 @@ export default function Contact() {
           </Reveal>
 
           <div className="flex flex-col gap-3 w-full">
-            {contactItems.map((ci, i) => (
-              <Reveal key={i}>
-                <a 
-                  href={ci.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-4 bg-card border border-border rounded-[14px] p-3 md:p-4 transition-all duration-300 hover:border-[rgba(0,212,255,0.3)] hover:bg-gradient-to-r hover:from-card hover:to-border/20 sm:hover:translate-x-2 block group"
-                >
+            {contactItems.map((ci, i) => {
+              const cardContent = (
+                <>
                   <div className={`w-10 h-10 rounded-lg flex items-center justify-center bg-gradient-to-br ${ci.bg} group-hover:scale-105 transition-transform duration-300 shrink-0`}>
                     {ci.icon}
                   </div>
@@ -131,9 +143,42 @@ export default function Contact() {
                     <div className="text-[0.72rem] text-muted mb-0.5 font-medium group-hover:text-cyan transition-colors">{ci.label}</div>
                     <div className="text-[0.82rem] md:text-[0.88rem] font-medium text-text truncate">{ci.val}</div>
                   </div>
-                </a>
-              </Reveal>
-            ))}
+                  {ci.isCopyable && (
+                    <div className="shrink-0 text-muted group-hover:text-cyan p-1 transition-colors">
+                      {copiedText ? <Check size={16} className="text-[#00ff88]" /> : <Copy size={16} />}
+                    </div>
+                  )}
+                </>
+              );
+
+              return (
+                <Reveal key={i}>
+                  {ci.isCopyable ? (
+                    <button
+                      type="button"
+                      onClick={() => handleCopy(ci.val)}
+                      className="w-full flex items-center text-left gap-4 bg-card border border-border rounded-[14px] p-3 md:p-4 transition-all duration-300 hover:border-[rgba(0,212,255,0.3)] hover:bg-gradient-to-r hover:from-card hover:to-border/20 sm:hover:translate-x-2 block group relative cursor-pointer"
+                    >
+                      {cardContent}
+                      {copiedText && (
+                        <span className="absolute right-12 top-1/2 -translate-y-1/2 text-[0.7rem] bg-[#00ff88]/10 text-[#00ff88] border border-[#00ff88]/20 px-2 py-0.5 rounded">
+                          Copied!
+                        </span>
+                      )}
+                    </button>
+                  ) : (
+                    <a 
+                      href={ci.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-4 bg-card border border-border rounded-[14px] p-3 md:p-4 transition-all duration-300 hover:border-[rgba(0,212,255,0.3)] hover:bg-gradient-to-r hover:from-card hover:to-border/20 sm:hover:translate-x-2 block group"
+                    >
+                      {cardContent}
+                    </a>
+                  )}
+                </Reveal>
+              );
+            })}
           </div>
         </div>
 

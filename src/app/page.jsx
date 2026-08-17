@@ -11,6 +11,7 @@ import Certificates from "@/components/Certificates";
 import Projects from "@/components/Projects";
 import UpcomingProject from "@/components/UpcomingProject"; 
 import Contact from "@/components/Contact";
+import Comments from "@/components/Comments";
 import Footer from "@/components/Footer";
 
 export default function Home() {
@@ -30,6 +31,7 @@ export default function Home() {
         <Projects />
         <UpcomingProject />
         <Contact />
+        <Comments />
       </main>
       <Footer />
     </>

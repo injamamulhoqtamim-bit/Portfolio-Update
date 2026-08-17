@@ -1,5 +1,4 @@
-﻿
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -12,6 +11,9 @@ import Education from "./Education";
 import Skills from "./Skills";
 import Certificates from "./Certificates";
 import UpcomingProject from "./UpcomingProject";
+import Comments from "./Comments";
+
+import { MessageCircle } from "lucide-react";
 
 export default function AdminPanel() {
   const router = useRouter();
@@ -281,6 +283,14 @@ export default function AdminPanel() {
         }
 
         // =====================================================
+        // COMMENTS
+        // =====================================================
+
+        if (activeTab === "comments") {
+          return;
+        }
+
+        // =====================================================
         // OTHER TABS
         // =====================================================
 
@@ -411,10 +421,8 @@ export default function AdminPanel() {
         email: data.data?.email || aboutForm.email,
         education: data.data?.education || aboutForm.education,
         intro: data.data?.intro || aboutForm.intro,
-        paragraph1:
-          data.data?.paragraph1 || aboutForm.paragraph1,
-        paragraph2:
-          data.data?.paragraph2 || aboutForm.paragraph2,
+        paragraph1: data.data?.paragraph1 || aboutForm.paragraph1,
+        paragraph2: data.data?.paragraph2 || aboutForm.paragraph2,
       });
 
       setAboutMessage(
@@ -2781,6 +2789,55 @@ export default function AdminPanel() {
               >
                 Resume
               </button>
+
+              {/* =================================================
+                  COMMENTS
+              ================================================== */}
+
+              <button
+                type="button"
+                onClick={() => changeTab("comments")}
+                className={`
+                  flex
+                  w-full
+                  items-center
+                  justify-between
+                  gap-3
+                  rounded-lg
+                  px-3
+                  py-2.5
+                  text-left
+                  text-sm
+                  font-medium
+                  transition
+                  active:scale-[0.99]
+
+                  sm:px-4
+                  sm:py-3
+
+                  ${
+                    activeTab === "comments"
+                      ? "bg-violet-600 text-white shadow-lg shadow-violet-900/20"
+                      : "text-gray-300 hover:bg-violet-600 hover:text-white"
+                  }
+                `}
+              >
+                <span className="flex items-center gap-2.5">
+                  <MessageCircle size={18} />
+                  <span>Comments</span>
+                </span>
+
+                <span
+                  className={`rounded-md px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ${
+                    activeTab === "comments"
+                      ? "bg-white/10 text-white"
+                      : "bg-violet-500/10 text-violet-300"
+                  }`}
+                >
+                  Admin
+                </span>
+              </button>
+
             </nav>
           </div>
 
@@ -2882,6 +2939,8 @@ export default function AdminPanel() {
                     ? "Upcoming Project"
                     : activeTab === "resume"
                     ? "Resume"
+                    : activeTab === "comments"
+                    ? "Comments"
                     : activeTab
                         .charAt(0)
                         .toUpperCase() +
@@ -2965,6 +3024,14 @@ export default function AdminPanel() {
 
               <UpcomingProject admin={adminProps} />
 
+              {/* =================================================
+                  COMMENTS
+              ================================================== */}
+
+              {activeTab === "comments" && (
+                <Comments admin={adminProps} />
+              )}
+
             </div>
           </div>
         </main>
@@ -2972,4 +3039,3 @@ export default function AdminPanel() {
     </div>
   );
 }
-

@@ -6,8 +6,9 @@ import { useRouter } from "next/navigation";
 export default function AdminLogin() {
   const router = useRouter();
 
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -15,17 +16,30 @@ export default function AdminLogin() {
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    setLoading(true);
     setError("");
 
+    if (!username.trim()) {
+      setError("Please enter your username.");
+      return;
+    }
+
+    if (!password) {
+      setError("Please enter your password.");
+      return;
+    }
+
+    setLoading(true);
+
     try {
-      const res = await fetch("/api/admin/login", {
+      const res = await fetch("/api/admin-auth", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
+        cache: "no-store",
         body: JSON.stringify({
-          email,
+          username: username.trim(),
           password,
         }),
       });
@@ -33,15 +47,28 @@ export default function AdminLogin() {
       const result = await res.json();
 
       if (!res.ok || !result.success) {
-        setError(result.message || "Invalid email or password.");
+        setError(
+          result.message || "Invalid username or password."
+        );
         return;
       }
+
+      /*
+       * IMPORTANT:
+       * Do NOT use localStorage for admin authentication.
+       *
+       * The /api/admin-auth endpoint sets the
+       * httpOnly "admin_session" cookie.
+       */
 
       router.replace("/admin");
       router.refresh();
     } catch (error) {
-      console.error("Login error:", error);
-      setError("Unable to login. Please try again.");
+      console.error("ADMIN LOGIN ERROR:", error);
+
+      setError(
+        "Unable to login. Please check your connection and try again."
+      );
     } finally {
       setLoading(false);
     }
@@ -50,6 +77,7 @@ export default function AdminLogin() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-950 px-4 text-white">
       <div className="w-full max-w-md rounded-2xl border border-gray-800 bg-gray-900 p-8 shadow-2xl">
+        {/* Header */}
         <div className="mb-8 text-center">
           <h1 className="text-3xl font-bold text-teal-400">
             Admin Login
@@ -60,26 +88,34 @@ export default function AdminLogin() {
           </p>
         </div>
 
+        {/* Error */}
         {error && (
           <div className="mb-5 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400">
             {error}
           </div>
         )}
 
-        <form onSubmit={handleLogin} className="space-y-5">
-          {/* Email */}
+        {/* Login Form */}
+        <form
+          onSubmit={handleLogin}
+          className="space-y-5"
+        >
+          {/* Username */}
           <div>
             <label className="mb-2 block text-sm font-medium text-gray-300">
-              Email
+              Username
             </label>
 
             <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter admin email"
+              type="text"
+              value={username}
+              onChange={(e) =>
+                setUsername(e.target.value)
+              }
+              placeholder="Enter admin username"
               autoComplete="username"
-              className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-3 text-white outline-none transition focus:border-teal-500"
+              disabled={loading}
+              className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-3 text-white outline-none transition placeholder:text-gray-500 focus:border-teal-500 disabled:cursor-not-allowed disabled:opacity-60"
               required
             />
           </div>
@@ -92,20 +128,32 @@ export default function AdminLogin() {
 
             <div className="relative">
               <input
-                type={showPassword ? "text" : "password"}
+                type={
+                  showPassword
+                    ? "text"
+                    : "password"
+                }
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) =>
+                  setPassword(e.target.value)
+                }
                 placeholder="Enter admin password"
                 autoComplete="current-password"
-                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-3 pr-12 text-white outline-none transition focus:border-teal-500"
+                disabled={loading}
+                className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-3 pr-12 text-white outline-none transition placeholder:text-gray-500 focus:border-teal-500 disabled:cursor-not-allowed disabled:opacity-60"
                 required
               />
 
-              {/* Show / Hide Password Button */}
+              {/* Show / Hide Password */}
               <button
                 type="button"
-                onClick={() => setShowPassword((prev) => !prev)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 transition hover:text-teal-400 focus:outline-none"
+                onClick={() =>
+                  setShowPassword(
+                    (prev) => !prev
+                  )
+                }
+                disabled={loading}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 transition hover:text-teal-400 focus:outline-none disabled:cursor-not-allowed"
                 aria-label={
                   showPassword
                     ? "Hide password"
@@ -113,7 +161,7 @@ export default function AdminLogin() {
                 }
               >
                 {showPassword ? (
-                  // Eye Off Icon
+                  /* Eye Off */
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
@@ -127,16 +175,19 @@ export default function AdminLogin() {
                       strokeLinejoin="round"
                       d="M3 3l18 18"
                     />
+
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       d="M10.58 10.58a2 2 0 102.83 2.83"
                     />
+
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       d="M9.88 4.24A9.77 9.77 0 0112 4c5.5 0 9.5 8 9.5 8a16.9 16.9 0 01-3.04 3.84"
                     />
+
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -144,7 +195,7 @@ export default function AdminLogin() {
                     />
                   </svg>
                 ) : (
-                  // Eye Icon
+                  /* Eye */
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
@@ -158,6 +209,7 @@ export default function AdminLogin() {
                       strokeLinejoin="round"
                       d="M2.5 12s3.5-7 9.5-7 9.5 7 9.5 7-3.5 7-9.5 7-9.5-7-9.5-7z"
                     />
+
                     <circle
                       cx="12"
                       cy="12"
@@ -175,7 +227,9 @@ export default function AdminLogin() {
             disabled={loading}
             className="w-full rounded-lg bg-teal-600 py-3 font-bold text-white transition hover:bg-teal-700 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {loading ? "Logging in..." : "Login"}
+            {loading
+              ? "Logging in..."
+              : "Login"}
           </button>
         </form>
       </div>

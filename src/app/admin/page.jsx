@@ -2531,13 +2531,13 @@ export default function AdminPanel() {
                   sm:text-2xl
                 "
               >
-                Admin Dashboard
+               Injamamul Hoq Tamim
               </h1>
 
               {/* Welcome Text */}
 
               <p className="mt-1 text-xs text-gray-400 sm:text-sm">
-                Welcome back, Injamamul Hoq Tamim
+                Welcome back
               </p>
             </div>
 

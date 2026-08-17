@@ -312,7 +312,6 @@ export default function AdminPanel() {
   const fetchAbout = async () => {
     try {
       setAboutLoading(true);
-
       setAboutMessage("");
 
       const response = await fetch("/api/about", {
@@ -395,7 +394,6 @@ export default function AdminPanel() {
 
     try {
       setAboutLoading(true);
-
       setAboutMessage("");
 
       const response = await fetch("/api/about", {
@@ -2278,6 +2276,28 @@ export default function AdminPanel() {
   };
 
   // =========================================================
+  // AUTHENTICATION GUARD
+  // =========================================================
+
+  if (authChecking) {
+    return (
+      <div className="flex min-h-dvh items-center justify-center bg-gray-950 text-white">
+        <div className="flex flex-col items-center gap-4">
+          <div className="h-12 w-12 animate-spin rounded-full border-4 border-gray-700 border-t-teal-400" />
+
+          <p className="text-sm text-gray-400">
+            Checking admin authentication...
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!authenticated) {
+    return null;
+  }
+
+  // =========================================================
   // RENDER PROPS
   // =========================================================
 
@@ -2559,9 +2579,7 @@ export default function AdminPanel() {
 
             <nav className="space-y-1.5 sm:space-y-2">
 
-              {/* =================================================
-                  ABOUT
-              ================================================== */}
+              {/* ABOUT */}
 
               <button
                 type="button"
@@ -2592,9 +2610,7 @@ export default function AdminPanel() {
                 About Me
               </button>
 
-              {/* =================================================
-                  PROJECTS
-              ================================================== */}
+              {/* PROJECTS */}
 
               <button
                 type="button"
@@ -2625,9 +2641,7 @@ export default function AdminPanel() {
                 Projects
               </button>
 
-              {/* =================================================
-                  SKILLS
-              ================================================== */}
+              {/* SKILLS */}
 
               <button
                 type="button"
@@ -2658,9 +2672,7 @@ export default function AdminPanel() {
                 Skills
               </button>
 
-              {/* =================================================
-                  CERTIFICATES
-              ================================================== */}
+              {/* CERTIFICATES */}
 
               <button
                 type="button"
@@ -2691,9 +2703,7 @@ export default function AdminPanel() {
                 Certificates
               </button>
 
-              {/* =================================================
-                  EDUCATION
-              ================================================== */}
+              {/* EDUCATION */}
 
               <button
                 type="button"
@@ -2724,9 +2734,7 @@ export default function AdminPanel() {
                 Education
               </button>
 
-              {/* =================================================
-                  UPCOMING PROJECT
-              ================================================== */}
+              {/* UPCOMING PROJECT */}
 
               <button
                 type="button"
@@ -2757,9 +2765,7 @@ export default function AdminPanel() {
                 Upcoming Project
               </button>
 
-              {/* =================================================
-                  RESUME
-              ================================================== */}
+              {/* RESUME */}
 
               <button
                 type="button"
@@ -2790,13 +2796,13 @@ export default function AdminPanel() {
                 Resume
               </button>
 
-              {/* =================================================
-                  COMMENTS
-              ================================================== */}
+              {/* COMMENTS */}
 
               <button
                 type="button"
-                onClick={() => changeTab("comments")}
+                onClick={() =>
+                  changeTab("comments")
+                }
                 className={`
                   flex
                   w-full
@@ -2828,16 +2834,25 @@ export default function AdminPanel() {
                 </span>
 
                 <span
-                  className={`rounded-md px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ${
-                    activeTab === "comments"
-                      ? "bg-white/10 text-white"
-                      : "bg-violet-500/10 text-violet-300"
-                  }`}
+                  className={`
+                    rounded-md
+                    px-2
+                    py-0.5
+                    text-[10px]
+                    font-bold
+                    uppercase
+                    tracking-wide
+
+                    ${
+                      activeTab === "comments"
+                        ? "bg-white/10 text-white"
+                        : "bg-violet-500/10 text-violet-300"
+                    }
+                  `}
                 >
                   Admin
                 </span>
               </button>
-
             </nav>
           </div>
 
@@ -2986,43 +3001,57 @@ export default function AdminPanel() {
                   ABOUT
               ================================================== */}
 
-              <About admin={adminProps} />
+              {activeTab === "about" && (
+                <About admin={adminProps} />
+              )}
 
               {/* =================================================
                   RESUME
               ================================================== */}
 
-              <Resume admin={adminProps} />
+              {activeTab === "resume" && (
+                <Resume admin={adminProps} />
+              )}
 
               {/* =================================================
                   PROJECTS
               ================================================== */}
 
-              <Projects admin={adminProps} />
+              {activeTab === "projects" && (
+                <Projects admin={adminProps} />
+              )}
 
               {/* =================================================
                   EDUCATION
               ================================================== */}
 
-              <Education admin={adminProps} />
+              {activeTab === "education" && (
+                <Education admin={adminProps} />
+              )}
 
               {/* =================================================
                   SKILLS
               ================================================== */}
 
-              <Skills admin={adminProps} />
+              {activeTab === "skills" && (
+                <Skills admin={adminProps} />
+              )}
 
               {/* =================================================
                   CERTIFICATES
               ================================================== */}
 
-              <Certificates admin={adminProps} />
+              {activeTab === "certificates" && (
+                <Certificates admin={adminProps} />
+              )}
 
               {/* =================================================
                   UPCOMING PROJECT
               ================================================== */}
 
-              <UpcomingProject admin={adminProps} />
+              {activeTab === "upcomingProject" && (
+                <UpcomingProject admin={adminProps} />
+              )}
 
               {/* =================================================
                   COMMENTS

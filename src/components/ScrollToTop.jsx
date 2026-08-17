@@ -3,19 +3,28 @@ import { useEffect, useState } from "react";
 
 export default function ScrollToTop() {
   const [isVisible, setIsVisible] = useState(false);
-  const [isOpen, setIsOpen] = useState(false); 
+  const [isOpen, setIsOpen] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
 
   useEffect(() => {
-    const toggleVisibility = () => {
+    const handleScroll = () => {
+      // Visibility toggling
       if (window.scrollY > 300) {
         setIsVisible(true);
       } else {
         setIsVisible(false);
       }
+
+      // Calculate scroll progress percentage
+      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (totalHeight > 0) {
+        const currentProgress = (window.scrollY / totalHeight) * 100;
+        setScrollProgress(currentProgress);
+      }
     };
 
-    window.addEventListener("scroll", toggleVisibility);
-    return () => window.removeEventListener("scroll", toggleVisibility);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const scrollToTop = () => {
@@ -27,11 +36,15 @@ export default function ScrollToTop() {
     }
   };
 
+  // SVG Circle Calculations
+  const radius = 20;
+  const circumference = 2 * Math.PI * radius;
+  const strokeDashoffset = circumference - (scrollProgress / 100) * circumference;
+
   return (
     <>
       {/* 🔵 ডান দিকে থাকা সোশ্যাল বাটন কন্টেইনার (Right Side) */}
       <div className="fixed bottom-6 right-6 z-50 flex flex-col gap-3 items-center">
-        
         {/* 📱 সোশ্যাল বাটনগুলোর কন্টেইনার */}
         <div 
           className={`flex flex-col gap-3 items-center transition-all duration-500 origin-bottom ${
@@ -116,15 +129,47 @@ export default function ScrollToTop() {
         </div>
       </div>
 
-      {/* 📜 বাম দিকে থাকা স্ক্রল-টু-টপ বাটন */}
+      {/* 📜 বাম দিকে থাকা স্ক্রল-টু-টপ উইথ প্রোগ্রেস বার */}
       {isVisible && (
-        <div className="fixed bottom-6 left-6 z-50">
+        <div className="fixed bottom-6 left-6 z-50 transition-opacity duration-300">
           <button
             onClick={scrollToTop}
             title="Back to top"
-            className="w-12 h-12 rounded-full bg-gradient-to-br from-cyan to-cyan2 border border-white/10 cursor-pointer flex items-center justify-center text-black text-[1.3rem] font-bold shadow-[0_4px_20px_rgba(0,212,255,0.2)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_8px_25px_rgba(0,212,255,0.45)] active:scale-90 animate-fade-in"
+            className="relative w-12 h-12 rounded-full bg-[#16181D] cursor-pointer flex items-center justify-center text-white shadow-lg transition-all duration-300 hover:-translate-y-1 active:scale-90 group"
           >
-            ↑
+            {/* SVG Circular Progress Ring */}
+            <svg className="absolute top-0 left-0 w-full h-full -rotate-90 pointer-events-none" viewBox="0 0 48 48">
+              {/* Background Track Circle */}
+              <circle
+                cx="24"
+                cy="24"
+                r={radius}
+                className="stroke-gray-700/50"
+                strokeWidth="3"
+                fill="transparent"
+              />
+              {/* Progress Indicator Circle */}
+              <circle
+                cx="24"
+                cy="24"
+                r={radius}
+                className="stroke-blue-500 transition-all duration-150 ease-out"
+                strokeWidth="3.5"
+                strokeDasharray={circumference}
+                strokeDashoffset={strokeDashoffset}
+                strokeLinecap="round"
+                fill="transparent"
+              />
+            </svg>
+
+            {/* Top Arrow Icon */}
+            <svg
+              className="w-5 h-5 text-gray-200 fill-none stroke-current stroke-2 transition-transform duration-300 group-hover:-translate-y-0.5"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+            </svg>
           </button>
         </div>
       )}

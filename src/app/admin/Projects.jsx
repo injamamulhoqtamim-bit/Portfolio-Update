@@ -19,6 +19,28 @@ export default function Projects({ admin }) {
     setProjectForm,
   } = admin;
 
+  // Total projects count
+  const totalProjects = Array.isArray(items) ? items.length : 0;
+
+  // Get last upload/updated date
+  const getLastUpdatedDate = () => {
+    if (!Array.isArray(items) || items.length === 0) return "N/A";
+    
+    // items এর প্রথম অথবা শেষ এলিমেন্ট থেকে সাম্প্রতিক তারিখ নেওয়ার নিয়ম
+    const dates = items
+      .map((item) => new Date(item.createdAt || item.updatedAt || item.date))
+      .filter((d) => !isNaN(d));
+
+    if (dates.length === 0) return "N/A";
+
+    const latestDate = new Date(Math.max(...dates));
+    return latestDate.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  };
+
   return (
     <>
       {/* =====================================================
@@ -28,12 +50,29 @@ export default function Projects({ admin }) {
       {activeTab === "projects" && (
         <section>
           {/* =================================================
-              HEADER
+              HEADER & ANALYTICS CARDS
           ================================================== */}
 
-          <h2 className="mb-5 text-2xl font-bold sm:mb-6 sm:text-3xl">
-            Manage Projects
-          </h2>
+          <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <h2 className="text-2xl font-bold sm:text-3xl">Manage Projects</h2>
+          </div>
+
+          {/* STATS CARDS */}
+          <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {/* TOTAL PROJECTS */}
+            <div className="rounded-xl border border-gray-800 bg-gray-900 p-5">
+              <p className="text-sm font-medium text-gray-400">Total Projects</p>
+              <p className="mt-2 text-3xl font-bold text-white">{totalProjects}</p>
+            </div>
+
+            {/* LAST UPLOAD DATE */}
+            <div className="rounded-xl border border-gray-800 bg-gray-900 p-5">
+              <p className="text-sm font-medium text-gray-400">Last Uploaded</p>
+              <p className="mt-2 text-3xl font-bold text-teal-400">
+                {getLastUpdatedDate()}
+              </p>
+            </div>
+          </div>
 
           {/* =================================================
               PROJECT FORM
@@ -44,20 +83,14 @@ export default function Projects({ admin }) {
             className="mb-6 space-y-5 rounded-xl border border-gray-800 bg-gray-900 p-4 sm:mb-8 sm:p-6"
           >
             <h3 className="text-2xl font-semibold text-teal-300">
-              {editingId
-                ? "Edit Project"
-                : "Add New Project"}
+              {editingId ? "Edit Project" : "Add New Project"}
             </h3>
 
-            {/* =================================================
-                TITLE
-            ================================================== */}
-
+            {/* TITLE */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="mb-2 block text-sm font-medium text-gray-300">
                 Project Title
               </label>
-
               <input
                 type="text"
                 placeholder="Portfolio Website"
@@ -68,17 +101,14 @@ export default function Projects({ admin }) {
                     title: e.target.value,
                   })
                 }
-                className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-teal-500"
+                className="w-full rounded-lg border border-gray-700 bg-gray-800 p-3 focus:border-teal-500 focus:outline-none"
                 required
               />
             </div>
 
-            {/* =================================================
-                IMAGE
-            ================================================== */}
-
+            {/* IMAGE */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="mb-2 block text-sm font-medium text-gray-300">
                 Project Image
               </label>
 
@@ -86,12 +116,11 @@ export default function Projects({ admin }) {
                 type="file"
                 accept="image/png,image/jpeg,image/jpg,image/webp,image/gif"
                 onChange={handleImageChange}
-                className="block min-w-0 w-full text-sm text-gray-300 file:mr-4 file:py-3 file:px-5 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-teal-600 file:text-white hover:file:bg-teal-700 cursor-pointer bg-gray-800 border border-gray-700 rounded-lg p-2"
+                className="block min-w-0 w-full cursor-pointer rounded-lg border border-gray-700 bg-gray-800 p-2 text-sm text-gray-300 file:mr-4 file:rounded-lg file:border-0 file:bg-teal-600 file:px-5 file:py-3 file:text-sm file:font-semibold file:text-white hover:file:bg-teal-700"
               />
 
-              <p className="text-xs text-gray-500 mt-2">
-                JPG, PNG, WEBP অথবা GIF.
-                Maximum 5MB.
+              <p className="mt-2 text-xs text-gray-500">
+                JPG, PNG, WEBP অথবা GIF. Maximum 5MB.
               </p>
 
               {imagePreview && (
@@ -106,81 +135,65 @@ export default function Projects({ admin }) {
                     <button
                       type="button"
                       onClick={handleRemoveImage}
-                      className="absolute top-2 right-2 w-9 h-9 rounded-full bg-red-600 hover:bg-red-700 text-white flex items-center justify-center shadow-lg"
+                      className="absolute top-2 right-2 flex h-9 w-9 items-center justify-center rounded-full bg-red-600 text-white shadow-lg hover:bg-red-700"
                     >
                       ✕
                     </button>
                   </div>
 
                   {imageFile && (
-                    <p className="text-xs text-gray-400 mt-2">
-                      Selected:{" "}
-                      {imageFile.name}
+                    <p className="mt-2 text-xs text-gray-400">
+                      Selected: {imageFile.name}
                     </p>
                   )}
                 </div>
               )}
             </div>
 
-            {/* =================================================
-                SHORT DESCRIPTION
-            ================================================== */}
-
+            {/* SHORT DESCRIPTION */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="mb-2 block text-sm font-medium text-gray-300">
                 Short Description
               </label>
 
               <textarea
                 placeholder="A short description of the project..."
-                value={
-                  projectForm.shortDescription || ""
-                }
+                value={projectForm.shortDescription || ""}
                 onChange={(e) =>
                   setProjectForm({
                     ...projectForm,
-                    shortDescription:
-                      e.target.value,
+                    shortDescription: e.target.value,
                   })
                 }
                 rows={3}
-                className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-teal-500 resize-none"
+                className="w-full resize-none rounded-lg border border-gray-700 bg-gray-800 p-3 focus:border-teal-500 focus:outline-none"
                 required
               />
             </div>
 
-            {/* =================================================
-                LONG DESCRIPTION
-            ================================================== */}
-
+            {/* LONG DESCRIPTION */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="mb-2 block text-sm font-medium text-gray-300">
                 Long Description
               </label>
 
               <textarea
                 placeholder="Write the complete project description..."
-                value={
-                  projectForm.longDescription || ""
-                }
+                value={projectForm.longDescription || ""}
                 onChange={(e) =>
                   setProjectForm({
                     ...projectForm,
-                    longDescription:
-                      e.target.value,
+                    longDescription: e.target.value,
                   })
                 }
                 rows={6}
-                className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-teal-500 resize-none"
+                className="w-full resize-none rounded-lg border border-gray-700 bg-gray-800 p-3 focus:border-teal-500 focus:outline-none"
               />
             </div>
 
-            {/* =================================================
-                TECH STACK
-            ================================================== */}
-
+            {/* TECH STACK */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="mb-2 block text-sm font-medium text-gray-300">
                 Technologies
               </label>
 
@@ -191,23 +204,18 @@ export default function Projects({ admin }) {
                 onChange={(e) =>
                   setProjectForm({
                     ...projectForm,
-                    techStack:
-                      e.target.value,
+                    techStack: e.target.value,
                   })
                 }
-                className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-teal-500"
+                className="w-full rounded-lg border border-gray-700 bg-gray-800 p-3 focus:border-teal-500 focus:outline-none"
               />
             </div>
 
-            {/* =================================================
-                URL GRID
-            ================================================== */}
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {/* URL GRID */}
+            <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
               {/* LIVE URL */}
-
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <label className="mb-2 block text-sm font-medium text-gray-300">
                   Live Website URL
                 </label>
 
@@ -218,105 +226,82 @@ export default function Projects({ admin }) {
                   onChange={(e) =>
                     setProjectForm({
                       ...projectForm,
-                      liveLink:
-                        e.target.value,
+                      liveLink: e.target.value,
                     })
                   }
-                  className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-teal-500"
+                  className="w-full rounded-lg border border-gray-700 bg-gray-800 p-3 focus:border-teal-500 focus:outline-none"
                 />
               </div>
 
               {/* GITHUB URL */}
-
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <label className="mb-2 block text-sm font-medium text-gray-300">
                   GitHub URL
                 </label>
 
                 <input
                   type="url"
                   placeholder="https://github.com/username/project"
-                  value={
-                    projectForm.githubLink || ""
-                  }
+                  value={projectForm.githubLink || ""}
                   onChange={(e) =>
                     setProjectForm({
                       ...projectForm,
-                      githubLink:
-                        e.target.value,
+                      githubLink: e.target.value,
                     })
                   }
-                  className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-teal-500"
+                  className="w-full rounded-lg border border-gray-700 bg-gray-800 p-3 focus:border-teal-500 focus:outline-none"
                 />
               </div>
             </div>
 
-            {/* =================================================
-                CHALLENGES
-            ================================================== */}
-
+            {/* CHALLENGES */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="mb-2 block text-sm font-medium text-gray-300">
                 Challenges
               </label>
 
               <textarea
-                placeholder={`Responsive design
-Authentication system
-Database integration`}
+                placeholder={`Responsive design\nAuthentication system\nDatabase integration`}
                 value={projectForm.challenges || ""}
                 onChange={(e) =>
                   setProjectForm({
                     ...projectForm,
-                    challenges:
-                      e.target.value,
+                    challenges: e.target.value,
                   })
                 }
                 rows={5}
-                className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-teal-500 resize-none"
+                className="w-full resize-none rounded-lg border border-gray-700 bg-gray-800 p-3 focus:border-teal-500 focus:outline-none"
               />
             </div>
 
-            {/* =================================================
-                FUTURE IMPROVEMENTS
-            ================================================== */}
-
+            {/* FUTURE IMPROVEMENTS */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="mb-2 block text-sm font-medium text-gray-300">
                 Future Improvements
               </label>
 
               <textarea
-                placeholder={`Add payment system
-Improve performance
-Add mobile application`}
-                value={
-                  projectForm.futureImprovements ||
-                  ""
-                }
+                placeholder={`Add payment system\nImprove performance\nAdd mobile application`}
+                value={projectForm.futureImprovements || ""}
                 onChange={(e) =>
                   setProjectForm({
                     ...projectForm,
-                    futureImprovements:
-                      e.target.value,
+                    futureImprovements: e.target.value,
                   })
                 }
                 rows={5}
-                className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-teal-500 resize-none"
+                className="w-full resize-none rounded-lg border border-gray-700 bg-gray-800 p-3 focus:border-teal-500 focus:outline-none"
               />
             </div>
 
-            {/* =================================================
-                BUTTONS
-            ================================================== */}
-
+            {/* BUTTONS */}
             <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <button
                 type="submit"
                 disabled={loading}
                 className={`w-full rounded-lg px-5 py-3 font-semibold transition sm:w-auto ${
                   loading
-                    ? "bg-gray-600 cursor-not-allowed"
+                    ? "cursor-not-allowed bg-gray-600"
                     : "bg-teal-600 hover:bg-teal-700"
                 }`}
               >
@@ -331,7 +316,7 @@ Add mobile application`}
                 <button
                   type="button"
                   onClick={resetForm}
-                  className="px-6 py-3 bg-gray-700 hover:bg-gray-600 rounded-lg font-semibold transition"
+                  className="rounded-lg bg-gray-700 px-6 py-3 font-semibold transition hover:bg-gray-600"
                 >
                   Cancel Edit
                 </button>
@@ -343,7 +328,7 @@ Add mobile application`}
               PROJECT LIST
           ================================================== */}
 
-          <div className="bg-gray-900 rounded-xl border border-gray-800 overflow-hidden">
+          <div className="overflow-hidden rounded-xl border border-gray-800 bg-gray-900">
             {/* LIST HEADER */}
 
             <div className="flex flex-col gap-3 border-b border-gray-800 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-6">
@@ -353,26 +338,21 @@ Add mobile application`}
 
               <button
                 type="button"
-                onClick={() =>
-                  fetchData("projects")
-                }
+                onClick={() => fetchData("projects")}
                 disabled={loading}
-                className="px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg text-sm transition disabled:opacity-50 disabled:cursor-not-allowed"
+                className="rounded-lg bg-gray-800 px-4 py-2 text-sm transition hover:bg-gray-700 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 Refresh
               </button>
             </div>
 
-            {/* =================================================
-                LOADING / EMPTY / LIST
-            ================================================== */}
+            {/* LOADING / EMPTY / LIST */}
 
             {loading ? (
               <div className="p-8 text-center text-gray-400">
                 Loading Projects...
               </div>
-            ) : !Array.isArray(items) ||
-              items.length === 0 ? (
+            ) : !Array.isArray(items) || items.length === 0 ? (
               <div className="p-8 text-center text-gray-500">
                 No projects found.
               </div>
@@ -383,20 +363,13 @@ Add mobile application`}
                     key={item._id}
                     className="p-4 transition hover:bg-gray-800/40 sm:p-6"
                   >
-                    <div className="flex flex-col lg:flex-row gap-6">
+                    <div className="flex flex-col gap-6 lg:flex-row">
                       {/* PROJECT IMAGE */}
 
-                      {(item.image ||
-                        item.imageUrl) && (
+                      {(item.image || item.imageUrl) && (
                         <img
-                          src={
-                            item.image ||
-                            item.imageUrl
-                          }
-                          alt={
-                            item.title ||
-                            "Project"
-                          }
+                          src={item.image || item.imageUrl}
+                          alt={item.title || "Project"}
                           className="h-40 w-full rounded-xl border border-gray-700 bg-white p-2 object-contain sm:h-44 lg:h-36 lg:w-56"
                         />
                       )}
@@ -410,122 +383,77 @@ Add mobile application`}
 
                         {/* DESCRIPTION */}
 
-                        <p className="text-gray-400 text-sm mt-2">
+                        <p className="mt-2 text-sm text-gray-400">
                           {item.shortDescription ||
                             item.description ||
                             item.desc ||
                             "No description"}
                         </p>
 
-                        {/* =================================================
-                            TECH STACK
-                        ================================================== */}
+                        {/* TECH STACK */}
 
-                        {item.techStack ||
-                        item.tech ? (
-                          <div className="flex flex-wrap gap-2 mt-4">
+                        {item.techStack || item.tech ? (
+                          <div className="mt-4 flex flex-wrap gap-2">
                             {(
-                              Array.isArray(
-                                item.techStack ||
-                                  item.tech
-                              )
-                                ? item.techStack ||
-                                  item.tech
+                              Array.isArray(item.techStack || item.tech)
+                                ? item.techStack || item.tech
                                 : String(
-                                    item.techStack ||
-                                      item.tech
+                                    item.techStack || item.tech
                                   ).split(",")
-                            ).map(
-                              (
-                                tech,
-                                index
-                              ) => (
-                                <span
-                                  key={
-                                    index
-                                  }
-                                  className="px-2.5 py-1 bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 rounded-full text-xs"
-                                >
-                                  {String(
-                                    tech
-                                  ).trim()}
-                                </span>
-                              )
-                            )}
+                            ).map((tech, index) => (
+                              <span
+                                key={index}
+                                className="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-2.5 py-1 text-xs text-cyan-400"
+                              >
+                                {String(tech).trim()}
+                              </span>
+                            ))}
                           </div>
                         ) : null}
 
-                        {/* =================================================
-                            PROJECT LINKS
-                        ================================================== */}
+                        {/* PROJECT LINKS */}
 
-                        <div className="flex flex-wrap gap-4 mt-4">
-                          {/* LIVE */}
-
-                          {(item.liveLink ||
-                            item.live) && (
+                        <div className="mt-4 flex flex-wrap gap-4">
+                          {(item.liveLink || item.live) && (
                             <a
-                              href={
-                                item.liveLink ||
-                                item.live
-                              }
+                              href={item.liveLink || item.live}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-cyan-400 hover:text-cyan-300 text-sm"
+                              className="text-sm text-cyan-400 hover:text-cyan-300"
                             >
                               Live Website ↗
                             </a>
                           )}
 
-                          {/* GITHUB */}
-
-                          {(item.githubLink ||
-                            item.code) && (
+                          {(item.githubLink || item.code) && (
                             <a
-                              href={
-                                item.githubLink ||
-                                item.code
-                              }
+                              href={item.githubLink || item.code}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-purple-400 hover:text-purple-300 text-sm"
+                              className="text-sm text-purple-400 hover:text-purple-300"
                             >
                               GitHub ↗
                             </a>
                           )}
                         </div>
 
-                        {/* =================================================
-                            ACTIONS
-                        ================================================== */}
+                        {/* ACTIONS */}
 
                         <div className="mt-5 flex flex-wrap gap-3">
-                          {/* EDIT */}
-
                           <button
                             type="button"
-                            onClick={() =>
-                              handleEditProject(
-                                item
-                              )
-                            }
+                            onClick={() => handleEditProject(item)}
                             disabled={loading}
-                            className="px-4 py-2 text-cyan-400 hover:text-cyan-300 hover:bg-cyan-400/10 rounded-lg transition font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="rounded-lg px-4 py-2 font-medium text-cyan-400 transition hover:bg-cyan-400/10 hover:text-cyan-300 disabled:cursor-not-allowed disabled:opacity-50"
                           >
                             Edit
                           </button>
 
-                          {/* DELETE */}
-
                           <button
                             type="button"
-                            onClick={() =>
-                              handleDeleteProject(
-                                item._id
-                              )
-                            }
+                            onClick={() => handleDeleteProject(item._id)}
                             disabled={loading}
-                            className="px-4 py-2 text-red-400 hover:text-red-300 hover:bg-red-400/10 rounded-lg transition font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="rounded-lg px-4 py-2 font-medium text-red-400 transition hover:bg-red-400/10 hover:text-red-300 disabled:cursor-not-allowed disabled:opacity-50"
                           >
                             Delete
                           </button>

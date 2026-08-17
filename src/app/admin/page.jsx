@@ -13,7 +13,16 @@ import Certificates from "./Certificates";
 import UpcomingProject from "./UpcomingProject";
 import Comments from "./Comments";
 
-import { MessageCircle } from "lucide-react";
+import {
+  UserRound,
+  FolderKanban,
+  Code2,
+  Award,
+  GraduationCap,
+  Rocket,
+  FileText,
+  MessageCircle,
+} from "lucide-react";
 
 export default function AdminPanel() {
   const router = useRouter();
@@ -148,7 +157,8 @@ export default function AdminPanel() {
     order: 0,
   });
 
-  const [certificateImageFile, setCertificateImageFile] = useState(null);
+  const [certificateImageFile, setCertificateImageFile] =
+    useState(null);
 
   const [certificateDocumentFile, setCertificateDocumentFile] =
     useState(null);
@@ -222,7 +232,10 @@ export default function AdminPanel() {
           setAuthenticated(true);
         }
       } catch (error) {
-        console.error("Admin authentication check failed:", error);
+        console.error(
+          "Admin authentication check failed:",
+          error
+        );
 
         if (!cancelled) {
           setAuthenticated(false);
@@ -324,7 +337,8 @@ export default function AdminPanel() {
 
       if (!response.ok || !data.success) {
         throw new Error(
-          data.message || "Failed to fetch About information."
+          data.message ||
+            "Failed to fetch About information."
         );
       }
 
@@ -409,18 +423,23 @@ export default function AdminPanel() {
 
       if (!response.ok || !data.success) {
         throw new Error(
-          data.message || "Failed to update About information."
+          data.message ||
+            "Failed to update About information."
         );
       }
 
       setAboutForm({
         name: data.data?.name || aboutForm.name,
-        location: data.data?.location || aboutForm.location,
+        location:
+          data.data?.location || aboutForm.location,
         email: data.data?.email || aboutForm.email,
-        education: data.data?.education || aboutForm.education,
+        education:
+          data.data?.education || aboutForm.education,
         intro: data.data?.intro || aboutForm.intro,
-        paragraph1: data.data?.paragraph1 || aboutForm.paragraph1,
-        paragraph2: data.data?.paragraph2 || aboutForm.paragraph2,
+        paragraph1:
+          data.data?.paragraph1 || aboutForm.paragraph1,
+        paragraph2:
+          data.data?.paragraph2 || aboutForm.paragraph2,
       });
 
       setAboutMessage(
@@ -432,7 +451,8 @@ export default function AdminPanel() {
       console.error("About Update Error:", error);
 
       setAboutMessage(
-        error.message || "Failed to update About information."
+        error.message ||
+          "Failed to update About information."
       );
     } finally {
       setAboutLoading(false);
@@ -476,7 +496,9 @@ export default function AdminPanel() {
 
       setCertificates([]);
 
-      alert(error.message || "Failed to load certificates.");
+      alert(
+        error.message || "Failed to load certificates."
+      );
     } finally {
       setCertificateLoading(false);
     }
@@ -899,7 +921,8 @@ export default function AdminPanel() {
 
       order: Number(project.order) || 0,
 
-      isActive: project.isActive !== false,
+      isActive:
+        project.isActive !== false,
     });
 
     setActiveTab("upcomingProject");
@@ -2479,6 +2502,7 @@ export default function AdminPanel() {
             }
           `}
         >
+
           {/* =================================================
               SIDEBAR TOP
           ================================================== */}
@@ -2531,7 +2555,7 @@ export default function AdminPanel() {
                   sm:text-2xl
                 "
               >
-               Injamamul Hoq 
+                Injamamul Hoq
               </h1>
 
               {/* Welcome Text */}
@@ -2579,7 +2603,9 @@ export default function AdminPanel() {
 
             <nav className="space-y-1.5 sm:space-y-2">
 
-              {/* ABOUT */}
+              {/* =================================================
+                  ABOUT ME
+              ================================================== */}
 
               <button
                 type="button"
@@ -2587,14 +2613,19 @@ export default function AdminPanel() {
                   changeTab("about")
                 }
                 className={`
+                  group
+                  flex
                   w-full
+                  items-center
+                  gap-3
                   rounded-lg
                   px-3
                   py-2.5
                   text-left
                   text-sm
                   font-medium
-                  transition
+                  transition-all
+                  duration-200
                   active:scale-[0.99]
 
                   sm:px-4
@@ -2607,10 +2638,29 @@ export default function AdminPanel() {
                   }
                 `}
               >
-                About Me
+                <UserRound
+                  size={18}
+                  strokeWidth={2}
+                  className={`
+                    shrink-0
+                    transition-transform
+                    duration-200
+                    group-hover:scale-110
+
+                    ${
+                      activeTab === "about"
+                        ? "text-white"
+                        : "text-gray-400 group-hover:text-teal-400"
+                    }
+                  `}
+                />
+
+                <span>About Me</span>
               </button>
 
-              {/* PROJECTS */}
+              {/* =================================================
+                  PROJECTS
+              ================================================== */}
 
               <button
                 type="button"
@@ -2618,14 +2668,19 @@ export default function AdminPanel() {
                   changeTab("projects")
                 }
                 className={`
+                  group
+                  flex
                   w-full
+                  items-center
+                  gap-3
                   rounded-lg
                   px-3
                   py-2.5
                   text-left
                   text-sm
                   font-medium
-                  transition
+                  transition-all
+                  duration-200
                   active:scale-[0.99]
 
                   sm:px-4
@@ -2638,10 +2693,29 @@ export default function AdminPanel() {
                   }
                 `}
               >
-                Projects
+                <FolderKanban
+                  size={18}
+                  strokeWidth={2}
+                  className={`
+                    shrink-0
+                    transition-transform
+                    duration-200
+                    group-hover:scale-110
+
+                    ${
+                      activeTab === "projects"
+                        ? "text-white"
+                        : "text-gray-400 group-hover:text-teal-400"
+                    }
+                  `}
+                />
+
+                <span>Projects</span>
               </button>
 
-              {/* SKILLS */}
+              {/* =================================================
+                  SKILLS
+              ================================================== */}
 
               <button
                 type="button"
@@ -2649,14 +2723,19 @@ export default function AdminPanel() {
                   changeTab("skills")
                 }
                 className={`
+                  group
+                  flex
                   w-full
+                  items-center
+                  gap-3
                   rounded-lg
                   px-3
                   py-2.5
                   text-left
                   text-sm
                   font-medium
-                  transition
+                  transition-all
+                  duration-200
                   active:scale-[0.99]
 
                   sm:px-4
@@ -2669,10 +2748,29 @@ export default function AdminPanel() {
                   }
                 `}
               >
-                Skills
+                <Code2
+                  size={18}
+                  strokeWidth={2}
+                  className={`
+                    shrink-0
+                    transition-transform
+                    duration-200
+                    group-hover:scale-110
+
+                    ${
+                      activeTab === "skills"
+                        ? "text-white"
+                        : "text-gray-400 group-hover:text-teal-400"
+                    }
+                  `}
+                />
+
+                <span>Skills</span>
               </button>
 
-              {/* CERTIFICATES */}
+              {/* =================================================
+                  CERTIFICATES
+              ================================================== */}
 
               <button
                 type="button"
@@ -2680,14 +2778,19 @@ export default function AdminPanel() {
                   changeTab("certificates")
                 }
                 className={`
+                  group
+                  flex
                   w-full
+                  items-center
+                  gap-3
                   rounded-lg
                   px-3
                   py-2.5
                   text-left
                   text-sm
                   font-medium
-                  transition
+                  transition-all
+                  duration-200
                   active:scale-[0.99]
 
                   sm:px-4
@@ -2700,10 +2803,29 @@ export default function AdminPanel() {
                   }
                 `}
               >
-                Certificates
+                <Award
+                  size={18}
+                  strokeWidth={2}
+                  className={`
+                    shrink-0
+                    transition-transform
+                    duration-200
+                    group-hover:scale-110
+
+                    ${
+                      activeTab === "certificates"
+                        ? "text-white"
+                        : "text-gray-400 group-hover:text-teal-400"
+                    }
+                  `}
+                />
+
+                <span>Certificates</span>
               </button>
 
-              {/* EDUCATION */}
+              {/* =================================================
+                  EDUCATION
+              ================================================== */}
 
               <button
                 type="button"
@@ -2711,14 +2833,19 @@ export default function AdminPanel() {
                   changeTab("education")
                 }
                 className={`
+                  group
+                  flex
                   w-full
+                  items-center
+                  gap-3
                   rounded-lg
                   px-3
                   py-2.5
                   text-left
                   text-sm
                   font-medium
-                  transition
+                  transition-all
+                  duration-200
                   active:scale-[0.99]
 
                   sm:px-4
@@ -2731,10 +2858,29 @@ export default function AdminPanel() {
                   }
                 `}
               >
-                Education
+                <GraduationCap
+                  size={18}
+                  strokeWidth={2}
+                  className={`
+                    shrink-0
+                    transition-transform
+                    duration-200
+                    group-hover:scale-110
+
+                    ${
+                      activeTab === "education"
+                        ? "text-white"
+                        : "text-gray-400 group-hover:text-teal-400"
+                    }
+                  `}
+                />
+
+                <span>Education</span>
               </button>
 
-              {/* UPCOMING PROJECT */}
+              {/* =================================================
+                  UPCOMING PROJECT
+              ================================================== */}
 
               <button
                 type="button"
@@ -2742,14 +2888,19 @@ export default function AdminPanel() {
                   changeTab("upcomingProject")
                 }
                 className={`
+                  group
+                  flex
                   w-full
+                  items-center
+                  gap-3
                   rounded-lg
                   px-3
                   py-2.5
                   text-left
                   text-sm
                   font-medium
-                  transition
+                  transition-all
+                  duration-200
                   active:scale-[0.99]
 
                   sm:px-4
@@ -2762,10 +2913,29 @@ export default function AdminPanel() {
                   }
                 `}
               >
-                Upcoming Project
+                <Rocket
+                  size={18}
+                  strokeWidth={2}
+                  className={`
+                    shrink-0
+                    transition-transform
+                    duration-200
+                    group-hover:scale-110
+
+                    ${
+                      activeTab === "upcomingProject"
+                        ? "text-white"
+                        : "text-gray-400 group-hover:text-teal-400"
+                    }
+                  `}
+                />
+
+                <span>Upcoming Project</span>
               </button>
 
-              {/* RESUME */}
+              {/* =================================================
+                  RESUME
+              ================================================== */}
 
               <button
                 type="button"
@@ -2773,14 +2943,19 @@ export default function AdminPanel() {
                   changeTab("resume")
                 }
                 className={`
+                  group
+                  flex
                   w-full
+                  items-center
+                  gap-3
                   rounded-lg
                   px-3
                   py-2.5
                   text-left
                   text-sm
                   font-medium
-                  transition
+                  transition-all
+                  duration-200
                   active:scale-[0.99]
 
                   sm:px-4
@@ -2793,10 +2968,29 @@ export default function AdminPanel() {
                   }
                 `}
               >
-                Resume
+                <FileText
+                  size={18}
+                  strokeWidth={2}
+                  className={`
+                    shrink-0
+                    transition-transform
+                    duration-200
+                    group-hover:scale-110
+
+                    ${
+                      activeTab === "resume"
+                        ? "text-white"
+                        : "text-gray-400 group-hover:text-teal-400"
+                    }
+                  `}
+                />
+
+                <span>Resume</span>
               </button>
 
-              {/* COMMENTS */}
+              {/* =================================================
+                  COMMENTS
+              ================================================== */}
 
               <button
                 type="button"
@@ -2804,6 +2998,7 @@ export default function AdminPanel() {
                   changeTab("comments")
                 }
                 className={`
+                  group
                   flex
                   w-full
                   items-center
@@ -2815,7 +3010,8 @@ export default function AdminPanel() {
                   text-left
                   text-sm
                   font-medium
-                  transition
+                  transition-all
+                  duration-200
                   active:scale-[0.99]
 
                   sm:px-4
@@ -2828,9 +3024,27 @@ export default function AdminPanel() {
                   }
                 `}
               >
-                <span className="flex items-center gap-2.5">
-                  <MessageCircle size={18} />
+                <span className="flex items-center gap-3">
+
+                  <MessageCircle
+                    size={18}
+                    strokeWidth={2}
+                    className={`
+                      shrink-0
+                      transition-transform
+                      duration-200
+                      group-hover:scale-110
+
+                      ${
+                        activeTab === "comments"
+                          ? "text-white"
+                          : "text-gray-400 group-hover:text-white"
+                      }
+                    `}
+                  />
+
                   <span>Comments</span>
+
                 </span>
 
                 <span
@@ -2842,6 +3056,7 @@ export default function AdminPanel() {
                     font-bold
                     uppercase
                     tracking-wide
+                    transition-all
 
                     ${
                       activeTab === "comments"
@@ -2853,6 +3068,7 @@ export default function AdminPanel() {
                   Admin
                 </span>
               </button>
+
             </nav>
           </div>
 
@@ -2885,6 +3101,7 @@ export default function AdminPanel() {
               Logout
             </button>
           </div>
+
         </aside>
 
         {/* =====================================================

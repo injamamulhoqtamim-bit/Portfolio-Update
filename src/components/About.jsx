@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Reveal from "./Reveal";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
@@ -7,34 +7,82 @@ import { FiUser, FiMapPin, FiMail, FiBookOpen } from "react-icons/fi";
 
 export default function About() {
   const [showMapLoader, setShowMapLoader] = useState(false);
+  const [aboutData, setAboutData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  
+  // 🟢 Hydration error সমাধানের জন্য mounted স্টেট
+  const [isMounted, setIsMounted] = useState(false);
 
-  // 🗺️ লোকেশনে ক্লিক করলে থ্রিডি ম্যাপ অ্যানিমেশন দেখিয়ে ম্যাপ ওপেন করার হ্যান্ডলার
+  useEffect(() => {
+    setIsMounted(true); // কম্পোনেন্ট মাউন্ট হলে true হবে
+
+    const fetchAbout = async () => {
+      try {
+        const res = await fetch("/api/about", { cache: "no-store" });
+        const result = await res.json();
+
+        if (result.success) {
+          setAboutData(result.data);
+        }
+      } catch (error) {
+        console.error("Error fetching about data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAbout();
+  }, []);
+
   const handleLocationClick = (e, mapUrl) => {
     e.preventDefault();
-    if (showMapLoader) return;
+    if (showMapLoader || !mapUrl) return;
 
-    // ১. অ্যানিমেশন ওভারলে চালু হবে
     setShowMapLoader(true);
 
-    // ২. ১.৫ সেকেন্ড ফোল্ডিং ম্যাপ অ্যানিমেশন দেখানোর পর নতুন ট্যাবে ম্যাপ ওপেন হবে
     setTimeout(() => {
       window.open(mapUrl, "_blank", "noopener,noreferrer");
       setShowMapLoader(false);
     }, 1500);
   };
 
+  const locationText = aboutData?.location || "Banani BTCL Colony, Dhaka";
+  const mapSearchUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(locationText)}`;
+
   const infoData = [
-    { title: "Name", value: "Md. Injamamul Hoq", icon: <FiUser /> },
+    { 
+      title: "Name", 
+      value: aboutData?.name || "Md. Injamamul Hoq", 
+      icon: <FiUser /> 
+    },
     { 
       title: "Location", 
-      value: "Banani BTCL Colony, Dhaka", 
+      value: locationText, 
       icon: <FiMapPin />, 
       isLocation: true, 
-      mapUrl: "https://www.google.com/maps/search/?api=1&query=Banani+BTCL+Colony,+Dhaka" 
+      mapUrl: mapSearchUrl
     },
-    { title: "Email", value: "injamamulhoqtamim@gmail.com", icon: <FiMail />, isEmail: true },
-    { title: "Education", value: "BSc in CSE", icon: <FiBookOpen /> }
+    { 
+      title: "Email", 
+      value: aboutData?.email || "injamamulhoqtamim@gmail.com", 
+      icon: <FiMail />, 
+      isEmail: true 
+    },
+    { 
+      title: "Education", 
+      value: aboutData?.education || "BSc in CSE", 
+      icon: <FiBookOpen /> 
+    }
   ];
+
+  // 🟢 সার্ভার রেন্ডারিং সম্পন্ন না হওয়া পর্যন্ত ক্লায়েন্ট সাইড লোডিং দেখাবে না (Hydration mismatch প্রতিরোধ করতে)
+  if (!isMounted || loading) {
+    return (
+      <section className="py-20 md:py-28 px-[5%] bg-dark2 text-center text-cyan flex items-center justify-center min-h-[400px]">
+        <p className="animate-pulse">Loading About Details...</p>
+      </section>
+    );
+  }
 
   return (
     <section id="about" className="py-20 md:py-28 px-[5%] bg-dark2 overflow-hidden relative">
@@ -65,7 +113,7 @@ export default function About() {
             <div className="w-full h-full relative z-10 transition-all duration-700 hover:scale-[1.03]">
               <Image 
                 src="/aboutme.png" 
-                alt="Md. Injamamul Hoq" 
+                alt={aboutData?.name || "Md. Injamamul Hoq"} 
                 fill 
                 sizes="(max-width: 640px) 260px, (max-width: 768px) 320px, (max-width: 1024px) 380px, 450px"
                 className="object-contain drop-shadow-[0_20px_50px_rgba(0,212,255,0.2)]" 
@@ -85,19 +133,25 @@ export default function About() {
         >
           <div className="space-y-5">
             <h3 className="text-2xl sm:text-3xl font-bold text-white leading-tight">
-              Hi, I'm <span className="bg-gradient-to-r from-cyan via-cyan2 to-pink text-transparent bg-clip-text">Injamamul Hoq</span>
+              Hi, I'm <span className="bg-gradient-to-r from-cyan via-cyan2 to-pink text-transparent bg-clip-text">
+                {aboutData?.name || "Injamamul Hoq"}
+              </span>
               <span className="block text-gray-400 font-normal text-lg sm:text-xl mt-3">
-                a passionate Frontend Developer who loves building modern and responsive web applications.
+                {aboutData?.intro}
               </span>
             </h3>
             
-            <p className="text-gray-400 leading-[1.8] text-base md:text-[1.05rem]">
-              I specialize in creating beautiful user interfaces using HTML, CSS, JavaScript, Tailwind CSS and React. I also enjoy exploring Cybersecurity and learning how to build more secure web systems.
-            </p>
-            
-            <p className="text-gray-400 leading-[1.8] text-base md:text-[1.05rem]">
-              My goal is to become a professional developer who creates innovative and secure digital experiences for people around the world.
-            </p>
+            {aboutData?.paragraph1 && (
+              <p className="text-gray-400 leading-[1.8] text-base md:text-[1.05rem]">
+                {aboutData.paragraph1}
+              </p>
+            )}
+
+            {aboutData?.paragraph2 && (
+              <p className="text-gray-400 leading-[1.8] text-base md:text-[1.05rem]">
+                {aboutData.paragraph2}
+              </p>
+            )}
           </div>
 
           {/* Info Cards Grid */}
@@ -134,7 +188,7 @@ export default function About() {
         </motion.div>
       </div>
 
-      {/* 📍 ফুল-স্ক্রিন ম্যাপ অ্যানিমেশন ওভারলে (AnimatePresence দিয়ে স্মুথ করা হয়েছে) */}
+      {/* 📍 Map Overlay Section */}
       <AnimatePresence>
         {showMapLoader && (
           <motion.div 
@@ -143,29 +197,14 @@ export default function About() {
             exit={{ opacity: 0 }}
             className="fixed inset-0 bg-black/70 z-[99999] flex flex-col items-center justify-center pointer-events-auto backdrop-blur-md"
           >
-            {/* From Uiverse.io by dexter-st */} 
             <div className="map-btn-wrapper">
               <svg height="0" width="0">
                 <filter id="land">
-                  <feTurbulence
-                    result="turb"
-                    numOctaves="7"
-                    baseFrequency="0.006"
-                    type="fractalNoise"
-                  ></feTurbulence>
-                  <feDisplacementMap
-                    yChannelSelector="G"
-                    xChannelSelector="R"
-                    scale="700"
-                    in="SourceGraphic"
-                    in2="turb"
-                  ></feDisplacementMap>
+                  <feTurbulence result="turb" numOctaves="7" baseFrequency="0.006" type="fractalNoise"></feTurbulence>
+                  <feDisplacementMap yChannelSelector="G" xChannelSelector="R" scale="700" in="SourceGraphic" in2="turb"></feDisplacementMap>
                 </filter>
               </svg>
-
-              {/* অটোপ্লে সিমুলেট করার জন্য ক্লাস ফোর্সমুক্ত অ্যানিমেশন ইফেক্ট করা হয়েছে */}
               <div className="map-btn animated-state">Opening Map...</div>
-
               <div className="pinpoint animated-state"></div>
               <div className="map-container animated-state">
                 <div className="map fold-1"></div>
@@ -178,16 +217,14 @@ export default function About() {
         )}
       </AnimatePresence>
 
-      {/* 🎨 ইন্টিগ্রেটেড কাস্টম সিএসএস */}
       <style jsx global>{`
         .map-btn-wrapper {
-          --btn-color: #00d4ff; /* নিয়ন সায়ান থিম */
+          --btn-color: #00d4ff;
           --text-color: #000000;
           --land-color: #ffdd9f;
           --veg-color: #36ad5aa9;
           --water-color: #b3e3ff;
           --transition-dur: 0.3s;
-
           position: relative;
           display: flex;
           font-size: 16px;
@@ -197,7 +234,6 @@ export default function About() {
           border-radius: 50ch;
           box-shadow: 0px 10px 40px rgba(0, 212, 255, 0.2);
         }
-
         .map-btn {
           padding: 1em 2em 1em 3.5em;
           border-radius: 50ch;
@@ -205,12 +241,9 @@ export default function About() {
           font-weight: 600;
           color: var(--text-color);
         }
-
-        /* অটোমেটিক অ্যানিমেশন রান করার জন্য কাস্টম কি-ফ্রেম ক্লাস */
         .map-btn.animated-state {
           animation: mapBtnPulse 1.5s ease-in-out infinite alternate;
         }
-
         .pinpoint.animated-state {
           pointer-events: none;
           position: absolute;
@@ -218,13 +251,12 @@ export default function About() {
           aspect-ratio: 1;
           top: 20%;
           left: 0.75em;
-          background-color: #ff4747; /* লোকেশন পিন রেড */
+          background-color: #ff4747;
           z-index: 1;
           mask-image: radial-gradient(circle at center, #0000 0%, #0000 32%, #fff 36%);
           filter: blur(0.25px);
           animation: pinpointMove 1.5s ease-in-out infinite alternate;
         }
-
         .map-container.animated-state {
           pointer-events: none;
           position: absolute;
@@ -235,7 +267,6 @@ export default function About() {
           z-index: 0;
           animation: mapFoldOpen 1.5s ease-in-out infinite alternate;
         }
-
         .map {
           position: absolute;
           bottom: 100px;
@@ -245,7 +276,6 @@ export default function About() {
           background-image: linear-gradient(to bottom, #fff2, 30%, #0000);
           transform-origin: left bottom;
         }
-
         .map::after {
           content: "";
           top: -40px;
@@ -258,17 +288,14 @@ export default function About() {
           box-shadow: inset 0 0 48px 24px var(--veg-color);
           z-index: 0;
         }
-
         .fold-1, .fold-2, .fold-3, .fold-4 {
           mask-image: linear-gradient(to top, #fff, 97%, #0000);
           overflow: hidden;
         }
-
         .fold-1 { left: -60px; transform: rotateY(10deg) translateZ(30px); }
         .fold-2 { left: 60px; transform: rotateY(-10deg) translateZ(10px); }
         .fold-3 { left: -169px; transform: rotateY(-15deg) translateZ(-1px); }
         .fold-4 { left: 166px; transform: rotateY(15deg) translateZ(31px); }
-
         .fold-1::before, .fold-2::before, .fold-3::before, .fold-4::before {
           content: "";
           position: absolute;
@@ -279,8 +306,6 @@ export default function About() {
           box-shadow: inset 0 10px 16px 3px #0004;
           z-index: 1;
         }
-
-        /* 🔄 অটোমেটিক অ্যানিমেশন কি-ফ্রেমসমূহ */
         @keyframes mapFoldOpen {
           0% {
             transform: perspective(120px) rotateX(35deg) scaleX(0);
@@ -291,7 +316,6 @@ export default function About() {
             opacity: 1;
           }
         }
-
         @keyframes pinpointMove {
           0% {
             border-radius: 50%;
@@ -302,7 +326,6 @@ export default function About() {
             transform: rotateZ(45deg) translate(-0.3em, -0.3em);
           }
         }
-
         @keyframes mapBtnPulse {
           0% { background-color: var(--btn-color); color: var(--text-color); }
           100% { background-color: #ffffff; color: #000000a6; }

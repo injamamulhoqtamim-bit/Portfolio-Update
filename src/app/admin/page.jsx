@@ -2531,7 +2531,7 @@ export default function AdminPanel() {
                   sm:text-2xl
                 "
               >
-               Injamamul Hoq Tamim
+               Injamamul Hoq 
               </h1>
 
               {/* Welcome Text */}

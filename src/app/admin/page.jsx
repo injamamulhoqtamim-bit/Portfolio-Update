@@ -109,11 +109,15 @@ export default function AdminPanel() {
   // =========================================================
 
   const [educationForm, setEducationForm] = useState({
-    degree: "",
-    institution: "",
-    passingYear: "",
-    description: "",
-  });
+  type: "education",
+  title: "",
+  degree: "",
+  institution: "",
+  passingYear: "",
+  description: "",
+  points: [],
+  link: "",
+});
 
   // =========================================================
   // PROJECT FORM
@@ -663,12 +667,16 @@ export default function AdminPanel() {
     setImageFile(null);
     setImagePreview("");
 
-    setEducationForm({
-      degree: "",
-      institution: "",
-      passingYear: "",
-      description: "",
-    });
+   setEducationForm({
+  type: "education",
+  title: "",
+  degree: "",
+  institution: "",
+  passingYear: "",
+  description: "",
+  points: [],
+  link: "",
+});
 
     setProjectForm({
       title: "",
@@ -1128,26 +1136,49 @@ export default function AdminPanel() {
   // =========================================================
 
   const handleEditEducation = (item) => {
-    setEditingId(item._id);
+  if (!item) return;
 
-    setEducationForm({
-      degree: item.degree || "",
+  setEditingId(item._id || item.id);
 
-      institution:
-        item.institution || "",
+  setEducationForm({
+    type: item.type || "education",
 
-      passingYear:
-        item.passingYear || "",
+    title:
+      item.title ||
+      item.degree ||
+      "",
 
-      description:
-        item.description || "",
-    });
+    degree:
+      item.degree ||
+      item.title ||
+      "",
 
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
+    institution:
+      item.institution ||
+      "",
+
+    passingYear:
+      item.passingYear ||
+      "",
+
+    description:
+      item.description ||
+      "",
+
+    points: Array.isArray(item.points)
+      ? item.points
+      : [],
+
+    link:
+      item.link ||
+      "",
+  });
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  });
+};
 
   const handleDeleteEducation = async (id) => {
     const confirmed = window.confirm(
@@ -1208,78 +1239,131 @@ export default function AdminPanel() {
   };
 
   const handleEducationSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    try {
-      setLoading(true);
+  if (!educationForm.type) {
+    alert("Please select a type.");
+    return;
+  }
 
-      const method = editingId
-        ? "PUT"
-        : "POST";
+  if (!educationForm.degree?.trim() && !educationForm.title?.trim()) {
+    alert("Title / Degree is required.");
+    return;
+  }
 
-      const body = {
-        ...(editingId && {
-          id: editingId,
-        }),
+  if (!educationForm.institution?.trim()) {
+    alert("Institution / Company is required.");
+    return;
+  }
 
-        degree:
-          educationForm.degree,
+  if (!educationForm.passingYear?.trim()) {
+    alert("Year / Duration is required.");
+    return;
+  }
 
-        institution:
-          educationForm.institution,
+  if (!educationForm.description?.trim()) {
+    alert("Description is required.");
+    return;
+  }
 
-        passingYear:
-          educationForm.passingYear,
+  try {
+    setLoading(true);
 
-        description:
-          educationForm.description,
+    const method = editingId ? "PUT" : "POST";
+
+    const body = {
+      ...(editingId && {
+        id: editingId,
+      }),
+
+      // IMPORTANT
+      type: educationForm.type,
+
+      // Title + backward compatibility
+      title:
+        educationForm.title?.trim() ||
+        educationForm.degree?.trim() ||
+        "",
+
+      degree:
+        educationForm.degree?.trim() ||
+        educationForm.title?.trim() ||
+        "",
+
+      institution:
+        educationForm.institution?.trim() || "",
+
+      passingYear:
+        educationForm.passingYear?.trim() || "",
+
+      description:
+        educationForm.description?.trim() || "",
+
+      points: Array.isArray(educationForm.points)
+        ? educationForm.points
+            .map((point) => point?.trim())
+            .filter(Boolean)
+        : [],
+
+      link:
+        educationForm.link?.trim() || "",
+    };
+
+    console.log("Education/Experience Submit Body:", body);
+
+    const res = await fetch("/api/education", {
+      method,
+
+      headers: {
+        "Content-Type": "application/json",
+      },
+
+      credentials: "include",
+
+      body: JSON.stringify(body),
+    });
+
+    const result = await res.json();
+
+    console.log("Education API Response:", result);
+
+    if (result.success) {
+      const typeLabel = {
+        education: "Education",
+        course: "Course / Training",
+        experience: "Experience",
+        research: "Research / Project",
       };
 
-      const res = await fetch(
-        "/api/education",
-        {
-          method,
-
-          headers: {
-            "Content-Type":
-              "application/json",
-          },
-
-          body: JSON.stringify(body),
-        }
+      alert(
+        editingId
+          ? `${typeLabel[educationForm.type] || "Item"} updated successfully!`
+          : `${typeLabel[educationForm.type] || "Item"} added successfully!`
       );
 
-      const result = await res.json();
+      resetForm();
 
-      if (result.success) {
-        alert(
-          editingId
-            ? "Education updated successfully!"
-            : "Education added successfully!"
-        );
-
-        resetForm();
-
-        await fetchData(
-          "education"
-        );
-      } else {
-        alert(
-          result.message ||
-            "Operation failed!"
-        );
-      }
-    } catch (error) {
-      console.error(
-        "Education Submit Error:",
-        error
+      await fetchData("education");
+    } else {
+      alert(
+        result.message ||
+          "Education/Experience operation failed!"
       );
-
-      alert("Something went wrong!");
-    } finally {
-      setLoading(false);
     }
-  };
+  } catch (error) {
+    console.error(
+      "Education/Experience Submit Error:",
+      error
+    );
+
+    alert(
+      error.message ||
+        "Something went wrong while saving!"
+    );
+  } finally {
+    setLoading(false);
+  }
+};
 
   // =========================================================
   // PROJECTS

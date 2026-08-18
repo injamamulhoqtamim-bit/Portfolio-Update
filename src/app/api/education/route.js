@@ -3,7 +3,7 @@ import connectDB from "@/lib/mongodb";
 import Education from "@/models/Education";
 
 // =========================
-// GET ALL EDUCATION
+// GET ALL EDUCATION & EXPERIENCE
 // =========================
 export async function GET() {
   try {
@@ -31,7 +31,7 @@ export async function GET() {
 }
 
 // =========================
-// ADD EDUCATION
+// ADD EDUCATION / EXPERIENCE
 // =========================
 export async function POST(request) {
   try {
@@ -40,14 +40,20 @@ export async function POST(request) {
     const body = await request.json();
 
     const {
+      title,
       degree,
       institution,
       passingYear,
       description,
+      type,
+      points,
+      link,
     } = body;
 
+    const finalTitle = (title || degree || "").trim();
+
     if (
-      !degree?.trim() ||
+      !finalTitle ||
       !institution?.trim() ||
       !passingYear?.trim() ||
       !description?.trim()
@@ -55,23 +61,37 @@ export async function POST(request) {
       return NextResponse.json(
         {
           success: false,
-          message: "All fields are required.",
+          message: "All required fields must be filled.",
         },
         { status: 400 }
       );
     }
 
+    // Process type value safely
+    const itemType = type ? String(type).trim().toLowerCase() : "education";
+
+    // Process points safely
+    const formattedPoints = Array.isArray(points)
+      ? points
+      : typeof points === "string" && points.trim()
+      ? points.split("\n").map((p) => p.trim()).filter(Boolean)
+      : [];
+
     const education = await Education.create({
-      degree: degree.trim(),
+      title: finalTitle,
+      degree: finalTitle,
       institution: institution.trim(),
       passingYear: passingYear.trim(),
       description: description.trim(),
+      type: itemType,
+      points: formattedPoints,
+      link: link ? link.trim() : "",
     });
 
     return NextResponse.json(
       {
         success: true,
-        message: "Education added successfully!",
+        message: "Item added successfully!",
         data: education,
       },
       { status: 201 }
@@ -90,7 +110,7 @@ export async function POST(request) {
 }
 
 // =========================
-// UPDATE EDUCATION
+// UPDATE EDUCATION / EXPERIENCE
 // =========================
 export async function PUT(request) {
   try {
@@ -100,29 +120,49 @@ export async function PUT(request) {
 
     const {
       id,
+      title,
       degree,
       institution,
       passingYear,
       description,
+      type,
+      points,
+      link,
     } = body;
 
     if (!id) {
       return NextResponse.json(
         {
           success: false,
-          message: "Education ID is required.",
+          message: "ID is required.",
         },
         { status: 400 }
       );
     }
 
+    const finalTitle = (title || degree || "").trim();
+
+    // Process type value safely
+    const itemType = type ? String(type).trim().toLowerCase() : "education";
+
+    // Process points safely
+    const formattedPoints = Array.isArray(points)
+      ? points
+      : typeof points === "string" && points.trim()
+      ? points.split("\n").map((p) => p.trim()).filter(Boolean)
+      : [];
+
     const updated = await Education.findByIdAndUpdate(
       id,
       {
-        degree: degree?.trim(),
+        title: finalTitle,
+        degree: finalTitle,
         institution: institution?.trim(),
         passingYear: passingYear?.trim(),
         description: description?.trim(),
+        type: itemType,
+        points: formattedPoints,
+        link: link?.trim() || "",
       },
       {
         new: true,
@@ -134,7 +174,7 @@ export async function PUT(request) {
       return NextResponse.json(
         {
           success: false,
-          message: "Education not found.",
+          message: "Item not found.",
         },
         { status: 404 }
       );
@@ -142,7 +182,7 @@ export async function PUT(request) {
 
     return NextResponse.json({
       success: true,
-      message: "Education updated successfully!",
+      message: "Updated successfully!",
       data: updated,
     });
   } catch (error) {
@@ -159,7 +199,7 @@ export async function PUT(request) {
 }
 
 // =========================
-// DELETE EDUCATION
+// DELETE EDUCATION / EXPERIENCE
 // =========================
 export async function DELETE(request) {
   try {
@@ -173,7 +213,7 @@ export async function DELETE(request) {
       return NextResponse.json(
         {
           success: false,
-          message: "Education ID is required.",
+          message: "ID is required.",
         },
         { status: 400 }
       );
@@ -185,7 +225,7 @@ export async function DELETE(request) {
       return NextResponse.json(
         {
           success: false,
-          message: "Education not found.",
+          message: "Item not found.",
         },
         { status: 404 }
       );
@@ -193,7 +233,7 @@ export async function DELETE(request) {
 
     return NextResponse.json({
       success: true,
-      message: "Education deleted successfully!",
+      message: "Deleted successfully!",
     });
   } catch (error) {
     console.error("❌ DELETE Education Error:", error);

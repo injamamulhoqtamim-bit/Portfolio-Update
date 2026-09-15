@@ -964,7 +964,7 @@ function AdminLoginContent() {
                       </svg>
                     )}
 
-                    {loading ? "Verifying..." : "LOGIN"}
+                    {loading ? "Verifying..." : "লগইন কইরা ফালাও, কেউ দেখবো না!"}
 
                   </span>
 

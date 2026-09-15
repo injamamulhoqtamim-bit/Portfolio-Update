@@ -1,17 +1,24 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useState, useRef } from "react";
+import { motion, useInView } from "framer-motion";
 
 export default function Footer() {
   const [isClient, setIsClient] = useState(false);
+
+  // Ref এবং useInView ব্যবহার করা হয়েছে যাতে অ্যানিমেশন শুধু একবারই ট্রিগার হয় এবং থেকে যায়
+  const ref = useRef(null);
+  const isInView = useInView(ref, { 
+    once: true,          // true দেওয়ার কারণে অ্যানিমেশন একবার হওয়ার পর আর রিসেট হবে না (ਸਟੈਟਿਕ থাকবে)
+    amount: 0.15         // ফুটারের ১৫% স্ক্রিনে আসলেই অ্যানিমেশন শুরু হবে
+  });
 
   // Hydration state check - production and server validation bypass korar jonno
   useEffect(() => {
     setIsClient(true);
   }, []);
 
-  // 🔄 কলামগুলোর জন্য ৪-দিকের অ্যানিমেশন ভ্যারিয়েন্ট
+  // 🔄 কলামগুলোর জন্য ৪-দিকের অ্যানিমেশন ভ্যারিয়েন্ট
   const columnVariants = (direction) => {
     const offsets = {
       left: { x: -60, y: 0 },
@@ -42,14 +49,8 @@ export default function Footer() {
     };
   };
 
-  // 📌 ভিউপোর্ট কনফিগারেশন (যাতে স্ক্রোল আউট করলে অ্যানিমেশন আবার রিসেট হয়)
-  const scrollViewport = { 
-    once: false,       // true দিলে শুধু একবার হতো, false দেওয়াতে স্ক্রোল করলে বারবার হবে
-    amount: 0.15       // ফুটারের ১৫% স্ক্রিনে আসলেই অ্যানিমেশন ট্রিগার হবে
-  };
-
   return (
-    <footer className="relative bg-dark3 border-t border-border pt-12 pb-8 px-[5%] overflow-hidden">
+    <footer ref={ref} className="relative bg-dark3 border-t border-border pt-12 pb-8 px-[5%] overflow-hidden">
       
       {/* Background Video Block */}
       {isClient && (
@@ -75,8 +76,7 @@ export default function Footer() {
         <motion.div 
           variants={columnVariants("left")}
           initial="hidden"
-          whileInView="visible"
-          viewport={scrollViewport}
+          animate={isInView ? "visible" : "hidden"}
           className="flex flex-col items-center sm:items-start col-span-1 sm:col-span-2 lg:col-span-1"
         >
           <a href="#home" className="font-syne font-extrabold text-[1.5rem] text-cyan tracking-[-1px] no-underline block mb-3">
@@ -102,8 +102,7 @@ export default function Footer() {
         <motion.div
           variants={columnVariants("up")}
           initial="hidden"
-          whileInView="visible"
-          viewport={scrollViewport}
+          animate={isInView ? "visible" : "hidden"}
         >
           <h4 className="text-[0.88rem] font-semibold text-white uppercase tracking-[1px] mb-4">Quick Links</h4>
           <ul className="list-none p-0 m-0 flex flex-col gap-2.5">
@@ -119,8 +118,7 @@ export default function Footer() {
         <motion.div
           variants={columnVariants("right")}
           initial="hidden"
-          whileInView="visible"
-          viewport={scrollViewport}
+          animate={isInView ? "visible" : "hidden"}
         >
           <h4 className="text-[0.88rem] font-semibold text-white uppercase tracking-[1px] mb-4">Get In Touch</h4>
           <ul className="list-none p-0 m-0 flex flex-col gap-2.5">
@@ -141,8 +139,7 @@ export default function Footer() {
       <motion.div 
         variants={columnVariants("down")}
         initial="hidden"
-        whileInView="visible"
-        viewport={scrollViewport}
+        animate={isInView ? "visible" : "hidden"}
         className="relative z-20 max-w-7xl mx-auto border-t border-border pt-6 flex justify-center items-center text-center"
       >
         <p className="text-[0.78rem] text-muted font-medium flex items-center justify-center gap-1.5 flex-wrap">

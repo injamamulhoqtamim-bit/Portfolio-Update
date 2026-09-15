@@ -189,7 +189,7 @@ export default function AdminLogin() {
               Injamamul Hoq
             </h1>
             <p className="mt-2 text-xs sm:text-sm text-gray-400">
-              Enter your credentials to access your admin dashboard
+              “Why are you here? This dashboard isn’t for you. Go eat some muri.” 😂
             </p>
           </div>
 
@@ -211,6 +211,12 @@ export default function AdminLogin() {
                 Gmail
               </label>
               <div className="relative group">
+                {/* Premium Gmail/Mail Logo Icon */}
+                <span className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none text-gray-400 group-focus-within:text-teal-400 transition-colors">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+                  </svg>
+                </span>
                 <input
                   type="text"
                   value={username}
@@ -218,7 +224,7 @@ export default function AdminLogin() {
                   placeholder="Enter admin Gmail"
                   autoComplete="username"
                   disabled={loading}
-                  className="w-full rounded-xl sm:rounded-2xl border border-gray-700/80 bg-gray-800/40 px-4 py-3 sm:py-3.5 text-sm sm:text-base text-white outline-none transition-all duration-300 placeholder:text-gray-500 focus:border-teal-500 focus:bg-gray-800/80 focus:ring-4 focus:ring-teal-500/10 disabled:cursor-not-allowed disabled:opacity-60"
+                  className="w-full rounded-xl sm:rounded-2xl border border-gray-700/80 bg-gray-800/40 pl-11 pr-4 py-3 sm:py-3.5 text-sm sm:text-base text-white outline-none transition-all duration-300 placeholder:text-gray-500 focus:border-teal-500 focus:bg-gray-800/80 focus:ring-4 focus:ring-teal-500/10 disabled:cursor-not-allowed disabled:opacity-60"
                   required
                 />
               </div>
@@ -229,7 +235,13 @@ export default function AdminLogin() {
               <label className="mb-2 block text-xs sm:text-sm font-medium text-gray-300">
                 Password
               </label>
-              <div className="relative">
+              <div className="relative group">
+                {/* Premium Password/Key Logo Icon */}
+                <span className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none text-gray-400 group-focus-within:text-teal-400 transition-colors">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z" />
+                  </svg>
+                </span>
                 <input
                   type={showPassword ? "text" : "password"}
                   value={password}
@@ -237,7 +249,7 @@ export default function AdminLogin() {
                   placeholder="Enter admin password"
                   autoComplete="current-password"
                   disabled={loading}
-                  className="w-full rounded-xl sm:rounded-2xl border border-gray-700/80 bg-gray-800/40 px-4 py-3 sm:py-3.5 pr-12 text-sm sm:text-base text-white outline-none transition-all duration-300 placeholder:text-gray-500 focus:border-teal-500 focus:bg-gray-800/80 focus:ring-4 focus:ring-teal-500/10 disabled:cursor-not-allowed disabled:opacity-60"
+                  className="w-full rounded-xl sm:rounded-2xl border border-gray-700/80 bg-gray-800/40 pl-11 pr-12 py-3 sm:py-3.5 text-sm sm:text-base text-white outline-none transition-all duration-300 placeholder:text-gray-500 focus:border-teal-500 focus:bg-gray-800/80 focus:ring-4 focus:ring-teal-500/10 disabled:cursor-not-allowed disabled:opacity-60"
                   required
                 />
 
@@ -283,7 +295,7 @@ export default function AdminLogin() {
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
                   )}
-                  {loading ? "Verifying..." : "Login to Dashboard"}
+                  {loading ? "Verifying..." : "LOGIN"}
                 </span>
               </button>
             </div>

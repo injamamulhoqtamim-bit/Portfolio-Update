@@ -68,8 +68,6 @@ const getSkillIcon = (iconName) => {
     mysql: "SiMysql",
     postgresql: "SiPostgresql",
     postgres: "SiPostgresql",
-    vscode: "SiVisualstudiocode",
-    "vs code": "SiVisualstudiocode",
     stripe: "SiStripe",
     cloudinary: "SiCloudinary",
     jwt: "SiJsonwebtokens",
@@ -116,6 +114,24 @@ const BetterAuthIcon = () => (
 const HeroUiIcon = () => (
   <svg viewBox="0 0 24 24" className="w-full h-full fill-current" aria-hidden="true">
     <path d="M12 2L2 7v10l10 5 10-5V7L12 2zm8 14.1L12 20.1l-8-4V7.9l8-4 8 4v8.2zM12 6.5c-3.3 0-6 2.7-6 6s2.7 6 6 6 6-2.7 6-6-2.7-6-6-6zm0 10c-2.2 0-4-1.8-4-4s1.8-4 4-4 4 1.8 4 4-1.8 4-4 4z" />
+  </svg>
+);
+
+const VSCodeIcon = () => (
+  <svg viewBox="0 0 24 24" className="w-full h-full fill-current" aria-hidden="true">
+    <path d="M23.15 2.587L18.21.421a1.05 1.05 0 0 0-1.12.214l-14.1 12.33-4.32-3.642a.75.75 0 0 0-.964 1.152l4.47 3.768-4.47 3.768a.75.75 0 0 0 .964 1.152l4.32-3.642 14.1 12.33a1.05 1.05 0 0 0 1.12.214l4.94-2.166a1.05 1.05 0 0 0 .625-.968V3.555a1.05 1.05 0 0 0-.625-.968zM18 19.33l-8.62-7.33L18 4.67v14.66z" />
+  </svg>
+);
+
+const VercelIcon = () => (
+  <svg viewBox="0 0 24 24" className="w-full h-full fill-current" aria-hidden="true">
+    <path d="M12 1l12 21H0z" />
+  </svg>
+);
+
+const NetlifyIcon = () => (
+  <svg viewBox="0 0 24 24" className="w-full h-full fill-current" aria-hidden="true">
+    <path d="M12 0L1.5 6v12L12 24l10.5-6V6L12 0zm0 3.2l7.5 4.3v8.6L12 20.8l-7.5-4.7V7.5L12 3.2z" />
   </svg>
 );
 
@@ -175,6 +191,9 @@ export default function SkillsTechnologies() {
     { name: "JWT & Bcrypt", icon: <SimpleIcons.SiJsonwebtokens className="text-[#000000] bg-white rounded p-0.5" />, url: "https://jwt.io" },
     { name: "Cloudinary", icon: <SimpleIcons.SiCloudinary className="text-[#3448C5]" />, url: "https://cloudinary.com" },
     { name: "Stripe API", icon: <SimpleIcons.SiStripe className="text-[#635BFF]" />, url: "https://stripe.com" },
+    { name: "VS Code", icon: <div className="w-9 h-9 text-[#007ACC]"><VSCodeIcon /></div>, url: "https://code.visualstudio.com" },
+    { name: "Vercel", icon: <div className="w-9 h-9 text-white"><VercelIcon /></div>, url: "https://vercel.com" },
+    { name: "Netlify", icon: <div className="w-9 h-9 text-[#00C7B7]"><NetlifyIcon /></div>, url: "https://www.netlify.com" },
     { name: "Wireshark", icon: <SimpleIcons.SiWireshark className="text-[#1679A7]" />, url: "https://www.wireshark.org" },
     { name: "Burp Suite", icon: <SimpleIcons.SiBurpsuite className="text-[#FF6633]" />, url: "https://portswigger.net/burp" },
     { name: "Kali Linux", icon: <SimpleIcons.SiKalilinux className="text-[#557C94]" />, url: "https://www.kali.org" },
@@ -183,9 +202,11 @@ export default function SkillsTechnologies() {
     { name: "npm", icon: <SimpleIcons.SiNpm className="text-[#CB3837]" />, url: "https://www.npmjs.com" },
   ];
 
-  const midIndex = Math.ceil(technologies.length / 2);
-  const rowOneTechs = technologies.slice(0, midIndex);
-  const rowTwoTechs = technologies.slice(midIndex);
+  // technologies গুলোকে ৩ ভাগে ভাগ করা হচ্ছে ৩টি লাইনের জন্য
+  const thirdSize = Math.ceil(technologies.length / 3);
+  const rowOneTechs = technologies.slice(0, thirdSize);
+  const rowTwoTechs = technologies.slice(thirdSize, thirdSize * 2);
+  const rowThreeTechs = technologies.slice(thirdSize * 2);
 
   if (loading) {
     return (
@@ -230,10 +251,10 @@ export default function SkillsTechnologies() {
           </div>
         </Reveal>
 
-        {/* MARQUEE CONTAINER */}
-        <div className="flex flex-col gap-8 w-full overflow-hidden relative py-4 mask-fade">
+        {/* MARQUEE CONTAINER (3 Rows) */}
+        <div className="flex flex-col gap-6 w-full overflow-hidden relative py-4 mask-fade">
           
-          {/* ROW 1: Left to Right Animation */}
+          {/* ROW 1: Right to Left Animation */}
           <div className="flex overflow-hidden w-full relative">
             <motion.div
               className="flex gap-8 shrink-0 items-center"
@@ -263,7 +284,7 @@ export default function SkillsTechnologies() {
             </motion.div>
           </div>
 
-          {/* ROW 2: Right to Left Animation */}
+          {/* ROW 2: Left to Right Animation */}
           <div className="flex overflow-hidden w-full relative">
             <motion.div
               className="flex gap-8 shrink-0 items-center"
@@ -277,6 +298,36 @@ export default function SkillsTechnologies() {
               {[...rowTwoTechs, ...rowTwoTechs].map((tech, i) => (
                 <a
                   key={`row2-${tech.name}-${i}`}
+                  href={tech.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex flex-col items-center justify-center gap-2.5 group cursor-pointer no-underline w-24 sm:w-28 transition-all duration-300 hover:-translate-y-1.5 shrink-0"
+                >
+                  <div className="text-4xl sm:text-5xl flex items-center justify-center p-1 transition-transform duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_8px_12px_rgba(0,212,255,0.25)]">
+                    {tech.icon}
+                  </div>
+                  <span className="text-[11px] sm:text-xs text-gray-400 font-medium tracking-wide text-center group-hover:text-cyan transition-colors duration-300 select-none truncate w-full">
+                    {tech.name}
+                  </span>
+                </a>
+              ))}
+            </motion.div>
+          </div>
+
+          {/* ROW 3: Right to Left Animation */}
+          <div className="flex overflow-hidden w-full relative">
+            <motion.div
+              className="flex gap-8 shrink-0 items-center"
+              animate={{ x: ["0%", "-50%"] }}
+              transition={{
+                duration: 30,
+                repeat: Infinity,
+                ease: "linear",
+              }}
+            >
+              {[...rowThreeTechs, ...rowThreeTechs].map((tech, i) => (
+                <a
+                  key={`row3-${tech.name}-${i}`}
                   href={tech.url}
                   target="_blank"
                   rel="noopener noreferrer"

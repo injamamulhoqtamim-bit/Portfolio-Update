@@ -21,36 +21,40 @@ export default function Contact() {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSending(true);
     setFormStatus({ show: false, success: false, message: "" });
 
     const SERVICE_ID = "service_7vnmc1p"; 
-    const MAIN_TEMPLATE_ID = "template_6ovj5dg"; 
+    const MAIN_TEMPLATE_ID = "template_6ovj5dg"; // Contact Us Template
+    const AUTO_REPLY_TEMPLATE_ID = "template_lww1bj9"; // Auto-Reply Template
     const PUBLIC_KEY = "imrQPuI2hAA9fAdXy";
 
-    emailjs.sendForm(SERVICE_ID, MAIN_TEMPLATE_ID, formRef.current, PUBLIC_KEY)
-      .then((result) => {
-        setFormStatus({
-          show: true,
-          success: true,
-          message: "✓ Message sent successfully! An auto-reply has been sent to your email."
-        });
-        e.target.reset(); 
-      })
-      .catch((error) => {
-        setFormStatus({
-          show: true,
-          success: false,
-          message: "❌ Something went wrong. Please try again or contact directly via social links."
-        });
-        console.error("EmailJS Error:", error);
-      })
-      .finally(() => {
-        setIsSending(false);
-        setTimeout(() => setFormStatus({ show: false, success: false, message: "" }), 5000);
+    try {
+      // ১. প্রথমে মেইন কন্টাক্ট মেইলটি পাঠাবে (আপনার কাছে আসবে)
+      await emailjs.sendForm(SERVICE_ID, MAIN_TEMPLATE_ID, formRef.current, PUBLIC_KEY);
+
+      // ২. এরপর ইউজারের ইমেইলে অটো-রিপ্লাই টেমপ্লেটটি পাঠাবে
+      await emailjs.sendForm(SERVICE_ID, AUTO_REPLY_TEMPLATE_ID, formRef.current, PUBLIC_KEY);
+
+      setFormStatus({
+        show: true,
+        success: true,
+        message: "✓ Message sent successfully! An auto-reply has been sent to your email."
       });
+      e.target.reset(); 
+    } catch (error) {
+      setFormStatus({
+        show: true,
+        success: false,
+        message: "❌ Something went wrong. Please try again or contact directly via social links."
+      });
+      console.error("EmailJS Error:", error);
+    } finally {
+      setIsSending(false);
+      setTimeout(() => setFormStatus({ show: false, success: false, message: "" }), 5000);
+    }
   };
 
   // 🌐 কন্টাক্ট ডাটা লিস্ট (ফোন নাম্বারসহ)

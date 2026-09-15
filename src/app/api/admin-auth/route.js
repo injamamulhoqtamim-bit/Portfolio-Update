@@ -38,11 +38,14 @@ export async function POST(request) {
       );
     }
 
-    // Check credentials
-    if (
-      username !== adminUsername ||
-      password !== adminPassword
-    ) {
+    const usernameMatch =
+      username.toLowerCase() ===
+      adminUsername.trim().toLowerCase();
+
+    const passwordMatch =
+      password === adminPassword;
+
+    if (!usernameMatch || !passwordMatch) {
       return NextResponse.json(
         {
           success: false,
@@ -52,28 +55,26 @@ export async function POST(request) {
       );
     }
 
-    // JWT secret
     const secret = new TextEncoder().encode(adminSecret);
 
-    // Create JWT
     const token = await new SignJWT({
-      email: username,
+      email: adminUsername.trim(),
       role: "admin",
+      authProvider: "password",
     })
       .setProtectedHeader({
         alg: "HS256",
+        typ: "JWT",
       })
       .setIssuedAt()
       .setExpirationTime("1d")
       .sign(secret);
 
-    // Response
     const response = NextResponse.json({
       success: true,
       message: "Admin login successful.",
     });
 
-    // Store JWT in httpOnly cookie
     response.cookies.set({
       name: "admin_token",
       value: token,

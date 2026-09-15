@@ -75,6 +75,12 @@ const getSkillIcon = (iconName) => {
     wireshark: "SiWireshark",
     burpsuite: "SiBurpsuite",
     kalilinux: "SiKalilinux",
+    // REST API 관련 별칭 추가 (Postman 또는 Swagger 아이콘 매핑)
+    "rest api": "SiPostman",
+    restapi: "SiPostman",
+    api: "SiPostman",
+    swagger: "SiSwagger",
+    postman: "SiPostman",
   };
 
   const mappedIconName = iconAliases[lowerName];
@@ -92,6 +98,7 @@ const getSkillIcon = (iconName) => {
   if (lowerName.includes("stripe")) return SimpleIcons.SiStripe || Icons.CodeXml;
   if (lowerName.includes("cloudinary")) return SimpleIcons.SiCloudinary || Icons.CodeXml;
   if (lowerName.includes("jwt")) return SimpleIcons.SiJsonwebtokens || Icons.CodeXml;
+  if (lowerName.includes("rest") || lowerName.includes("api")) return SimpleIcons.SiPostman || Icons.CodeXml;
 
   return Icons.CodeXml;
 };
@@ -202,7 +209,6 @@ export default function SkillsTechnologies() {
     { name: "npm", icon: <SimpleIcons.SiNpm className="text-[#CB3837]" />, url: "https://www.npmjs.com" },
   ];
 
-  // technologies গুলোকে ৩ ভাগে ভাগ করা হচ্ছে ৩টি লাইনের জন্য
   const thirdSize = Math.ceil(technologies.length / 3);
   const rowOneTechs = technologies.slice(0, thirdSize);
   const rowTwoTechs = technologies.slice(thirdSize, thirdSize * 2);

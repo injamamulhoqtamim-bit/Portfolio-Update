@@ -23,6 +23,13 @@ import {
   Rocket,
   FileText,
   MessageCircle,
+  CheckCircle2,
+  XCircle,
+  AlertTriangle,
+  Info,
+  X,
+  ShieldCheck,
+  Trash2,
 } from "lucide-react";
 
 export default function AdminPanel() {
@@ -202,6 +209,81 @@ export default function AdminPanel() {
   const [authChecking, setAuthChecking] = useState(true);
   const [authenticated, setAuthenticated] = useState(false);
 
+  // =========================================================
+  // PREMIUM NOTIFICATIONS
+  // =========================================================
+
+  const [notification, setNotification] = useState(null);
+  const [confirmDialog, setConfirmDialog] = useState(null);
+
+  const notify = (message, type) => {
+    const text = String(message || "").trim();
+    let resolvedType = type;
+
+    if (!resolvedType) {
+      const lower = text.toLowerCase();
+
+      if (lower.includes("successfully") || lower.includes("success")) {
+        resolvedType = "success";
+      } else if (
+        lower.includes("required") ||
+        lower.includes("please select") ||
+        lower.includes("must be") ||
+        lower.includes("missing") ||
+        lower.includes("invalid") ||
+        lower.includes("less than")
+      ) {
+        resolvedType = "warning";
+      } else if (
+        lower.includes("failed") ||
+        lower.includes("error") ||
+        lower.includes("wrong") ||
+        lower.includes("delete failed") ||
+        lower.includes("operation failed")
+      ) {
+        resolvedType = "error";
+      } else {
+        resolvedType = "info";
+      }
+    }
+
+    setNotification({
+      id: Date.now(),
+      message: text,
+      type: resolvedType,
+    });
+  };
+
+  useEffect(() => {
+    if (!notification) return;
+
+    const timer = setTimeout(
+      () => setNotification(null),
+      notification.type === "error" ? 5200 : 3800
+    );
+
+    return () => clearTimeout(timer);
+  }, [notification]);
+
+  const confirmAction = (message) =>
+    new Promise((resolve) => {
+      setConfirmDialog({
+        message: String(message || ""),
+        resolve,
+      });
+    });
+
+  const closeConfirmDialog = (result) => {
+    if (!confirmDialog) return;
+
+    const resolve = confirmDialog.resolve;
+    setConfirmDialog(null);
+
+    if (typeof resolve === "function") {
+      resolve(result);
+    }
+  };
+
   useEffect(() => {
     let cancelled = false;
 
@@ -380,37 +462,37 @@ export default function AdminPanel() {
     e.preventDefault();
 
     if (!aboutForm.name.trim()) {
-      alert("Name is required.");
+      notify("Name is required.");
       return;
     }
 
     if (!aboutForm.location.trim()) {
-      alert("Location is required.");
+      notify("Location is required.");
       return;
     }
 
     if (!aboutForm.email.trim()) {
-      alert("Email is required.");
+      notify("Email is required.");
       return;
     }
 
     if (!aboutForm.education.trim()) {
-      alert("Education is required.");
+      notify("Education is required.");
       return;
     }
 
     if (!aboutForm.intro.trim()) {
-      alert("Intro text is required.");
+      notify("Intro text is required.");
       return;
     }
 
     if (!aboutForm.paragraph1.trim()) {
-      alert("First paragraph is required.");
+      notify("First paragraph is required.");
       return;
     }
 
     if (!aboutForm.paragraph2.trim()) {
-      alert("Second paragraph is required.");
+      notify("Second paragraph is required.");
       return;
     }
 
@@ -462,7 +544,7 @@ export default function AdminPanel() {
         "About information updated successfully!"
       );
 
-      alert(
+      notify(
         "About information updated successfully!"
       );
     } catch (error) {
@@ -525,7 +607,7 @@ export default function AdminPanel() {
 
       setCertificates([]);
 
-      alert(
+      notify(
         error.message ||
           "Failed to load certificates."
       );
@@ -589,7 +671,7 @@ export default function AdminPanel() {
     }
 
     if (file.type !== "application/pdf") {
-      alert(
+      notify(
         "Please select a valid PDF file."
       );
 
@@ -599,7 +681,7 @@ export default function AdminPanel() {
     }
 
     if (file.size > 10 * 1024 * 1024) {
-      alert(
+      notify(
         "Resume PDF must be less than 10MB."
       );
 
@@ -689,8 +771,7 @@ export default function AdminPanel() {
   const handleDeleteResume = async () => {
     if (!resumeInfo) return;
 
-    const confirmed =
-      window.confirm(
+    const confirmed = await confirmAction(
         "Are you sure you want to delete the current resume?"
       );
 
@@ -1091,15 +1172,14 @@ export default function AdminPanel() {
   const handleDeleteUpcomingProject =
     async (id) => {
       if (!id) {
-        alert(
+        notify(
           "Upcoming Project ID is missing."
         );
 
         return;
       }
 
-      const confirmed =
-        window.confirm(
+      const confirmed = await confirmAction(
           "Are you sure you want to delete this upcoming project?"
         );
 
@@ -1145,7 +1225,7 @@ export default function AdminPanel() {
           resetForm();
         }
 
-        alert(
+        notify(
           "Upcoming Project deleted successfully!"
         );
       } catch (error) {
@@ -1154,7 +1234,7 @@ export default function AdminPanel() {
           error
         );
 
-        alert(
+        notify(
           error.message ||
             "Failed to delete upcoming project."
         );
@@ -1170,7 +1250,7 @@ export default function AdminPanel() {
       if (
         !upcomingProjectForm.title.trim()
       ) {
-        alert(
+        notify(
           "Project title is required."
         );
 
@@ -1219,7 +1299,7 @@ export default function AdminPanel() {
           );
         }
 
-        alert(
+        notify(
           editingId
             ? "Upcoming Project updated successfully!"
             : "Upcoming Project added successfully!"
@@ -1236,7 +1316,7 @@ export default function AdminPanel() {
           error
         );
 
-        alert(
+        notify(
           error.message ||
             "Failed to save upcoming project."
         );
@@ -1262,7 +1342,7 @@ export default function AdminPanel() {
         "image/"
       )
     ) {
-      alert(
+      notify(
         "Please select a valid image file."
       );
 
@@ -1275,7 +1355,7 @@ export default function AdminPanel() {
       file.size >
       5 * 1024 * 1024
     ) {
-      alert(
+      notify(
         "Image size must be less than 5MB."
       );
 
@@ -1307,7 +1387,7 @@ export default function AdminPanel() {
     };
 
     reader.onerror = () => {
-      alert(
+      notify(
         "Failed to read image."
       );
     };
@@ -1393,8 +1473,7 @@ export default function AdminPanel() {
 
   const handleDeleteEducation =
     async (id) => {
-      const confirmed =
-        window.confirm(
+      const confirmed = await confirmAction(
           "Are you sure you want to delete this education?"
         );
 
@@ -1432,11 +1511,11 @@ export default function AdminPanel() {
               )
           );
 
-          alert(
+          notify(
             "Education deleted successfully!"
           );
         } else {
-          alert(
+          notify(
             result.message ||
               "Delete failed!"
           );
@@ -1447,7 +1526,7 @@ export default function AdminPanel() {
           error
         );
 
-        alert(
+        notify(
           "Something went wrong while deleting!"
         );
       } finally {
@@ -1460,7 +1539,7 @@ export default function AdminPanel() {
       e.preventDefault();
 
       if (!educationForm.type) {
-        alert(
+        notify(
           "Please select a type."
         );
 
@@ -1471,7 +1550,7 @@ export default function AdminPanel() {
         !educationForm.degree?.trim() &&
         !educationForm.title?.trim()
       ) {
-        alert(
+        notify(
           "Title / Degree is required."
         );
 
@@ -1481,7 +1560,7 @@ export default function AdminPanel() {
       if (
         !educationForm.institution?.trim()
       ) {
-        alert(
+        notify(
           "Institution / Company is required."
         );
 
@@ -1491,7 +1570,7 @@ export default function AdminPanel() {
       if (
         !educationForm.passingYear?.trim()
       ) {
-        alert(
+        notify(
           "Year / Duration is required."
         );
 
@@ -1501,7 +1580,7 @@ export default function AdminPanel() {
       if (
         !educationForm.description?.trim()
       ) {
-        alert(
+        notify(
           "Description is required."
         );
 
@@ -1611,7 +1690,7 @@ export default function AdminPanel() {
               "Research / Project",
           };
 
-          alert(
+          notify(
             editingId
               ? `${
                   typeLabel[
@@ -1631,7 +1710,7 @@ export default function AdminPanel() {
             "education"
           );
         } else {
-          alert(
+          notify(
             result.message ||
               "Education/Experience operation failed!"
           );
@@ -1642,7 +1721,7 @@ export default function AdminPanel() {
           error
         );
 
-        alert(
+        notify(
           error.message ||
             "Something went wrong while saving!"
         );
@@ -1754,8 +1833,7 @@ export default function AdminPanel() {
 
   const handleDeleteProject =
     async (id) => {
-      const confirmed =
-        window.confirm(
+      const confirmed = await confirmAction(
           "Are you sure you want to delete this project?"
         );
 
@@ -1793,11 +1871,11 @@ export default function AdminPanel() {
               )
           );
 
-          alert(
+          notify(
             "Project deleted successfully!"
           );
         } else {
-          alert(
+          notify(
             result.message ||
               "Project delete failed!"
           );
@@ -1808,7 +1886,7 @@ export default function AdminPanel() {
           error
         );
 
-        alert(
+        notify(
           "Something went wrong while deleting project!"
         );
       } finally {
@@ -1824,7 +1902,7 @@ export default function AdminPanel() {
         !editingId &&
         !projectForm.image
       ) {
-        alert(
+        notify(
           "Please upload a project image."
         );
 
@@ -1914,7 +1992,7 @@ export default function AdminPanel() {
           await res.json();
 
         if (result.success) {
-          alert(
+          notify(
             editingId
               ? "Project updated successfully!"
               : "Project added successfully!"
@@ -1926,7 +2004,7 @@ export default function AdminPanel() {
             "projects"
           );
         } else {
-          alert(
+          notify(
             result.message ||
               "Project operation failed!"
           );
@@ -1937,7 +2015,7 @@ export default function AdminPanel() {
           error
         );
 
-        alert(
+        notify(
           "Something went wrong while saving project!"
         );
       } finally {
@@ -1992,8 +2070,7 @@ export default function AdminPanel() {
 
   const handleDeleteSkill =
     async (id) => {
-      const confirmed =
-        window.confirm(
+      const confirmed = await confirmAction(
           "Are you sure you want to delete this skill?"
         );
 
@@ -2031,11 +2108,11 @@ export default function AdminPanel() {
               )
           );
 
-          alert(
+          notify(
             "Skill deleted successfully!"
           );
         } else {
-          alert(
+          notify(
             result.message ||
               "Skill delete failed!"
           );
@@ -2046,7 +2123,7 @@ export default function AdminPanel() {
           error
         );
 
-        alert(
+        notify(
           "Something went wrong while deleting skill!"
         );
       } finally {
@@ -2061,7 +2138,7 @@ export default function AdminPanel() {
       if (
         !skillForm.name.trim()
       ) {
-        alert(
+        notify(
           "Skill name is required."
         );
 
@@ -2080,7 +2157,7 @@ export default function AdminPanel() {
         skillLevel < 0 ||
         skillLevel > 100
       ) {
-        alert(
+        notify(
           "Skill level must be between 0 and 100."
         );
 
@@ -2143,7 +2220,7 @@ export default function AdminPanel() {
           await res.json();
 
         if (result.success) {
-          alert(
+          notify(
             editingId
               ? "Skill updated successfully!"
               : "Skill added successfully!"
@@ -2155,7 +2232,7 @@ export default function AdminPanel() {
             "skills"
           );
         } else {
-          alert(
+          notify(
             result.message ||
               "Skill operation failed!"
           );
@@ -2166,7 +2243,7 @@ export default function AdminPanel() {
           error
         );
 
-        alert(
+        notify(
           "Something went wrong while saving skill!"
         );
       } finally {
@@ -2209,7 +2286,7 @@ export default function AdminPanel() {
           "image/"
         )
       ) {
-        alert(
+        notify(
           "Please select a valid image file."
         );
 
@@ -2222,7 +2299,7 @@ export default function AdminPanel() {
         file.size >
         5 * 1024 * 1024
       ) {
-        alert(
+        notify(
           "Certificate image must be less than 5MB."
         );
 
@@ -2245,7 +2322,7 @@ export default function AdminPanel() {
       };
 
       reader.onerror = () => {
-        alert(
+        notify(
           "Failed to read certificate image."
         );
       };
@@ -2274,7 +2351,7 @@ export default function AdminPanel() {
           .endsWith(".pdf");
 
       if (!isPDF) {
-        alert(
+        notify(
           "Please select a valid PDF document."
         );
 
@@ -2287,7 +2364,7 @@ export default function AdminPanel() {
         file.size >
         10 * 1024 * 1024
       ) {
-        alert(
+        notify(
           "Certificate PDF must be less than 10MB."
         );
 
@@ -2318,7 +2395,7 @@ export default function AdminPanel() {
         !certificateForm.organization?.trim() ||
         !certificateForm.date?.trim()
       ) {
-        alert(
+        notify(
           "Please fill in certificate title, organization and date."
         );
 
@@ -2329,7 +2406,7 @@ export default function AdminPanel() {
         !editingCertificate &&
         !certificateDocumentFile
       ) {
-        alert(
+        notify(
           "Please upload a certificate PDF document."
         );
 
@@ -2355,7 +2432,7 @@ export default function AdminPanel() {
           );
 
         if (!isPdf) {
-          alert(
+          notify(
             "Please select a valid PDF certificate document."
           );
 
@@ -2532,7 +2609,7 @@ export default function AdminPanel() {
           );
         }
 
-        alert(
+        notify(
           editingCertificate
             ? "Certificate updated successfully!"
             : "Certificate added successfully!"
@@ -2547,7 +2624,7 @@ export default function AdminPanel() {
           error
         );
 
-        alert(
+        notify(
           error.message ||
             "Something went wrong while saving certificate."
         );
@@ -2658,15 +2735,14 @@ export default function AdminPanel() {
   const handleDeleteCertificate =
     async (id) => {
       if (!id) {
-        alert(
+        notify(
           "Certificate ID is missing."
         );
 
         return;
       }
 
-      const confirmed =
-        window.confirm(
+      const confirmed = await confirmAction(
           "Are you sure you want to delete this certificate?\n\nThis will permanently remove the certificate, image and PDF."
         );
 
@@ -2728,7 +2804,7 @@ export default function AdminPanel() {
           resetCertificateForm();
         }
 
-        alert(
+        notify(
           "Certificate deleted successfully!"
         );
       } catch (error) {
@@ -2737,7 +2813,7 @@ export default function AdminPanel() {
           error
         );
 
-        alert(
+        notify(
           error.message ||
             "Something went wrong while deleting certificate."
         );
@@ -2931,6 +3007,160 @@ export default function AdminPanel() {
 
   return (
     <div className="min-h-dvh overflow-x-hidden bg-gray-950 text-white">
+
+      {/* =====================================================
+          PREMIUM NOTIFICATION TOAST
+      ====================================================== */}
+
+      {notification && (
+        <div
+          className="pointer-events-none fixed inset-x-0 top-4 z-[100] flex justify-center px-4 sm:top-6 sm:justify-end sm:px-6 lg:px-8"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          <div
+            key={notification.id}
+            className="pointer-events-auto relative w-full max-w-md overflow-hidden rounded-2xl border border-white/10 bg-gray-900/95 shadow-2xl shadow-black/50 backdrop-blur-2xl transition-all duration-300"
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-white/[0.04] to-transparent" />
+
+            <div className="relative flex items-start gap-3 p-4 sm:p-5">
+              <div
+                className={`mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border shadow-lg ${
+                  notification.type === "success"
+                    ? "border-emerald-400/20 bg-emerald-400/10 text-emerald-400 shadow-emerald-950/20"
+                    : notification.type === "error"
+                      ? "border-red-400/20 bg-red-400/10 text-red-400 shadow-red-950/20"
+                      : notification.type === "warning"
+                        ? "border-amber-400/20 bg-amber-400/10 text-amber-400 shadow-amber-950/20"
+                        : "border-cyan-400/20 bg-cyan-400/10 text-cyan-400 shadow-cyan-950/20"
+                }`}
+              >
+                {notification.type === "success" ? (
+                  <CheckCircle2 size={22} strokeWidth={2.2} />
+                ) : notification.type === "error" ? (
+                  <XCircle size={22} strokeWidth={2.2} />
+                ) : notification.type === "warning" ? (
+                  <AlertTriangle size={22} strokeWidth={2.2} />
+                ) : (
+                  <Info size={22} strokeWidth={2.2} />
+                )}
+              </div>
+
+              <div className="min-w-0 flex-1 pt-0.5">
+                <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-500">
+                  {notification.type === "success"
+                    ? "Success"
+                    : notification.type === "error"
+                      ? "Something went wrong"
+                      : notification.type === "warning"
+                        ? "Attention"
+                        : "Notification"}
+                </p>
+
+                <p className="mt-1 text-sm font-medium leading-6 text-gray-100">
+                  {notification.message}
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setNotification(null)}
+                className="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-gray-500 transition hover:bg-white/5 hover:text-white active:scale-95"
+                aria-label="Close notification"
+              >
+                <X size={17} />
+              </button>
+            </div>
+
+            <div
+              className={`h-0.5 w-full origin-left ${
+                notification.type === "success"
+                  ? "bg-emerald-400"
+                  : notification.type === "error"
+                    ? "bg-red-400"
+                    : notification.type === "warning"
+                      ? "bg-amber-400"
+                      : "bg-cyan-400"
+              }`}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* =====================================================
+          PREMIUM CONFIRMATION MODAL
+      ====================================================== */}
+
+      {confirmDialog && (
+        <div
+          className="fixed inset-0 z-[110] flex items-center justify-center bg-black/75 p-4 backdrop-blur-md"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="premium-confirm-title"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget) {
+              closeConfirmDialog(false);
+            }
+          }}
+        >
+          <div className="w-full max-w-md overflow-hidden rounded-3xl border border-white/10 bg-gray-900 shadow-2xl shadow-black/60">
+            <div className="relative p-6 sm:p-7">
+              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-red-400/70 to-transparent" />
+
+              <div className="flex items-start gap-4">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-red-400/20 bg-red-400/10 text-red-400 shadow-lg shadow-red-950/20">
+                  <Trash2 size={21} strokeWidth={2.1} />
+                </div>
+
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center justify-between gap-3">
+                    <h2
+                      id="premium-confirm-title"
+                      className="text-lg font-bold tracking-tight text-white"
+                    >
+                      Confirm action
+                    </h2>
+
+                    <button
+                      type="button"
+                      onClick={() => closeConfirmDialog(false)}
+                      className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-gray-500 transition hover:bg-white/5 hover:text-white active:scale-95"
+                      aria-label="Close confirmation"
+                    >
+                      <X size={17} />
+                    </button>
+                  </div>
+
+                  <p className="mt-2 whitespace-pre-line text-sm leading-6 text-gray-400">
+                    {confirmDialog.message}
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-7 flex flex-col-reverse gap-2.5 sm:flex-row sm:justify-end">
+                <button
+                  type="button"
+                  onClick={() => closeConfirmDialog(false)}
+                  className="rounded-xl border border-gray-700 bg-gray-800/80 px-5 py-2.5 text-sm font-semibold text-gray-300 transition hover:border-gray-600 hover:bg-gray-800 hover:text-white active:scale-[0.98]"
+                >
+                  Cancel
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => closeConfirmDialog(true)}
+                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-red-400/20 bg-red-500 px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-red-950/30 transition hover:bg-red-400 active:scale-[0.98]"
+                >
+                  <ShieldCheck size={17} />
+                  Confirm
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="flex min-h-dvh">
 
         {/* =====================================================

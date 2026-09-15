@@ -15,10 +15,6 @@ async function isAdmin() {
   try {
     const cookieStore = await cookies();
 
-    /* -------------------------------------------------------
-       Get JWT cookie
-    ------------------------------------------------------- */
-
     const token =
       cookieStore.get("admin_token")?.value;
 
@@ -29,10 +25,6 @@ async function isAdmin() {
 
       return false;
     }
-
-    /* -------------------------------------------------------
-       Get secret
-    ------------------------------------------------------- */
 
     const adminSecret =
       process.env.ADMIN_SECRET;
@@ -45,10 +37,6 @@ async function isAdmin() {
       return false;
     }
 
-    /* -------------------------------------------------------
-       Verify JWT
-    ------------------------------------------------------- */
-
     const secret = new TextEncoder().encode(
       adminSecret
     );
@@ -60,10 +48,6 @@ async function isAdmin() {
         algorithms: ["HS256"],
       }
     );
-
-    /* -------------------------------------------------------
-       Make sure token belongs to admin
-    ------------------------------------------------------- */
 
     if (payload?.role !== "admin") {
       console.warn(
@@ -133,8 +117,8 @@ export async function POST(request) {
     const name =
       body?.name?.trim() || "";
 
-    const email =
-      body?.email?.trim().toLowerCase() || "";
+    const relation =
+      body?.relation?.trim() || "";
 
     const message =
       body?.message?.trim() || "";
@@ -143,12 +127,12 @@ export async function POST(request) {
        Required fields
     ------------------------------------------------------- */
 
-    if (!name || !email || !message) {
+    if (!name || !relation || !message) {
       return NextResponse.json(
         {
           success: false,
           message:
-            "Name, email and comment are required.",
+            "Name, relation and comment are required.",
         },
         { status: 400 }
       );
@@ -164,6 +148,21 @@ export async function POST(request) {
           success: false,
           message:
             "Name must be at least 2 characters.",
+        },
+        { status: 400 }
+      );
+    }
+
+    /* -------------------------------------------------------
+       Relation validation
+    ------------------------------------------------------- */
+
+    if (relation.length < 2) {
+      return NextResponse.json(
+        {
+          success: false,
+          message:
+            "Relation must be at least 2 characters.",
         },
         { status: 400 }
       );
@@ -196,31 +195,13 @@ export async function POST(request) {
     }
 
     /* -------------------------------------------------------
-       Email validation
-    ------------------------------------------------------- */
-
-    const emailRegex =
-      /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    if (!emailRegex.test(email)) {
-      return NextResponse.json(
-        {
-          success: false,
-          message:
-            "Please enter a valid email address.",
-        },
-        { status: 400 }
-      );
-    }
-
-    /* -------------------------------------------------------
        Duplicate protection
-       Same email + same message within 60 seconds
+       Same name + same message within 60 seconds
     ------------------------------------------------------- */
 
     const recentDuplicate =
       await Comment.findOne({
-        email,
+        name,
         message,
         createdAt: {
           $gte: new Date(
@@ -247,7 +228,7 @@ export async function POST(request) {
     const comment =
       await Comment.create({
         name,
-        email,
+        relation,
         message,
       });
 
@@ -280,15 +261,10 @@ export async function POST(request) {
 /* =========================================================
    PATCH COMMENT
    Admin only
-   Add / update / remove reply
    ========================================================= */
 
 export async function PATCH(request) {
   try {
-    /* -------------------------------------------------------
-       Verify admin JWT
-    ------------------------------------------------------- */
-
     const admin = await isAdmin();
 
     if (!admin) {
@@ -306,10 +282,6 @@ export async function PATCH(request) {
       );
     }
 
-    /* -------------------------------------------------------
-       Database
-    ------------------------------------------------------- */
-
     await connectDB();
 
     const body = await request.json();
@@ -318,10 +290,6 @@ export async function PATCH(request) {
 
     const reply =
       body?.reply?.trim() || "";
-
-    /* -------------------------------------------------------
-       Validate comment ID
-    ------------------------------------------------------- */
 
     if (!id) {
       return NextResponse.json(
@@ -334,10 +302,6 @@ export async function PATCH(request) {
       );
     }
 
-    /* -------------------------------------------------------
-       Validate reply
-    ------------------------------------------------------- */
-
     if (reply.length > 1500) {
       return NextResponse.json(
         {
@@ -348,10 +312,6 @@ export async function PATCH(request) {
         { status: 400 }
       );
     }
-
-    /* -------------------------------------------------------
-       Find comment
-    ------------------------------------------------------- */
 
     const comment =
       await Comment.findById(id);
@@ -366,10 +326,6 @@ export async function PATCH(request) {
         { status: 404 }
       );
     }
-
-    /* -------------------------------------------------------
-       Update reply
-    ------------------------------------------------------- */
 
     comment.reply = reply;
 
@@ -412,10 +368,6 @@ export async function PATCH(request) {
 
 export async function DELETE(request) {
   try {
-    /* -------------------------------------------------------
-       Verify admin JWT
-    ------------------------------------------------------- */
-
     const admin = await isAdmin();
 
     if (!admin) {
@@ -433,15 +385,7 @@ export async function DELETE(request) {
       );
     }
 
-    /* -------------------------------------------------------
-       Database
-    ------------------------------------------------------- */
-
     await connectDB();
-
-    /* -------------------------------------------------------
-       Get comment ID
-    ------------------------------------------------------- */
 
     const { searchParams } =
       new URL(request.url);
@@ -460,10 +404,6 @@ export async function DELETE(request) {
       );
     }
 
-    /* -------------------------------------------------------
-       Delete comment
-    ------------------------------------------------------- */
-
     const deleted =
       await Comment.findByIdAndDelete(id);
 
@@ -477,10 +417,6 @@ export async function DELETE(request) {
         { status: 404 }
       );
     }
-
-    /* -------------------------------------------------------
-       Success
-    ------------------------------------------------------- */
 
     return NextResponse.json({
       success: true,

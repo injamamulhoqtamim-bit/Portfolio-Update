@@ -9,11 +9,10 @@ const commentSchema = new mongoose.Schema(
       maxlength: 60,
     },
 
-    email: {
+    relation: {
       type: String,
       required: true,
       trim: true,
-      lowercase: true,
       maxlength: 120,
     },
 

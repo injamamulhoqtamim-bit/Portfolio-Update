@@ -10,12 +10,12 @@ import {
   Loader2,
   RefreshCw,
   User,
-  Mail,
+  Users,
   Clock,
   ShieldCheck,
 } from "lucide-react";
 
-export default function Comments() {
+export default function CommentsAdmin() {
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [savingId, setSavingId] = useState(null);
@@ -314,9 +314,9 @@ export default function Comments() {
                       </h3>
 
                       <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 text-xs text-zinc-500 mt-1">
-                        <span className="inline-flex items-center gap-1">
-                          <Mail size={12} />
-                          {comment.email}
+                        <span className="inline-flex items-center gap-1 text-blue-400 font-medium">
+                          <Users size={12} />
+                          {comment.relation}
                         </span>
 
                         <span className="inline-flex items-center gap-1">

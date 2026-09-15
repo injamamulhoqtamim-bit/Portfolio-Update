@@ -6,7 +6,7 @@ import {
   Send,
   Loader2,
   User,
-  Mail,
+  Users,
   Clock,
   ShieldCheck,
   RefreshCw,
@@ -20,7 +20,7 @@ export default function Comments() {
 
   const [form, setForm] = useState({
     name: "",
-    email: "",
+    relation: "",
     message: "",
   });
 
@@ -98,18 +98,23 @@ export default function Comments() {
     setSuccess("");
 
     const name = form.name.trim();
-    const email = form.email.trim();
+    const relation = form.relation.trim();
     const message = form.message.trim();
 
     /* Validation */
 
-    if (!name || !email || !message) {
+    if (!name || !relation || !message) {
       setError("Please fill in all fields.");
       return;
     }
 
     if (name.length < 2) {
       setError("Name must be at least 2 characters.");
+      return;
+    }
+
+    if (relation.length < 2) {
+      setError("Relation must be at least 2 characters.");
       return;
     }
 
@@ -128,7 +133,7 @@ export default function Comments() {
         },
         body: JSON.stringify({
           name,
-          email,
+          relation,
           message,
         }),
       });
@@ -155,7 +160,7 @@ export default function Comments() {
 
       setForm({
         name: "",
-        email: "",
+        relation: "",
         message: "",
       });
 
@@ -249,7 +254,7 @@ export default function Comments() {
             className="bg-zinc-900/80 border border-zinc-800 rounded-3xl p-5 sm:p-7 lg:p-8 shadow-2xl"
           >
 
-            {/* NAME + EMAIL */}
+            {/* NAME + RELATION */}
 
             <div className="grid sm:grid-cols-2 gap-4">
 
@@ -281,27 +286,27 @@ export default function Comments() {
                 </div>
               </div>
 
-              {/* EMAIL */}
+              {/* RELATION / ROLE */}
 
               <div>
                 <label className="block text-sm font-semibold text-zinc-300 mb-2">
-                  Email
+                  Relation / Connection
                 </label>
 
                 <div className="relative">
 
-                  <Mail
+                  <Users
                     size={18}
                     className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500"
                   />
 
                   <input
-                    type="email"
-                    name="email"
-                    value={form.email}
+                    type="text"
+                    name="relation"
+                    value={form.relation}
                     onChange={handleChange}
-                    maxLength={120}
-                    placeholder="you@example.com"
+                    maxLength={60}
+                    placeholder="e.g. Close Friend, Brother, Neighbour"
                     className="w-full bg-zinc-950 border border-zinc-800 rounded-xl py-3.5 pl-11 pr-4 text-white placeholder:text-zinc-600 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition"
                     required
                   />
@@ -471,7 +476,7 @@ export default function Comments() {
           ) : comments.length === 0 ? (
 
             /* =================================================
-               EMPTY
+                EMPTY
             ================================================= */
 
             <div className="max-w-6xl mx-auto px-4 sm:px-6">
@@ -498,7 +503,7 @@ export default function Comments() {
           ) : (
 
             /* =================================================
-               INFINITE RIGHT → LEFT MARQUEE
+                INFINITE RIGHT → LEFT MARQUEE
             ================================================= */
 
             <div className="relative w-full overflow-hidden">
@@ -583,6 +588,10 @@ export default function Comments() {
                           <h4 className="font-bold text-white break-words">
                             {comment.name}
                           </h4>
+
+                          <p className="text-xs text-blue-400 font-medium mt-0.5 break-words">
+                            {comment.relation}
+                          </p>
 
                           <div className="flex flex-wrap items-center gap-2 mt-1 text-xs text-zinc-500">
 

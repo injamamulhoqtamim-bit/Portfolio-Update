@@ -19,6 +19,7 @@ export default function Projects() {
   const [selectedProject, setSelectedProject] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
+  const [isPaused, setIsPaused] = useState(false); // অটোপ্লে পজ করার জন্য স্টেট
 
   // ==========================================
   // FETCH PROJECTS FROM MONGODB
@@ -43,7 +44,6 @@ export default function Projects() {
       if (result.success) {
         setProjects(result.data || []);
 
-        // Current index যেন data change হলে invalid না হয়
         setCurrentIndex((prev) => {
           if (!result.data || result.data.length === 0) {
             return 0;
@@ -123,6 +123,20 @@ export default function Projects() {
       prev === projects.length - 1 ? 0 : prev + 1
     );
   };
+
+  // ==========================================
+  // AUTO SLIDE (RIGHT TO LEFT / NEXT)
+  // ==========================================
+  useEffect(() => {
+    // যদি প্রজেক্ট ১ টার কম হয়, মোডাল খোলা থাকে বা মাউস হোভার করা থাকে তবে স্লাইড হবে না
+    if (projects.length <= 1 || modalOpen || isPaused) return;
+
+    const interval = setInterval(() => {
+      handleNext();
+    }, 3000); // ৪ সেকেন্ড পর পর স্লাইড পরিবর্তন হবে (প্রয়োজনে সময় কমাতে বা বাড়াতে পারেন)
+
+    return () => clearInterval(interval);
+  }, [projects.length, modalOpen, isPaused, currentIndex]);
 
   // ==========================================
   // DOT CLICK
@@ -300,7 +314,11 @@ export default function Projects() {
             3D CAROUSEL
         ========================================== */}
 
-        <div className="relative max-w-[1200px] mx-auto min-h-[480px] md:min-h-[580px] flex items-center justify-center [perspective:1200px]">
+        <div 
+          className="relative max-w-[1200px] mx-auto min-h-[480px] md:min-h-[580px] flex items-center justify-center [perspective:1200px]"
+          onMouseEnter={() => setIsPaused(true)}   // মাউস নিলে স্লাইড থামবে
+          onMouseLeave={() => setIsPaused(false)}  // মাউস সরালে স্লাইড আবার শুরু হবে
+        >
 
           {/* ==========================================
               PREVIOUS BUTTON

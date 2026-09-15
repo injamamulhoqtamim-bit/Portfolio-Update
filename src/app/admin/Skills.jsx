@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import * as Icons from "lucide-react";
+import * as SimpleIcons from "react-icons/si";
 
 export default function Skills({ admin }) {
   const {
@@ -11,67 +12,274 @@ export default function Skills({ admin }) {
     handleDeleteSkill,
     handleEditSkill,
     handleSkillSubmit,
-    items = [], // Default array handling
+    items = [],
     loading,
     resetForm,
     setSkillForm,
     skillForm = {},
   } = admin;
 
-  // Category Filter State
+  // ============================================================
+  // CATEGORY FILTER STATE
+  // ============================================================
   const [selectedCategory, setSelectedCategory] = useState("All");
 
-  // Dynamic Icon Renderer Component
+  // ============================================================
+  // ICON ALIASES
+  // ============================================================
+  // Admin শুধু React/Firebase/Node.js লিখলেও
+  // automatically correct Simple Icons name পাওয়া যাবে।
+  const ICON_ALIASES = {
+    react: "SiReact",
+
+    firebase: "SiFirebase",
+
+    "node.js": "SiNodedotjs",
+    nodejs: "SiNodedotjs",
+    node: "SiNodedotjs",
+
+    javascript: "SiJavascript",
+    js: "SiJavascript",
+
+    typescript: "SiTypescript",
+    ts: "SiTypescript",
+
+    html: "SiHtml5",
+    html5: "SiHtml5",
+
+    css: "SiCss3",
+    css3: "SiCss3",
+
+    tailwind: "SiTailwindcss",
+    "tailwind css": "SiTailwindcss",
+    tailwindcss: "SiTailwindcss",
+
+    nextjs: "SiNextdotjs",
+    "next.js": "SiNextdotjs",
+    next: "SiNextdotjs",
+
+    mongodb: "SiMongodb",
+    mongo: "SiMongodb",
+
+    express: "SiExpress",
+    "express.js": "SiExpress",
+
+    github: "SiGithub",
+
+    git: "SiGit",
+
+    gitlab: "SiGitlab",
+
+    docker: "SiDocker",
+
+    vercel: "SiVercel",
+
+    netlify: "SiNetlify",
+
+    npm: "SiNpm",
+
+    yarn: "SiYarn",
+
+    vscode: "SiVisualstudiocode",
+    "vs code": "SiVisualstudiocode",
+
+    figma: "SiFigma",
+
+    redux: "SiRedux",
+
+    "react router": "SiReactrouter",
+    reactrouter: "SiReactrouter",
+
+    postman: "SiPostman",
+
+    bootstrap: "SiBootstrap",
+
+    sass: "SiSass",
+
+    jquery: "SiJquery",
+
+    python: "SiPython",
+
+    java: "SiJava",
+
+    php: "SiPhp",
+
+    mysql: "SiMysql",
+
+    postgres: "SiPostgresql",
+    postgresql: "SiPostgresql",
+
+    prisma: "SiPrisma",
+
+    graphql: "SiGraphql",
+
+    wordpress: "SiWordpress",
+
+    linux: "SiLinux",
+
+    windows: "SiWindows",
+
+    android: "SiAndroid",
+
+    canva: "SiCanva",
+
+    notion: "SiNotion",
+  };
+
+  // ============================================================
+  // NORMALIZE ICON NAME
+  // ============================================================
+  const normalizeIconName = (value) => {
+    const trimmed = value?.trim();
+
+    if (!trimmed) {
+      return "";
+    }
+
+    // ----------------------------------------------------------
+    // Already correct Simple Icons name
+    // Example: SiReact
+    // ----------------------------------------------------------
+    if (SimpleIcons[trimmed]) {
+      return trimmed;
+    }
+
+    // ----------------------------------------------------------
+    // Already valid Lucide icon name
+    // Example: Code, Server, Database
+    // ----------------------------------------------------------
+    if (Icons[trimmed]) {
+      return trimmed;
+    }
+
+    // ----------------------------------------------------------
+    // Check aliases
+    // ----------------------------------------------------------
+    const alias = ICON_ALIASES[trimmed.toLowerCase()];
+
+    if (alias) {
+      return alias;
+    }
+
+    // ----------------------------------------------------------
+    // Unknown name হলে original value রাখা হবে
+    // RenderIcon পরে fallback CodeXml দেখাবে
+    // ----------------------------------------------------------
+    return trimmed;
+  };
+
+  // ============================================================
+  // DYNAMIC ICON RENDERER COMPONENT FOR ADMIN
+  // ============================================================
   const RenderIcon = ({ name, color }) => {
+    // ----------------------------------------------------------
+    // Icon না থাকলে Skill Name-এর প্রথম letter দেখাবে
+    // ----------------------------------------------------------
     if (!name) {
       return (
-        <span className="text-lg font-bold">
+        <span
+          className="text-lg font-bold"
+          style={{ color: color || "#00d4ff" }}
+        >
           {skillForm.name?.charAt(0)?.toUpperCase() || "S"}
         </span>
       );
     }
-    const IconComponent = Icons[name];
-    return IconComponent ? (
-      <IconComponent size={24} style={{ color }} />
-    ) : (
-      <Icons.CodeXml size={24} style={{ color }} />
+
+    // ----------------------------------------------------------
+    // Normalize icon name
+    // ----------------------------------------------------------
+    const normalizedName = normalizeIconName(name);
+
+    // ----------------------------------------------------------
+    // Simple Icons → Lucide Icons → CodeXml fallback
+    // ----------------------------------------------------------
+    const IconComponent =
+      SimpleIcons[normalizedName] ||
+      Icons[normalizedName] ||
+      Icons.CodeXml;
+
+    return (
+      <IconComponent
+        size={24}
+        style={{
+          color: color || "#00d4ff",
+        }}
+      />
     );
   };
 
-  // Safe Array Handling
+  // ============================================================
+  // SAFE ARRAY HANDLING
+  // ============================================================
   const skillList = Array.isArray(items) ? items : [];
 
-  // Category Counts Calculation
+  // ============================================================
+  // CATEGORY COUNTS
+  // ============================================================
   const counts = {
     All: skillList.length,
-    Frontend: skillList.filter((s) => s.category === "Frontend").length,
-    Backend: skillList.filter((s) => s.category === "Backend").length,
-    Tools: skillList.filter((s) => s.category === "Tools").length,
+
+    Frontend: skillList.filter(
+      (s) => s.category === "Frontend"
+    ).length,
+
+    Backend: skillList.filter(
+      (s) => s.category === "Backend"
+    ).length,
+
+    Tools: skillList.filter(
+      (s) => s.category === "Tools"
+    ).length,
   };
 
-  // Filter skills based on selected category tab
+  // ============================================================
+  // FILTER SKILLS
+  // ============================================================
   const filteredSkills =
     selectedCategory === "All"
       ? skillList
-      : skillList.filter((item) => item.category === selectedCategory);
+      : skillList.filter(
+          (item) =>
+            item.category === selectedCategory
+        );
 
-  if (activeTab !== "skills") return null;
+  // ============================================================
+  // ONLY SHOW WHEN SKILLS TAB IS ACTIVE
+  // ============================================================
+  if (activeTab !== "skills") {
+    return null;
+  }
 
+  // ============================================================
+  // MAIN UI
+  // ============================================================
   return (
     <div className="space-y-8">
-      {/* HEADER SECTION */}
+      {/* ======================================================
+          HEADER SECTION
+      ======================================================= */}
       <div>
-        <h2 className="text-2xl font-bold sm:text-3xl text-white">Manage Skills</h2>
+        <h2 className="text-2xl font-bold sm:text-3xl text-white">
+          Manage Skills
+        </h2>
+
         <p className="mt-1 text-sm text-gray-400">
           Total uploaded skills summary across categories.
         </p>
       </div>
 
-      {/* 📊 TOP SUMMARY COUNTER CARDS */}
+      {/* ======================================================
+          TOP SUMMARY COUNTER CARDS
+      ======================================================= */}
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-        {/* TOTAL SKILLS */}
+        {/* ====================================================
+            TOTAL SKILLS
+        ===================================================== */}
         <div
-          onClick={() => setSelectedCategory("All")}
+          onClick={() =>
+            setSelectedCategory("All")
+          }
           className={`cursor-pointer rounded-xl border p-4 shadow-lg transition-all ${
             selectedCategory === "All"
               ? "border-teal-500 bg-teal-950/30"
@@ -82,14 +290,22 @@ export default function Skills({ admin }) {
             <span className="text-xs font-semibold uppercase tracking-wider text-gray-400">
               Total Skills
             </span>
+
             <Icons.Layers className="h-5 w-5 text-teal-400" />
           </div>
-          <p className="mt-3 text-3xl font-extrabold text-white">{counts.All}</p>
+
+          <p className="mt-3 text-3xl font-extrabold text-white">
+            {counts.All}
+          </p>
         </div>
 
-        {/* FRONTEND */}
+        {/* ====================================================
+            FRONTEND
+        ===================================================== */}
         <div
-          onClick={() => setSelectedCategory("Frontend")}
+          onClick={() =>
+            setSelectedCategory("Frontend")
+          }
           className={`cursor-pointer rounded-xl border p-4 shadow-lg transition-all ${
             selectedCategory === "Frontend"
               ? "border-cyan-500 bg-cyan-950/30"
@@ -100,14 +316,22 @@ export default function Skills({ admin }) {
             <span className="text-xs font-semibold uppercase tracking-wider text-gray-400">
               Frontend
             </span>
+
             <Icons.Layout className="h-5 w-5 text-cyan-400" />
           </div>
-          <p className="mt-3 text-3xl font-extrabold text-white">{counts.Frontend}</p>
+
+          <p className="mt-3 text-3xl font-extrabold text-white">
+            {counts.Frontend}
+          </p>
         </div>
 
-        {/* BACKEND */}
+        {/* ====================================================
+            BACKEND
+        ===================================================== */}
         <div
-          onClick={() => setSelectedCategory("Backend")}
+          onClick={() =>
+            setSelectedCategory("Backend")
+          }
           className={`cursor-pointer rounded-xl border p-4 shadow-lg transition-all ${
             selectedCategory === "Backend"
               ? "border-emerald-500 bg-emerald-950/30"
@@ -118,14 +342,22 @@ export default function Skills({ admin }) {
             <span className="text-xs font-semibold uppercase tracking-wider text-gray-400">
               Backend
             </span>
+
             <Icons.Server className="h-5 w-5 text-emerald-400" />
           </div>
-          <p className="mt-3 text-3xl font-extrabold text-white">{counts.Backend}</p>
+
+          <p className="mt-3 text-3xl font-extrabold text-white">
+            {counts.Backend}
+          </p>
         </div>
 
-        {/* TOOLS */}
+        {/* ====================================================
+            TOOLS
+        ===================================================== */}
         <div
-          onClick={() => setSelectedCategory("Tools")}
+          onClick={() =>
+            setSelectedCategory("Tools")
+          }
           className={`cursor-pointer rounded-xl border p-4 shadow-lg transition-all ${
             selectedCategory === "Tools"
               ? "border-purple-500 bg-purple-950/30"
@@ -136,98 +368,154 @@ export default function Skills({ admin }) {
             <span className="text-xs font-semibold uppercase tracking-wider text-gray-400">
               Tools
             </span>
+
             <Icons.Wrench className="h-5 w-5 text-purple-400" />
           </div>
-          <p className="mt-3 text-3xl font-extrabold text-white">{counts.Tools}</p>
+
+          <p className="mt-3 text-3xl font-extrabold text-white">
+            {counts.Tools}
+          </p>
         </div>
       </div>
 
-      {/* SKILL FORM (ADD / EDIT) */}
+      {/* ======================================================
+          SKILL FORM
+      ======================================================= */}
       <form
         onSubmit={handleSkillSubmit}
         className="space-y-5 rounded-xl border border-gray-800 bg-gray-900 p-4 sm:p-6 shadow-xl"
       >
         <h3 className="text-xl font-semibold text-teal-300">
-          {editingId ? "Edit Skill" : "Add New Skill"}
+          {editingId
+            ? "Edit Skill"
+            : "Add New Skill"}
         </h3>
 
-        {/* NAME */}
+        {/* ====================================================
+            NAME
+        ===================================================== */}
         <div>
           <label className="mb-2 block text-sm font-medium text-gray-300">
             Skill Name
           </label>
+
           <input
             type="text"
             placeholder="e.g. React.js, Node.js, VS Code"
             value={skillForm.name || ""}
             onChange={(e) =>
-              setSkillForm({ ...skillForm, name: e.target.value })
+              setSkillForm({
+                ...skillForm,
+                name: e.target.value,
+              })
             }
             className="w-full rounded-lg border border-gray-700 bg-gray-800 p-3 text-white focus:border-teal-500 focus:outline-none"
             required
           />
         </div>
 
-        {/* CATEGORY */}
+        {/* ====================================================
+            CATEGORY
+        ===================================================== */}
         <div>
           <label className="mb-2 block text-sm font-medium text-gray-300">
             Category
           </label>
+
           <select
-            value={skillForm.category || "Frontend"}
+            value={
+              skillForm.category ||
+              "Frontend"
+            }
             onChange={(e) =>
-              setSkillForm({ ...skillForm, category: e.target.value })
+              setSkillForm({
+                ...skillForm,
+                category: e.target.value,
+              })
             }
             className="w-full rounded-lg border border-gray-700 bg-gray-800 p-3 text-white focus:border-teal-500 focus:outline-none"
           >
-            <option value="Frontend">Frontend</option>
-            <option value="Backend">Backend</option>
-            <option value="Tools">Tools</option>
+            <option value="Frontend">
+              Frontend
+            </option>
+
+            <option value="Backend">
+              Backend
+            </option>
+
+            <option value="Tools">
+              Tools
+            </option>
           </select>
         </div>
 
-        {/* LEVEL */}
+        {/* ====================================================
+            LEVEL
+        ===================================================== */}
         <div>
           <div className="mb-2 flex items-center justify-between">
             <label className="block text-sm font-medium text-gray-300">
               Skill Level
             </label>
+
             <span className="font-bold text-teal-400">
               {skillForm.level || 0}%
             </span>
           </div>
+
           <input
             type="range"
             min="0"
             max="100"
             value={skillForm.level || 0}
             onChange={(e) =>
-              setSkillForm({ ...skillForm, level: Number(e.target.value) })
+              setSkillForm({
+                ...skillForm,
+                level: Number(
+                  e.target.value
+                ),
+              })
             }
             className="w-full accent-teal-500 cursor-pointer"
           />
         </div>
 
-        {/* COLOR & ORDER */}
+        {/* ====================================================
+            COLOR & ORDER
+        ===================================================== */}
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+          {/* COLOR */}
           <div>
             <label className="mb-2 block text-sm font-medium text-gray-300">
               Skill Color
             </label>
+
             <div className="flex items-center gap-3">
               <input
                 type="color"
-                value={skillForm.color || "#00d4ff"}
+                value={
+                  skillForm.color ||
+                  "#00d4ff"
+                }
                 onChange={(e) =>
-                  setSkillForm({ ...skillForm, color: e.target.value })
+                  setSkillForm({
+                    ...skillForm,
+                    color: e.target.value,
+                  })
                 }
                 className="h-11 w-14 cursor-pointer rounded-lg border border-gray-700 bg-gray-800 p-1"
               />
+
               <input
                 type="text"
-                value={skillForm.color || ""}
+                value={
+                  skillForm.color || ""
+                }
                 onChange={(e) =>
-                  setSkillForm({ ...skillForm, color: e.target.value })
+                  setSkillForm({
+                    ...skillForm,
+                    color: e.target.value,
+                  })
                 }
                 placeholder="#00d4ff"
                 className="w-full rounded-lg border border-gray-700 bg-gray-800 p-3 text-white focus:border-teal-500 focus:outline-none"
@@ -235,74 +523,142 @@ export default function Skills({ admin }) {
             </div>
           </div>
 
+          {/* ORDER */}
           <div>
             <label className="mb-2 block text-sm font-medium text-gray-300">
               Display Order
             </label>
+
             <input
               type="number"
               min="0"
-              value={skillForm.order ?? 0}
+              value={
+                skillForm.order ?? 0
+              }
               onChange={(e) =>
-                setSkillForm({ ...skillForm, order: Number(e.target.value) })
+                setSkillForm({
+                  ...skillForm,
+                  order: Number(
+                    e.target.value
+                  ),
+                })
               }
               className="w-full rounded-lg border border-gray-700 bg-gray-800 p-3 text-white focus:border-teal-500 focus:outline-none"
             />
           </div>
         </div>
 
-        {/* ICON */}
+        {/* ====================================================
+            ICON
+        ===================================================== */}
         <div>
           <label className="mb-2 block text-sm font-medium text-gray-300">
-            Icon Name (Lucide React)
+            Icon Name
           </label>
+
           <input
             type="text"
-            placeholder="e.g. Code, Server, Wrench, Terminal, Database"
+            placeholder="e.g. SiReact, SiFirebase, SiNodedotjs, SiJavascript"
             value={skillForm.icon || ""}
             onChange={(e) =>
-              setSkillForm({ ...skillForm, icon: e.target.value })
+              setSkillForm({
+                ...skillForm,
+                icon: e.target.value,
+              })
             }
             className="w-full rounded-lg border border-gray-700 bg-gray-800 p-3 text-white focus:border-teal-500 focus:outline-none"
           />
+
+          <div className="mt-2 space-y-1">
+            <p className="text-xs text-gray-500">
+              Recommended Simple Icons names:
+            </p>
+
+            <p className="text-xs text-teal-400">
+              React → SiReact
+            </p>
+
+            <p className="text-xs text-teal-400">
+              Firebase → SiFirebase
+            </p>
+
+            <p className="text-xs text-teal-400">
+              Node.js → SiNodedotjs
+            </p>
+
+            <p className="text-xs text-teal-400">
+              JavaScript → SiJavascript
+            </p>
+          </div>
         </div>
 
-        {/* PREVIEW */}
+        {/* ====================================================
+            LIVE PREVIEW
+        ===================================================== */}
         <div className="rounded-xl border border-gray-800 bg-gray-950 p-4">
           <p className="mb-3 text-xs uppercase tracking-wider text-gray-500 font-bold">
             Live Preview
           </p>
+
           <div className="flex items-center gap-4">
+            {/* ICON PREVIEW */}
             <div
               className="flex h-12 w-12 items-center justify-center rounded-xl border"
               style={{
-                borderColor: `${skillForm.color || "#00d4ff"}55`,
-                backgroundColor: `${skillForm.color || "#00d4ff"}10`,
+                borderColor: `${
+                  skillForm.color ||
+                  "#00d4ff"
+                }55`,
+
+                backgroundColor: `${
+                  skillForm.color ||
+                  "#00d4ff"
+                }10`,
               }}
             >
               <RenderIcon
                 name={skillForm.icon}
-                color={skillForm.color || "#00d4ff"}
+                color={
+                  skillForm.color ||
+                  "#00d4ff"
+                }
               />
             </div>
+
+            {/* PREVIEW CONTENT */}
             <div className="flex-1">
               <div className="flex justify-between text-sm mb-1">
                 <span className="font-semibold text-white">
-                  {skillForm.name || "Skill Name"}
+                  {skillForm.name ||
+                    "Skill Name"}
                 </span>
+
                 <span
                   className="font-bold"
-                  style={{ color: skillForm.color || "#00d4ff" }}
+                  style={{
+                    color:
+                      skillForm.color ||
+                      "#00d4ff",
+                  }}
                 >
-                  {skillForm.level || 0}%
+                  {skillForm.level ||
+                    0}
+                  %
                 </span>
               </div>
+
               <div className="h-2 w-full overflow-hidden rounded-full bg-gray-800">
                 <div
                   className="h-full transition-all duration-300"
                   style={{
-                    width: `${skillForm.level || 0}%`,
-                    backgroundColor: skillForm.color || "#00d4ff",
+                    width: `${
+                      skillForm.level ||
+                      0
+                    }%`,
+
+                    backgroundColor:
+                      skillForm.color ||
+                      "#00d4ff",
                   }}
                 />
               </div>
@@ -310,14 +666,20 @@ export default function Skills({ admin }) {
           </div>
         </div>
 
-        {/* BUTTONS */}
+        {/* ====================================================
+            BUTTONS
+        ===================================================== */}
         <div className="flex gap-3">
           <button
             type="submit"
             disabled={loading}
             className="rounded-lg bg-teal-600 px-6 py-3 font-semibold text-white transition hover:bg-teal-500 disabled:opacity-50"
           >
-            {loading ? "Saving..." : editingId ? "Update Skill" : "Save Skill"}
+            {loading
+              ? "Saving..."
+              : editingId
+              ? "Update Skill"
+              : "Save Skill"}
           </button>
 
           {editingId && (
@@ -332,15 +694,22 @@ export default function Skills({ admin }) {
         </div>
       </form>
 
-      {/* 📋 SKILLS LIST SECTION */}
+      {/* ======================================================
+          UPLOADED SKILLS LIST
+      ======================================================= */}
       <div className="overflow-hidden rounded-xl border border-gray-800 bg-gray-900">
+        {/* HEADER */}
         <div className="flex flex-col gap-4 border-b border-gray-800 p-4 sm:p-6 sm:flex-row sm:items-center sm:justify-between">
           <h3 className="text-xl font-semibold text-teal-300">
-            Uploaded Skills List ({filteredSkills.length})
+            Uploaded Skills List (
+            {filteredSkills.length})
           </h3>
+
           <button
             type="button"
-            onClick={() => fetchData("skills")}
+            onClick={() =>
+              fetchData("skills")
+            }
             disabled={loading}
             className="rounded-lg bg-gray-800 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 transition"
           >
@@ -348,101 +717,173 @@ export default function Skills({ admin }) {
           </button>
         </div>
 
-        {/* CATEGORY FILTER TABS */}
+        {/* ====================================================
+            CATEGORY FILTER TABS
+        ===================================================== */}
         <div className="flex flex-wrap gap-2 border-b border-gray-800 bg-gray-950/50 p-3 px-4 sm:px-6">
-          {["All", "Frontend", "Backend", "Tools"].map((cat) => (
+          {[
+            "All",
+            "Frontend",
+            "Backend",
+            "Tools",
+          ].map((cat) => (
             <button
               key={cat}
               type="button"
-              onClick={() => setSelectedCategory(cat)}
+              onClick={() =>
+                setSelectedCategory(
+                  cat
+                )
+              }
               className={`rounded-lg px-3.5 py-1.5 text-xs font-semibold transition ${
-                selectedCategory === cat
+                selectedCategory ===
+                cat
                   ? "bg-teal-500/20 text-teal-300 border border-teal-500/40"
                   : "bg-gray-800/60 text-gray-400 hover:bg-gray-800 hover:text-white"
               }`}
             >
-              {cat} ({counts[cat] || 0})
+              {cat} (
+              {counts[cat] || 0})
             </button>
           ))}
         </div>
 
-        {/* CONTENT LIST */}
+        {/* ====================================================
+            CONTENT LIST
+        ===================================================== */}
         {loading ? (
-          <div className="p-8 text-center text-gray-400">Loading Skills...</div>
-        ) : filteredSkills.length === 0 ? (
+          <div className="p-8 text-center text-gray-400">
+            Loading Skills...
+          </div>
+        ) : filteredSkills.length ===
+          0 ? (
           <div className="p-8 text-center text-gray-500">
             No skills found under{" "}
-            <span className="text-teal-400">{selectedCategory}</span>.
+            <span className="text-teal-400">
+              {selectedCategory}
+            </span>
+            .
           </div>
         ) : (
           <div className="divide-y divide-gray-800">
-            {filteredSkills.map((item) => {
-              const color = item.color || "#00d4ff";
-              return (
-                <div
-                  key={item._id || item.id}
-                  className="flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-6 hover:bg-gray-800/40 transition"
-                >
-                  <div className="flex items-center gap-4 flex-1">
-                    <div
-                      className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border"
-                      style={{
-                        borderColor: `${color}55`,
-                        backgroundColor: `${color}10`,
-                      }}
-                    >
-                      <RenderIcon name={item.icon} color={color} />
-                    </div>
+            {filteredSkills.map(
+              (item) => {
+                const color =
+                  item.color ||
+                  "#00d4ff";
 
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-3">
-                        <h4 className="font-bold text-white">{item.name}</h4>
-                        <span className="rounded-full bg-gray-800 px-2.5 py-0.5 text-xs font-medium text-teal-400 border border-gray-700">
-                          {item.category}
-                        </span>
+                const iconName =
+                  normalizeIconName(
+                    item.icon
+                  );
+
+                return (
+                  <div
+                    key={
+                      item._id ||
+                      item.id
+                    }
+                    className="flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-6 hover:bg-gray-800/40 transition"
+                  >
+                    {/* ==================================================
+                        SKILL INFO
+                    =================================================== */}
+                    <div className="flex items-center gap-4 flex-1">
+                      {/* ICON */}
+                      <div
+                        className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border"
+                        style={{
+                          borderColor: `${color}55`,
+                          backgroundColor: `${color}10`,
+                        }}
+                      >
+                        <RenderIcon
+                          name={iconName}
+                          color={color}
+                        />
                       </div>
-                      <div className="mt-2 flex items-center gap-4 max-w-xs">
-                        <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-gray-800">
-                          <div
-                            className="h-full transition-all duration-300"
-                            style={{
-                              width: `${item.level}%`,
-                              backgroundColor: color,
-                            }}
-                          />
+
+                      {/* NAME + LEVEL */}
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-3">
+                          <h4 className="font-bold text-white">
+                            {item.name}
+                          </h4>
+
+                          <span className="rounded-full bg-gray-800 px-2.5 py-0.5 text-xs font-medium text-teal-400 border border-gray-700">
+                            {item.category}
+                          </span>
                         </div>
-                        <span
-                          className="text-xs font-bold"
-                          style={{ color }}
-                        >
-                          {item.level}%
-                        </span>
+
+                        {/* LEVEL BAR */}
+                        <div className="mt-2 flex items-center gap-4 max-w-xs">
+                          <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-gray-800">
+                            <div
+                              className="h-full transition-all duration-300"
+                              style={{
+                                width: `${item.level}%`,
+                                backgroundColor:
+                                  color,
+                              }}
+                            />
+                          </div>
+
+                          <span
+                            className="text-xs font-bold"
+                            style={{
+                              color,
+                            }}
+                          >
+                            {item.level}%
+                          </span>
+                        </div>
+
+                        {/* ICON NAME */}
+                        <p className="mt-1 text-[11px] text-gray-500">
+                          Icon:{" "}
+                          <span className="text-gray-400">
+                            {iconName ||
+                              "Default"}
+                          </span>
+                        </p>
                       </div>
                     </div>
-                  </div>
 
-                  {/* ✏️ 🗑️ EDIT & DELETE BUTTONS AT THE BOTTOM / RIGHT */}
-                  <div className="flex items-center justify-end gap-2 border-t border-gray-800/60 pt-3 sm:border-0 sm:pt-0">
-                    <button
-                      type="button"
-                      onClick={() => handleEditSkill(item)}
-                      disabled={loading}
-                      className="rounded-lg bg-cyan-500/10 px-4 py-1.5 text-sm font-medium text-cyan-400 hover:bg-cyan-500/20 transition"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => handleDeleteSkill(item._id || item.id)}
-                      disabled={loading}
-                      className="rounded-lg bg-red-500/10 px-4 py-1.5 text-sm font-medium text-red-400 hover:bg-red-500/20 transition"
-                    >
-                      Delete
-                    </button>
+                    {/* ==================================================
+                        EDIT & DELETE BUTTONS
+                    =================================================== */}
+                    <div className="flex items-center justify-end gap-2 border-t border-gray-800/60 pt-3 sm:border-0 sm:pt-0">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          handleEditSkill(
+                            item
+                          )
+                        }
+                        disabled={loading}
+                        className="rounded-lg bg-cyan-500/10 px-4 py-1.5 text-sm font-medium text-cyan-400 hover:bg-cyan-500/20 transition"
+                      >
+                        Edit
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() =>
+                          handleDeleteSkill(
+                            item._id ||
+                              item.id
+                          )
+                        }
+                        disabled={loading}
+                        className="rounded-lg bg-red-500/10 px-4 py-1.5 text-sm font-medium text-red-400 hover:bg-red-500/20 transition"
+                      >
+                        Delete
+                      </button>
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              }
+            )}
           </div>
         )}
       </div>

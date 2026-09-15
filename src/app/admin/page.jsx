@@ -11,6 +11,7 @@ import Education from "./Education";
 import Skills from "./Skills";
 import Certificates from "./Certificates";
 import UpcomingProject from "./UpcomingProject";
+
 import Comments from "./Comments";
 
 import {
@@ -109,15 +110,15 @@ export default function AdminPanel() {
   // =========================================================
 
   const [educationForm, setEducationForm] = useState({
-  type: "education",
-  title: "",
-  degree: "",
-  institution: "",
-  passingYear: "",
-  description: "",
-  points: [],
-  link: "",
-});
+    type: "education",
+    title: "",
+    degree: "",
+    institution: "",
+    passingYear: "",
+    description: "",
+    points: [],
+    link: "",
+  });
 
   // =========================================================
   // PROJECT FORM
@@ -176,8 +177,10 @@ export default function AdminPanel() {
   const [existingCertificateImage, setExistingCertificateImage] =
     useState("");
 
-  const [existingCertificateDocument, setExistingCertificateDocument] =
-    useState("");
+  const [
+    existingCertificateDocument,
+    setExistingCertificateDocument,
+  ] = useState("");
 
   const [editingCertificate, setEditingCertificate] = useState(null);
 
@@ -361,7 +364,8 @@ export default function AdminPanel() {
       console.error("About Fetch Error:", error);
 
       setAboutMessage(
-        error.message || "Failed to load About information."
+        error.message ||
+          "Failed to load About information."
       );
     } finally {
       setAboutLoading(false);
@@ -435,22 +439,32 @@ export default function AdminPanel() {
       setAboutForm({
         name: data.data?.name || aboutForm.name,
         location:
-          data.data?.location || aboutForm.location,
-        email: data.data?.email || aboutForm.email,
+          data.data?.location ||
+          aboutForm.location,
+        email:
+          data.data?.email ||
+          aboutForm.email,
         education:
-          data.data?.education || aboutForm.education,
-        intro: data.data?.intro || aboutForm.intro,
+          data.data?.education ||
+          aboutForm.education,
+        intro:
+          data.data?.intro ||
+          aboutForm.intro,
         paragraph1:
-          data.data?.paragraph1 || aboutForm.paragraph1,
+          data.data?.paragraph1 ||
+          aboutForm.paragraph1,
         paragraph2:
-          data.data?.paragraph2 || aboutForm.paragraph2,
+          data.data?.paragraph2 ||
+          aboutForm.paragraph2,
       });
 
       setAboutMessage(
         "About information updated successfully!"
       );
 
-      alert("About information updated successfully!");
+      alert(
+        "About information updated successfully!"
+      );
     } catch (error) {
       console.error("About Update Error:", error);
 
@@ -471,14 +485,20 @@ export default function AdminPanel() {
     try {
       setCertificateLoading(true);
 
-      const response = await fetch("/api/certificates", {
-        method: "GET",
-        cache: "no-store",
-      });
+      const response = await fetch(
+        "/api/certificates",
+        {
+          method: "GET",
+          cache: "no-store",
+        }
+      );
 
       const data = await response.json();
 
-      console.log("Certificates API Response:", data);
+      console.log(
+        "Certificates API Response:",
+        data
+      );
 
       if (!response.ok || !data.success) {
         throw new Error(
@@ -488,7 +508,9 @@ export default function AdminPanel() {
         );
       }
 
-      const certificateList = Array.isArray(data.data)
+      const certificateList = Array.isArray(
+        data.data
+      )
         ? data.data
         : Array.isArray(data.certificates)
         ? data.certificates
@@ -496,12 +518,16 @@ export default function AdminPanel() {
 
       setCertificates(certificateList);
     } catch (error) {
-      console.error("Certificate API Error:", error);
+      console.error(
+        "Certificate API Error:",
+        error
+      );
 
       setCertificates([]);
 
       alert(
-        error.message || "Failed to load certificates."
+        error.message ||
+          "Failed to load certificates."
       );
     } finally {
       setCertificateLoading(false);
@@ -514,27 +540,40 @@ export default function AdminPanel() {
 
   const fetchResume = async () => {
     try {
-      const response = await fetch("/api/resume?info=true", {
-        method: "GET",
-        cache: "no-store",
-      });
+      const response = await fetch(
+        "/api/resume?info=true",
+        {
+          method: "GET",
+          cache: "no-store",
+        }
+      );
 
       const data = await response.json();
 
-      if (response.status === 404 || !data?.resume) {
+      if (
+        response.status === 404 ||
+        !data?.resume
+      ) {
         setResumeInfo(null);
         return;
       }
 
       if (!response.ok) {
         throw new Error(
-          data.message || "Failed to fetch resume."
+          data.message ||
+            "Failed to fetch resume."
         );
       }
 
-      setResumeInfo(data.resume || null);
+      setResumeInfo(
+        data.resume || null
+      );
     } catch (error) {
-      console.error("Resume Fetch Error:", error);
+      console.error(
+        "Resume Fetch Error:",
+        error
+      );
+
       setResumeInfo(null);
     }
   };
@@ -550,7 +589,9 @@ export default function AdminPanel() {
     }
 
     if (file.type !== "application/pdf") {
-      alert("Please select a valid PDF file.");
+      alert(
+        "Please select a valid PDF file."
+      );
 
       e.target.value = "";
       setResumeFile(null);
@@ -558,7 +599,9 @@ export default function AdminPanel() {
     }
 
     if (file.size > 10 * 1024 * 1024) {
-      alert("Resume PDF must be less than 10MB.");
+      alert(
+        "Resume PDF must be less than 10MB."
+      );
 
       e.target.value = "";
       setResumeFile(null);
@@ -572,7 +615,10 @@ export default function AdminPanel() {
     e.preventDefault();
 
     if (!resumeFile) {
-      setResumeMessage("Please select a PDF file first.");
+      setResumeMessage(
+        "Please select a PDF file first."
+      );
+
       return;
     }
 
@@ -582,36 +628,58 @@ export default function AdminPanel() {
 
       const formData = new FormData();
 
-      formData.append("file", resumeFile);
+      formData.append(
+        "file",
+        resumeFile
+      );
 
-      const response = await fetch("/api/resume", {
-        method: "POST",
-        body: formData,
-      });
+      const response = await fetch(
+        "/api/resume",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
 
       const data = await response.json();
 
-      if (!response.ok || !data.success) {
+      if (
+        !response.ok ||
+        !data.success
+      ) {
         throw new Error(
-          data.message || "Failed to upload resume."
+          data.message ||
+            "Failed to upload resume."
         );
       }
 
-      setResumeInfo(data.resume || null);
+      setResumeInfo(
+        data.resume || null
+      );
+
       setResumeFile(null);
 
-      setResumeMessage("Resume uploaded successfully!");
+      setResumeMessage(
+        "Resume uploaded successfully!"
+      );
 
-      const input = document.getElementById("resume-file");
+      const input =
+        document.getElementById(
+          "resume-file"
+        );
 
       if (input) {
         input.value = "";
       }
     } catch (error) {
-      console.error("Resume Upload Error:", error);
+      console.error(
+        "Resume Upload Error:",
+        error
+      );
 
       setResumeMessage(
-        error.message || "Failed to upload resume."
+        error.message ||
+          "Failed to upload resume."
       );
     } finally {
       setResumeLoading(false);
@@ -621,9 +689,10 @@ export default function AdminPanel() {
   const handleDeleteResume = async () => {
     if (!resumeInfo) return;
 
-    const confirmed = window.confirm(
-      "Are you sure you want to delete the current resume?"
-    );
+    const confirmed =
+      window.confirm(
+        "Are you sure you want to delete the current resume?"
+      );
 
     if (!confirmed) return;
 
@@ -631,26 +700,41 @@ export default function AdminPanel() {
       setResumeLoading(true);
       setResumeMessage("");
 
-      const response = await fetch("/api/resume", {
-        method: "DELETE",
-      });
+      const response =
+        await fetch(
+          "/api/resume",
+          {
+            method: "DELETE",
+          }
+        );
 
-      const data = await response.json();
+      const data =
+        await response.json();
 
-      if (!response.ok || !data.success) {
+      if (
+        !response.ok ||
+        !data.success
+      ) {
         throw new Error(
-          data.message || "Failed to delete resume."
+          data.message ||
+            "Failed to delete resume."
         );
       }
 
       setResumeInfo(null);
 
-      setResumeMessage("Resume deleted successfully!");
+      setResumeMessage(
+        "Resume deleted successfully!"
+      );
     } catch (error) {
-      console.error("Resume Delete Error:", error);
+      console.error(
+        "Resume Delete Error:",
+        error
+      );
 
       setResumeMessage(
-        error.message || "Failed to delete resume."
+        error.message ||
+          "Failed to delete resume."
       );
     } finally {
       setResumeLoading(false);
@@ -667,16 +751,16 @@ export default function AdminPanel() {
     setImageFile(null);
     setImagePreview("");
 
-   setEducationForm({
-  type: "education",
-  title: "",
-  degree: "",
-  institution: "",
-  passingYear: "",
-  description: "",
-  points: [],
-  link: "",
-});
+    setEducationForm({
+      type: "education",
+      title: "",
+      degree: "",
+      institution: "",
+      passingYear: "",
+      description: "",
+      points: [],
+      link: "",
+    });
 
     setProjectForm({
       title: "",
@@ -744,13 +828,15 @@ export default function AdminPanel() {
     setExistingCertificateImage("");
     setExistingCertificateDocument("");
 
-    const imageInput = document.getElementById(
-      "certificate-image"
-    );
+    const imageInput =
+      document.getElementById(
+        "certificate-image"
+      );
 
-    const documentInput = document.getElementById(
-      "certificate-document"
-    );
+    const documentInput =
+      document.getElementById(
+        "certificate-document"
+      );
 
     if (imageInput) {
       imageInput.value = "";
@@ -765,7 +851,9 @@ export default function AdminPanel() {
   // FETCH DATA
   // =========================================================
 
-  const fetchData = async (tab = activeTab) => {
+  const fetchData = async (
+    tab = activeTab
+  ) => {
     try {
       let endpoint = "";
 
@@ -775,41 +863,61 @@ export default function AdminPanel() {
         endpoint = "/api/projects";
       } else if (tab === "skills") {
         endpoint = "/api/skills";
-      } else if (tab === "upcomingProject") {
-        endpoint = "/api/upcomingProject";
+      } else if (
+        tab === "upcomingProject"
+      ) {
+        endpoint =
+          "/api/upcomingProject";
+
       } else {
         setItems([]);
         return;
       }
 
-      const res = await fetch(endpoint, {
-        method: "GET",
-        cache: "no-store",
-        credentials: "include",
-      });
+      const res = await fetch(
+        endpoint,
+        {
+          method: "GET",
+          cache: "no-store",
+          credentials: "include",
+        }
+      );
 
       if (!res.ok) {
-        throw new Error("HTTP Error: " + res.status);
+        throw new Error(
+          "HTTP Error: " +
+            res.status
+        );
       }
 
-      const result = await res.json();
+      const result =
+        await res.json();
 
-      console.log(tab + " API Result:", result);
+      console.log(
+        tab + " API Result:",
+        result
+      );
 
       if (result.success) {
         setItems(
-          Array.isArray(result.data)
+          Array.isArray(
+            result.data
+          )
             ? result.data
             : []
         );
       } else {
         setItems([]);
 
-        console.error(result.message);
+        console.error(
+          result.message
+        );
       }
     } catch (error) {
       console.error(
-        "Fetch " + tab + " Error:",
+        "Fetch " +
+          tab +
+          " Error:",
         error
       );
 
@@ -828,6 +936,7 @@ export default function AdminPanel() {
     resetCertificateForm();
 
     setItems([]);
+
     setActiveTab(tab);
   };
 
@@ -836,23 +945,28 @@ export default function AdminPanel() {
   // =========================================================
 
   const addUpcomingFeature = () => {
-    if (!featureInput.name.trim()) {
+    if (
+      !featureInput.name.trim()
+    ) {
       return;
     }
 
-    setUpcomingProjectForm((prev) => ({
-      ...prev,
+    setUpcomingProjectForm(
+      (prev) => ({
+        ...prev,
 
-      features: [
-        ...prev.features,
-        {
-          name: featureInput.name.trim(),
-          icon:
-            featureInput.icon.trim() ||
-            "Sparkles",
-        },
-      ],
-    }));
+        features: [
+          ...prev.features,
+          {
+            name:
+              featureInput.name.trim(),
+            icon:
+              featureInput.icon.trim() ||
+              "Sparkles",
+          },
+        ],
+      })
+    );
 
     setFeatureInput({
       name: "",
@@ -860,34 +974,45 @@ export default function AdminPanel() {
     });
   };
 
-  const removeUpcomingFeature = (index) => {
-    setUpcomingProjectForm((prev) => ({
-      ...prev,
+  const removeUpcomingFeature = (
+    index
+  ) => {
+    setUpcomingProjectForm(
+      (prev) => ({
+        ...prev,
 
-      features: prev.features.filter(
-        (_, i) => i !== index
-      ),
-    }));
+        features:
+          prev.features.filter(
+            (_, i) =>
+              i !== index
+          ),
+      })
+    );
   };
 
   const addUpcomingTech = () => {
-    if (!techInput.name.trim()) {
+    if (
+      !techInput.name.trim()
+    ) {
       return;
     }
 
-    setUpcomingProjectForm((prev) => ({
-      ...prev,
+    setUpcomingProjectForm(
+      (prev) => ({
+        ...prev,
 
-      tech: [
-        ...prev.tech,
-        {
-          name: techInput.name.trim(),
-          icon:
-            techInput.icon.trim() ||
-            "Code2",
-        },
-      ],
-    }));
+        tech: [
+          ...prev.tech,
+          {
+            name:
+              techInput.name.trim(),
+            icon:
+              techInput.icon.trim() ||
+              "Code2",
+          },
+        ],
+      })
+    );
 
     setTechInput({
       name: "",
@@ -895,17 +1020,25 @@ export default function AdminPanel() {
     });
   };
 
-  const removeUpcomingTech = (index) => {
-    setUpcomingProjectForm((prev) => ({
-      ...prev,
+  const removeUpcomingTech = (
+    index
+  ) => {
+    setUpcomingProjectForm(
+      (prev) => ({
+        ...prev,
 
-      tech: prev.tech.filter(
-        (_, i) => i !== index
-      ),
-    }));
+        tech:
+          prev.tech.filter(
+            (_, i) =>
+              i !== index
+          ),
+      })
+    );
   };
 
-  const handleEditUpcomingProject = (project) => {
+  const handleEditUpcomingProject = (
+    project
+  ) => {
     if (!project) return;
 
     setEditingId(project._id);
@@ -913,27 +1046,41 @@ export default function AdminPanel() {
     setUpcomingProjectForm({
       title: project.title || "",
 
-      tagline: project.tagline || "",
+      tagline:
+        project.tagline || "",
 
-      desc: project.desc || "",
+      desc:
+        project.desc || "",
 
-      image: project.image || "",
+      image:
+        project.image || "",
 
-      features: Array.isArray(project.features)
-        ? project.features
-        : [],
+      features:
+        Array.isArray(
+          project.features
+        )
+          ? project.features
+          : [],
 
-      tech: Array.isArray(project.tech)
-        ? project.tech
-        : [],
+      tech:
+        Array.isArray(
+          project.tech
+        )
+          ? project.tech
+          : [],
 
-      order: Number(project.order) || 0,
+      order:
+        Number(project.order) ||
+        0,
 
       isActive:
-        project.isActive !== false,
+        project.isActive !==
+        false,
     });
 
-    setActiveTab("upcomingProject");
+    setActiveTab(
+      "upcomingProject"
+    );
 
     window.scrollTo({
       top: 0,
@@ -941,435 +1088,576 @@ export default function AdminPanel() {
     });
   };
 
-  const handleDeleteUpcomingProject = async (id) => {
-    if (!id) {
-      alert("Upcoming Project ID is missing.");
-      return;
-    }
-
-    const confirmed = window.confirm(
-      "Are you sure you want to delete this upcoming project?"
-    );
-
-    if (!confirmed) return;
-
-    try {
-      setLoading(true);
-
-      const response = await fetch(
-        "/api/upcomingProject/" + id,
-        {
-          method: "DELETE",
-        }
-      );
-
-      const data = await response.json();
-
-      if (!response.ok || data.success === false) {
-        throw new Error(
-          data.message || "Delete failed"
+  const handleDeleteUpcomingProject =
+    async (id) => {
+      if (!id) {
+        alert(
+          "Upcoming Project ID is missing."
         );
+
+        return;
       }
 
-      setItems((prev) =>
-        prev.filter(
-          (item) => item._id !== id
-        )
-      );
+      const confirmed =
+        window.confirm(
+          "Are you sure you want to delete this upcoming project?"
+        );
 
-      if (editingId === id) {
-        resetForm();
+      if (!confirmed) return;
+
+      try {
+        setLoading(true);
+
+        const response =
+          await fetch(
+            "/api/upcomingProject/" +
+              id,
+            {
+              method: "DELETE",
+            }
+          );
+
+        const data =
+          await response.json();
+
+        if (
+          !response.ok ||
+          data.success ===
+            false
+        ) {
+          throw new Error(
+            data.message ||
+              "Delete failed"
+          );
+        }
+
+        setItems(
+          (prev) =>
+            prev.filter(
+              (item) =>
+                item._id !== id
+            )
+        );
+
+        if (
+          editingId === id
+        ) {
+          resetForm();
+        }
+
+        alert(
+          "Upcoming Project deleted successfully!"
+        );
+      } catch (error) {
+        console.error(
+          "Delete Upcoming Project Error:",
+          error
+        );
+
+        alert(
+          error.message ||
+            "Failed to delete upcoming project."
+        );
+      } finally {
+        setLoading(false);
       }
+    };
 
-      alert(
-        "Upcoming Project deleted successfully!"
-      );
-    } catch (error) {
-      console.error(
-        "Delete Upcoming Project Error:",
-        error
-      );
-
-      alert(
-        error.message ||
-          "Failed to delete upcoming project."
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleUpcomingProjectSubmit = async (e) => {
-    e.preventDefault();
-
-    if (!upcomingProjectForm.title.trim()) {
-      alert("Project title is required.");
-      return;
-    }
-
-    try {
-      setLoading(true);
-
-      const method = editingId
-        ? "PUT"
-        : "POST";
-
-      const url = editingId
-        ? "/api/upcomingProject/" + editingId
-        : "/api/upcomingProject";
-
-      const response = await fetch(url, {
-        method,
-
-        headers: {
-          "Content-Type": "application/json",
-        },
-
-        body: JSON.stringify(
-          upcomingProjectForm
-        ),
-      });
-
-      const data = await response.json();
+  const handleUpcomingProjectSubmit =
+    async (e) => {
+      e.preventDefault();
 
       if (
-        !response.ok ||
-        data.success === false
+        !upcomingProjectForm.title.trim()
       ) {
-        throw new Error(
-          data.message ||
-            "Something went wrong"
+        alert(
+          "Project title is required."
         );
+
+        return;
       }
 
-      alert(
-        editingId
-          ? "Upcoming Project updated successfully!"
-          : "Upcoming Project added successfully!"
-      );
+      try {
+        setLoading(true);
 
-      resetForm();
+        const method =
+          editingId
+            ? "PUT"
+            : "POST";
 
-      await fetchData(
-        "upcomingProject"
-      );
-    } catch (error) {
-      console.error(
-        "Upcoming Project Submit Error:",
-        error
-      );
+        const url =
+          editingId
+            ? "/api/upcomingProject/" +
+              editingId
+            : "/api/upcomingProject";
 
-      alert(
-        error.message ||
-          "Failed to save upcoming project."
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+        const response =
+          await fetch(url, {
+            method,
+
+            headers: {
+              "Content-Type":
+                "application/json",
+            },
+
+            body: JSON.stringify(
+              upcomingProjectForm
+            ),
+          });
+
+        const data =
+          await response.json();
+
+        if (
+          !response.ok ||
+          data.success ===
+            false
+        ) {
+          throw new Error(
+            data.message ||
+              "Something went wrong"
+          );
+        }
+
+        alert(
+          editingId
+            ? "Upcoming Project updated successfully!"
+            : "Upcoming Project added successfully!"
+        );
+
+        resetForm();
+
+        await fetchData(
+          "upcomingProject"
+        );
+      } catch (error) {
+        console.error(
+          "Upcoming Project Submit Error:",
+          error
+        );
+
+        alert(
+          error.message ||
+            "Failed to save upcoming project."
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
 
   // =========================================================
   // PROJECT IMAGE UPLOAD
   // =========================================================
 
-  const handleImageChange = (e) => {
-    const file = e.target.files?.[0];
+  const handleImageChange = (
+    e
+  ) => {
+    const file =
+      e.target.files?.[0];
 
     if (!file) return;
 
-    if (!file.type.startsWith("image/")) {
+    if (
+      !file.type.startsWith(
+        "image/"
+      )
+    ) {
       alert(
         "Please select a valid image file."
       );
 
       e.target.value = "";
+
       return;
     }
 
-    if (file.size > 5 * 1024 * 1024) {
+    if (
+      file.size >
+      5 * 1024 * 1024
+    ) {
       alert(
         "Image size must be less than 5MB."
       );
 
       e.target.value = "";
+
       return;
     }
 
     setImageFile(file);
 
-    const reader = new FileReader();
+    const reader =
+      new FileReader();
 
     reader.onload = () => {
-      const base64Image = reader.result;
+      const base64Image =
+        reader.result;
 
-      setImagePreview(base64Image);
+      setImagePreview(
+        base64Image
+      );
 
-      setProjectForm((prev) => ({
-        ...prev,
-        image: base64Image,
-      }));
+      setProjectForm(
+        (prev) => ({
+          ...prev,
+          image:
+            base64Image,
+        })
+      );
     };
 
     reader.onerror = () => {
-      alert("Failed to read image.");
+      alert(
+        "Failed to read image."
+      );
     };
 
-    reader.readAsDataURL(file);
+    reader.readAsDataURL(
+      file
+    );
   };
 
   // =========================================================
   // REMOVE PROJECT IMAGE
   // =========================================================
 
-  const handleRemoveImage = () => {
-    setImageFile(null);
-    setImagePreview("");
+  const handleRemoveImage =
+    () => {
+      setImageFile(null);
+      setImagePreview("");
 
-    setProjectForm((prev) => ({
-      ...prev,
-      image: "",
-    }));
-  };
+      setProjectForm(
+        (prev) => ({
+          ...prev,
+          image: "",
+        })
+      );
+    };
 
   // =========================================================
   // EDUCATION
   // =========================================================
 
-  const handleEditEducation = (item) => {
-  if (!item) return;
+  const handleEditEducation = (
+    item
+  ) => {
+    if (!item) return;
 
-  setEditingId(item._id || item.id);
-
-  setEducationForm({
-    type: item.type || "education",
-
-    title:
-      item.title ||
-      item.degree ||
-      "",
-
-    degree:
-      item.degree ||
-      item.title ||
-      "",
-
-    institution:
-      item.institution ||
-      "",
-
-    passingYear:
-      item.passingYear ||
-      "",
-
-    description:
-      item.description ||
-      "",
-
-    points: Array.isArray(item.points)
-      ? item.points
-      : [],
-
-    link:
-      item.link ||
-      "",
-  });
-
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth",
-  });
-};
-
-  const handleDeleteEducation = async (id) => {
-    const confirmed = window.confirm(
-      "Are you sure you want to delete this education?"
+    setEditingId(
+      item._id || item.id
     );
 
-    if (!confirmed) return;
+    setEducationForm({
+      type:
+        item.type ||
+        "education",
 
-    try {
-      setLoading(true);
-
-      const res = await fetch(
-        "/api/education",
-        {
-          method: "DELETE",
-
-          headers: {
-            "Content-Type":
-              "application/json",
-          },
-
-          body: JSON.stringify({
-            id,
-          }),
-        }
-      );
-
-      const result = await res.json();
-
-      if (result.success) {
-        setItems((prev) =>
-          prev.filter(
-            (item) => item._id !== id
-          )
-        );
-
-        alert(
-          "Education deleted successfully!"
-        );
-      } else {
-        alert(
-          result.message ||
-            "Delete failed!"
-        );
-      }
-    } catch (error) {
-      console.error(
-        "Delete Education Error:",
-        error
-      );
-
-      alert(
-        "Something went wrong while deleting!"
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleEducationSubmit = async (e) => {
-  e.preventDefault();
-
-  if (!educationForm.type) {
-    alert("Please select a type.");
-    return;
-  }
-
-  if (!educationForm.degree?.trim() && !educationForm.title?.trim()) {
-    alert("Title / Degree is required.");
-    return;
-  }
-
-  if (!educationForm.institution?.trim()) {
-    alert("Institution / Company is required.");
-    return;
-  }
-
-  if (!educationForm.passingYear?.trim()) {
-    alert("Year / Duration is required.");
-    return;
-  }
-
-  if (!educationForm.description?.trim()) {
-    alert("Description is required.");
-    return;
-  }
-
-  try {
-    setLoading(true);
-
-    const method = editingId ? "PUT" : "POST";
-
-    const body = {
-      ...(editingId && {
-        id: editingId,
-      }),
-
-      // IMPORTANT
-      type: educationForm.type,
-
-      // Title + backward compatibility
       title:
-        educationForm.title?.trim() ||
-        educationForm.degree?.trim() ||
+        item.title ||
+        item.degree ||
         "",
 
       degree:
-        educationForm.degree?.trim() ||
-        educationForm.title?.trim() ||
+        item.degree ||
+        item.title ||
         "",
 
       institution:
-        educationForm.institution?.trim() || "",
+        item.institution ||
+        "",
 
       passingYear:
-        educationForm.passingYear?.trim() || "",
+        item.passingYear ||
+        "",
 
       description:
-        educationForm.description?.trim() || "",
+        item.description ||
+        "",
 
-      points: Array.isArray(educationForm.points)
-        ? educationForm.points
-            .map((point) => point?.trim())
-            .filter(Boolean)
-        : [],
+      points:
+        Array.isArray(
+          item.points
+        )
+          ? item.points
+          : [],
 
       link:
-        educationForm.link?.trim() || "",
-    };
-
-    console.log("Education/Experience Submit Body:", body);
-
-    const res = await fetch("/api/education", {
-      method,
-
-      headers: {
-        "Content-Type": "application/json",
-      },
-
-      credentials: "include",
-
-      body: JSON.stringify(body),
+        item.link || "",
     });
 
-    const result = await res.json();
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
 
-    console.log("Education API Response:", result);
+  const handleDeleteEducation =
+    async (id) => {
+      const confirmed =
+        window.confirm(
+          "Are you sure you want to delete this education?"
+        );
 
-    if (result.success) {
-      const typeLabel = {
-        education: "Education",
-        course: "Course / Training",
-        experience: "Experience",
-        research: "Research / Project",
-      };
+      if (!confirmed) return;
 
-      alert(
-        editingId
-          ? `${typeLabel[educationForm.type] || "Item"} updated successfully!`
-          : `${typeLabel[educationForm.type] || "Item"} added successfully!`
-      );
+      try {
+        setLoading(true);
 
-      resetForm();
+        const res =
+          await fetch(
+            "/api/education",
+            {
+              method: "DELETE",
 
-      await fetchData("education");
-    } else {
-      alert(
-        result.message ||
-          "Education/Experience operation failed!"
-      );
-    }
-  } catch (error) {
-    console.error(
-      "Education/Experience Submit Error:",
-      error
-    );
+              headers: {
+                "Content-Type":
+                  "application/json",
+              },
 
-    alert(
-      error.message ||
-        "Something went wrong while saving!"
-    );
-  } finally {
-    setLoading(false);
-  }
-};
+              body: JSON.stringify({
+                id,
+              }),
+            }
+          );
+
+        const result =
+          await res.json();
+
+        if (result.success) {
+          setItems(
+            (prev) =>
+              prev.filter(
+                (item) =>
+                  item._id !== id
+              )
+          );
+
+          alert(
+            "Education deleted successfully!"
+          );
+        } else {
+          alert(
+            result.message ||
+              "Delete failed!"
+          );
+        }
+      } catch (error) {
+        console.error(
+          "Delete Education Error:",
+          error
+        );
+
+        alert(
+          "Something went wrong while deleting!"
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+  const handleEducationSubmit =
+    async (e) => {
+      e.preventDefault();
+
+      if (!educationForm.type) {
+        alert(
+          "Please select a type."
+        );
+
+        return;
+      }
+
+      if (
+        !educationForm.degree?.trim() &&
+        !educationForm.title?.trim()
+      ) {
+        alert(
+          "Title / Degree is required."
+        );
+
+        return;
+      }
+
+      if (
+        !educationForm.institution?.trim()
+      ) {
+        alert(
+          "Institution / Company is required."
+        );
+
+        return;
+      }
+
+      if (
+        !educationForm.passingYear?.trim()
+      ) {
+        alert(
+          "Year / Duration is required."
+        );
+
+        return;
+      }
+
+      if (
+        !educationForm.description?.trim()
+      ) {
+        alert(
+          "Description is required."
+        );
+
+        return;
+      }
+
+      try {
+        setLoading(true);
+
+        const method =
+          editingId
+            ? "PUT"
+            : "POST";
+
+        const body = {
+          ...(editingId && {
+            id: editingId,
+          }),
+
+          type:
+            educationForm.type,
+
+          title:
+            educationForm.title?.trim() ||
+            educationForm.degree?.trim() ||
+            "",
+
+          degree:
+            educationForm.degree?.trim() ||
+            educationForm.title?.trim() ||
+            "",
+
+          institution:
+            educationForm.institution?.trim() ||
+            "",
+
+          passingYear:
+            educationForm.passingYear?.trim() ||
+            "",
+
+          description:
+            educationForm.description?.trim() ||
+            "",
+
+          points:
+            Array.isArray(
+              educationForm.points
+            )
+              ? educationForm.points
+                  .map(
+                    (point) =>
+                      point?.trim()
+                  )
+                  .filter(Boolean)
+              : [],
+
+          link:
+            educationForm.link?.trim() ||
+            "",
+        };
+
+        console.log(
+          "Education/Experience Submit Body:",
+          body
+        );
+
+        const res =
+          await fetch(
+            "/api/education",
+            {
+              method,
+
+              headers: {
+                "Content-Type":
+                  "application/json",
+              },
+
+              credentials:
+                "include",
+
+              body: JSON.stringify(
+                body
+              ),
+            }
+          );
+
+        const result =
+          await res.json();
+
+        console.log(
+          "Education API Response:",
+          result
+        );
+
+        if (result.success) {
+          const typeLabel = {
+            education:
+              "Education",
+
+            course:
+              "Course / Training",
+
+            experience:
+              "Experience",
+
+            research:
+              "Research / Project",
+          };
+
+          alert(
+            editingId
+              ? `${
+                  typeLabel[
+                    educationForm.type
+                  ] || "Item"
+                } updated successfully!`
+              : `${
+                  typeLabel[
+                    educationForm.type
+                  ] || "Item"
+                } added successfully!`
+          );
+
+          resetForm();
+
+          await fetchData(
+            "education"
+          );
+        } else {
+          alert(
+            result.message ||
+              "Education/Experience operation failed!"
+          );
+        }
+      } catch (error) {
+        console.error(
+          "Education/Experience Submit Error:",
+          error
+        );
+
+        alert(
+          error.message ||
+            "Something went wrong while saving!"
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
 
   // =========================================================
   // PROJECTS
   // =========================================================
 
-  const handleEditProject = (item) => {
+  const handleEditProject = (
+    item
+  ) => {
     setEditingId(item._id);
 
     const existingImage =
@@ -1396,10 +1684,18 @@ export default function AdminPanel() {
         "",
 
       techStack:
-        Array.isArray(item.techStack)
-          ? item.techStack.join(", ")
-          : Array.isArray(item.tech)
-          ? item.tech.join(", ")
+        Array.isArray(
+          item.techStack
+        )
+          ? item.techStack.join(
+              ", "
+            )
+          : Array.isArray(
+              item.tech
+            )
+          ? item.tech.join(
+              ", "
+            )
           : item.techStack ||
             item.tech ||
             "",
@@ -1417,9 +1713,14 @@ export default function AdminPanel() {
         "",
 
       challenges:
-        Array.isArray(item.challenges)
-          ? item.challenges.join("\n")
-          : item.challenges || "",
+        Array.isArray(
+          item.challenges
+        )
+          ? item.challenges.join(
+              "\n"
+            )
+          : item.challenges ||
+            "",
 
       futureImprovements:
         Array.isArray(
@@ -1439,7 +1740,10 @@ export default function AdminPanel() {
             "",
     });
 
-    setImagePreview(existingImage);
+    setImagePreview(
+      existingImage
+    );
+
     setImageFile(null);
 
     window.scrollTo({
@@ -1448,192 +1752,206 @@ export default function AdminPanel() {
     });
   };
 
-  const handleDeleteProject = async (id) => {
-    const confirmed = window.confirm(
-      "Are you sure you want to delete this project?"
-    );
+  const handleDeleteProject =
+    async (id) => {
+      const confirmed =
+        window.confirm(
+          "Are you sure you want to delete this project?"
+        );
 
-    if (!confirmed) return;
+      if (!confirmed) return;
 
-    try {
-      setLoading(true);
+      try {
+        setLoading(true);
 
-      const res = await fetch(
-        "/api/projects",
-        {
-          method: "DELETE",
+        const res =
+          await fetch(
+            "/api/projects",
+            {
+              method: "DELETE",
 
-          headers: {
-            "Content-Type":
-              "application/json",
-          },
+              headers: {
+                "Content-Type":
+                  "application/json",
+              },
 
-          body: JSON.stringify({
-            id,
-          }),
+              body: JSON.stringify({
+                id,
+              }),
+            }
+          );
+
+        const result =
+          await res.json();
+
+        if (result.success) {
+          setItems(
+            (prev) =>
+              prev.filter(
+                (item) =>
+                  item._id !== id
+              )
+          );
+
+          alert(
+            "Project deleted successfully!"
+          );
+        } else {
+          alert(
+            result.message ||
+              "Project delete failed!"
+          );
         }
-      );
-
-      const result = await res.json();
-
-      if (result.success) {
-        setItems((prev) =>
-          prev.filter(
-            (item) => item._id !== id
-          )
+      } catch (error) {
+        console.error(
+          "Delete Project Error:",
+          error
         );
 
         alert(
-          "Project deleted successfully!"
+          "Something went wrong while deleting project!"
         );
-      } else {
-        alert(
-          result.message ||
-            "Project delete failed!"
-        );
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error(
-        "Delete Project Error:",
-        error
-      );
+    };
 
-      alert(
-        "Something went wrong while deleting project!"
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+  const handleProjectSubmit =
+    async (e) => {
+      e.preventDefault();
 
-  const handleProjectSubmit = async (e) => {
-    e.preventDefault();
-
-    if (
-      !editingId &&
-      !projectForm.image
-    ) {
-      alert(
-        "Please upload a project image."
-      );
-
-      return;
-    }
-
-    try {
-      setLoading(true);
-
-      const method = editingId
-        ? "PUT"
-        : "POST";
-
-      const body = {
-        ...(editingId && {
-          id: editingId,
-        }),
-
-        title:
-          projectForm.title,
-
-        image:
-          projectForm.image,
-
-        description:
-          projectForm.shortDescription,
-
-        shortDescription:
-          projectForm.shortDescription,
-
-        longDescription:
-          projectForm.longDescription,
-
-        techStack:
-          projectForm.techStack
-            .split(",")
-            .map(
-              (item) =>
-                item.trim()
-            )
-            .filter(Boolean),
-
-        liveLink:
-          projectForm.liveLink,
-
-        githubLink:
-          projectForm.githubLink,
-
-        challenges:
-          projectForm.challenges
-            .split("\n")
-            .map(
-              (item) =>
-                item.trim()
-            )
-            .filter(Boolean),
-
-        futureImprovements:
-          projectForm.futureImprovements
-            .split("\n")
-            .map(
-              (item) =>
-                item.trim()
-            )
-            .filter(Boolean),
-      };
-
-      const res = await fetch(
-        "/api/projects",
-        {
-          method,
-
-          headers: {
-            "Content-Type":
-              "application/json",
-          },
-
-          body: JSON.stringify(body),
-        }
-      );
-
-      const result = await res.json();
-
-      if (result.success) {
+      if (
+        !editingId &&
+        !projectForm.image
+      ) {
         alert(
+          "Please upload a project image."
+        );
+
+        return;
+      }
+
+      try {
+        setLoading(true);
+
+        const method =
           editingId
-            ? "Project updated successfully!"
-            : "Project added successfully!"
+            ? "PUT"
+            : "POST";
+
+        const body = {
+          ...(editingId && {
+            id: editingId,
+          }),
+
+          title:
+            projectForm.title,
+
+          image:
+            projectForm.image,
+
+          description:
+            projectForm.shortDescription,
+
+          shortDescription:
+            projectForm.shortDescription,
+
+          longDescription:
+            projectForm.longDescription,
+
+          techStack:
+            projectForm.techStack
+              .split(",")
+              .map(
+                (item) =>
+                  item.trim()
+              )
+              .filter(Boolean),
+
+          liveLink:
+            projectForm.liveLink,
+
+          githubLink:
+            projectForm.githubLink,
+
+          challenges:
+            projectForm.challenges
+              .split("\n")
+              .map(
+                (item) =>
+                  item.trim()
+              )
+              .filter(Boolean),
+
+          futureImprovements:
+            projectForm.futureImprovements
+              .split("\n")
+              .map(
+                (item) =>
+                  item.trim()
+              )
+              .filter(Boolean),
+        };
+
+        const res =
+          await fetch(
+            "/api/projects",
+            {
+              method,
+
+              headers: {
+                "Content-Type":
+                  "application/json",
+              },
+
+              body: JSON.stringify(
+                body
+              ),
+            }
+          );
+
+        const result =
+          await res.json();
+
+        if (result.success) {
+          alert(
+            editingId
+              ? "Project updated successfully!"
+              : "Project added successfully!"
+          );
+
+          resetForm();
+
+          await fetchData(
+            "projects"
+          );
+        } else {
+          alert(
+            result.message ||
+              "Project operation failed!"
+          );
+        }
+      } catch (error) {
+        console.error(
+          "Project Submit Error:",
+          error
         );
 
-        resetForm();
-
-        await fetchData(
-          "projects"
-        );
-      } else {
         alert(
-          result.message ||
-            "Project operation failed!"
+          "Something went wrong while saving project!"
         );
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error(
-        "Project Submit Error:",
-        error
-      );
-
-      alert(
-        "Something went wrong while saving project!"
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
 
   // =========================================================
   // SKILLS
   // =========================================================
 
-  const handleEditSkill = (item) => {
+  const handleEditSkill = (
+    item
+  ) => {
     setEditingId(item._id);
 
     setSkillForm({
@@ -1656,8 +1974,7 @@ export default function AdminPanel() {
         "#00d4ff",
 
       icon:
-        item.icon ||
-        "",
+        item.icon || "",
 
       order:
         typeof item.order ===
@@ -1673,714 +1990,798 @@ export default function AdminPanel() {
     });
   };
 
-  const handleDeleteSkill = async (id) => {
-    const confirmed = window.confirm(
-      "Are you sure you want to delete this skill?"
-    );
+  const handleDeleteSkill =
+    async (id) => {
+      const confirmed =
+        window.confirm(
+          "Are you sure you want to delete this skill?"
+        );
 
-    if (!confirmed) return;
+      if (!confirmed) return;
 
-    try {
-      setLoading(true);
+      try {
+        setLoading(true);
 
-      const res = await fetch(
-        "/api/skills",
-        {
-          method: "DELETE",
+        const res =
+          await fetch(
+            "/api/skills",
+            {
+              method: "DELETE",
 
-          headers: {
-            "Content-Type":
-              "application/json",
-          },
+              headers: {
+                "Content-Type":
+                  "application/json",
+              },
 
-          body: JSON.stringify({
-            id,
-          }),
+              body: JSON.stringify({
+                id,
+              }),
+            }
+          );
+
+        const result =
+          await res.json();
+
+        if (result.success) {
+          setItems(
+            (prev) =>
+              prev.filter(
+                (item) =>
+                  item._id !== id
+              )
+          );
+
+          alert(
+            "Skill deleted successfully!"
+          );
+        } else {
+          alert(
+            result.message ||
+              "Skill delete failed!"
+          );
         }
-      );
-
-      const result = await res.json();
-
-      if (result.success) {
-        setItems((prev) =>
-          prev.filter(
-            (item) => item._id !== id
-          )
+      } catch (error) {
+        console.error(
+          "Delete Skill Error:",
+          error
         );
 
         alert(
-          "Skill deleted successfully!"
+          "Something went wrong while deleting skill!"
         );
-      } else {
-        alert(
-          result.message ||
-            "Skill delete failed!"
-        );
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error(
-        "Delete Skill Error:",
-        error
-      );
+    };
 
-      alert(
-        "Something went wrong while deleting skill!"
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+  const handleSkillSubmit =
+    async (e) => {
+      e.preventDefault();
 
-  const handleSkillSubmit = async (e) => {
-    e.preventDefault();
-
-    if (!skillForm.name.trim()) {
-      alert(
-        "Skill name is required."
-      );
-
-      return;
-    }
-
-    const skillLevel = Number(
-      skillForm.level
-    );
-
-    if (
-      Number.isNaN(skillLevel) ||
-      skillLevel < 0 ||
-      skillLevel > 100
-    ) {
-      alert(
-        "Skill level must be between 0 and 100."
-      );
-
-      return;
-    }
-
-    try {
-      setLoading(true);
-
-      const method = editingId
-        ? "PUT"
-        : "POST";
-
-      const body = {
-        ...(editingId && {
-          id: editingId,
-        }),
-
-        name:
-          skillForm.name.trim(),
-
-        category:
-          skillForm.category,
-
-        level:
-          skillLevel,
-
-        color:
-          skillForm.color ||
-          "#00d4ff",
-
-        icon:
-          skillForm.icon.trim(),
-
-        order:
-          Number(
-            skillForm.order
-          ) || 0,
-      };
-
-      const res = await fetch(
-        "/api/skills",
-        {
-          method,
-
-          headers: {
-            "Content-Type":
-              "application/json",
-          },
-
-          body: JSON.stringify(body),
-        }
-      );
-
-      const result = await res.json();
-
-      if (result.success) {
+      if (
+        !skillForm.name.trim()
+      ) {
         alert(
+          "Skill name is required."
+        );
+
+        return;
+      }
+
+      const skillLevel =
+        Number(
+          skillForm.level
+        );
+
+      if (
+        Number.isNaN(
+          skillLevel
+        ) ||
+        skillLevel < 0 ||
+        skillLevel > 100
+      ) {
+        alert(
+          "Skill level must be between 0 and 100."
+        );
+
+        return;
+      }
+
+      try {
+        setLoading(true);
+
+        const method =
           editingId
-            ? "Skill updated successfully!"
-            : "Skill added successfully!"
+            ? "PUT"
+            : "POST";
+
+        const body = {
+          ...(editingId && {
+            id: editingId,
+          }),
+
+          name:
+            skillForm.name.trim(),
+
+          category:
+            skillForm.category,
+
+          level:
+            skillLevel,
+
+          color:
+            skillForm.color ||
+            "#00d4ff",
+
+          icon:
+            skillForm.icon.trim(),
+
+          order:
+            Number(
+              skillForm.order
+            ) || 0,
+        };
+
+        const res =
+          await fetch(
+            "/api/skills",
+            {
+              method,
+
+              headers: {
+                "Content-Type":
+                  "application/json",
+              },
+
+              body: JSON.stringify(
+                body
+              ),
+            }
+          );
+
+        const result =
+          await res.json();
+
+        if (result.success) {
+          alert(
+            editingId
+              ? "Skill updated successfully!"
+              : "Skill added successfully!"
+          );
+
+          resetForm();
+
+          await fetchData(
+            "skills"
+          );
+        } else {
+          alert(
+            result.message ||
+              "Skill operation failed!"
+          );
+        }
+      } catch (error) {
+        console.error(
+          "Skill Submit Error:",
+          error
         );
 
-        resetForm();
-
-        await fetchData(
-          "skills"
-        );
-      } else {
         alert(
-          result.message ||
-            "Skill operation failed!"
+          "Something went wrong while saving skill!"
         );
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error(
-        "Skill Submit Error:",
-        error
-      );
-
-      alert(
-        "Something went wrong while saving skill!"
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
 
   // =========================================================
   // CERTIFICATE INPUT HANDLER
   // =========================================================
 
-  const handleCertificateChange = (e) => {
-    const {
-      name,
-      value,
-    } = e.target;
+  const handleCertificateChange =
+    (e) => {
+      const {
+        name,
+        value,
+      } = e.target;
 
-    setCertificateForm((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+      setCertificateForm(
+        (prev) => ({
+          ...prev,
+          [name]: value,
+        })
+      );
+    };
 
   // =========================================================
   // CERTIFICATE IMAGE FILE HANDLER
   // =========================================================
 
-  const handleCertificateImageChange = (e) => {
-    const file = e.target.files?.[0];
+  const handleCertificateImageChange =
+    (e) => {
+      const file =
+        e.target.files?.[0];
 
-    if (!file) return;
+      if (!file) return;
 
-    if (!file.type.startsWith("image/")) {
-      alert(
-        "Please select a valid image file."
+      if (
+        !file.type.startsWith(
+          "image/"
+        )
+      ) {
+        alert(
+          "Please select a valid image file."
+        );
+
+        e.target.value = "";
+
+        return;
+      }
+
+      if (
+        file.size >
+        5 * 1024 * 1024
+      ) {
+        alert(
+          "Certificate image must be less than 5MB."
+        );
+
+        e.target.value = "";
+
+        return;
+      }
+
+      setCertificateImageFile(
+        file
       );
 
-      e.target.value = "";
-      return;
-    }
+      const reader =
+        new FileReader();
 
-    if (file.size > 5 * 1024 * 1024) {
-      alert(
-        "Certificate image must be less than 5MB."
-      );
+      reader.onload = () => {
+        setCertificateImagePreview(
+          reader.result
+        );
+      };
 
-      e.target.value = "";
-      return;
-    }
+      reader.onerror = () => {
+        alert(
+          "Failed to read certificate image."
+        );
+      };
 
-    setCertificateImageFile(file);
-
-    const reader = new FileReader();
-
-    reader.onload = () => {
-      setCertificateImagePreview(
-        reader.result
+      reader.readAsDataURL(
+        file
       );
     };
-
-    reader.onerror = () => {
-      alert(
-        "Failed to read certificate image."
-      );
-    };
-
-    reader.readAsDataURL(file);
-  };
 
   // =========================================================
   // CERTIFICATE PDF FILE HANDLER
   // =========================================================
 
-  const handleCertificateDocumentChange = (e) => {
-    const file = e.target.files?.[0];
+  const handleCertificateDocumentChange =
+    (e) => {
+      const file =
+        e.target.files?.[0];
 
-    if (!file) return;
+      if (!file) return;
 
-    const isPDF =
-      file.type ===
-        "application/pdf" ||
-      file.name
-        .toLowerCase()
-        .endsWith(".pdf");
+      const isPDF =
+        file.type ===
+          "application/pdf" ||
+        file.name
+          .toLowerCase()
+          .endsWith(".pdf");
 
-    if (!isPDF) {
-      alert(
-        "Please select a valid PDF document."
+      if (!isPDF) {
+        alert(
+          "Please select a valid PDF document."
+        );
+
+        e.target.value = "";
+
+        return;
+      }
+
+      if (
+        file.size >
+        10 * 1024 * 1024
+      ) {
+        alert(
+          "Certificate PDF must be less than 10MB."
+        );
+
+        e.target.value = "";
+
+        return;
+      }
+
+      setCertificateDocumentFile(
+        file
       );
 
-      e.target.value = "";
-      return;
-    }
-
-    if (file.size > 10 * 1024 * 1024) {
-      alert(
-        "Certificate PDF must be less than 10MB."
+      setCertificateDocumentName(
+        file.name
       );
-
-      e.target.value = "";
-      return;
-    }
-
-    setCertificateDocumentFile(file);
-
-    setCertificateDocumentName(
-      file.name
-    );
-  };
+    };
 
   // =========================================================
   // ADD / UPDATE CERTIFICATE
   // =========================================================
 
-  const handleCertificateSubmit = async (e) => {
-    e.preventDefault();
+  const handleCertificateSubmit =
+    async (e) => {
+      e.preventDefault();
 
-    if (
-      !certificateForm.title?.trim() ||
-      !certificateForm.organization?.trim() ||
-      !certificateForm.date?.trim()
-    ) {
-      alert(
-        "Please fill in certificate title, organization and date."
-      );
-
-      return;
-    }
-
-    if (
-      !editingCertificate &&
-      !certificateDocumentFile
-    ) {
-      alert(
-        "Please upload a certificate PDF document."
-      );
-
-      return;
-    }
-
-    if (certificateDocumentFile) {
-      const fileName =
-        certificateDocumentFile.name?.toLowerCase() ||
-        "";
-
-      const fileType =
-        certificateDocumentFile.type ||
-        "";
-
-      const isPdf =
-        fileType ===
-          "application/pdf" ||
-        fileName.endsWith(".pdf");
-
-      if (!isPdf) {
+      if (
+        !certificateForm.title?.trim() ||
+        !certificateForm.organization?.trim() ||
+        !certificateForm.date?.trim()
+      ) {
         alert(
-          "Please select a valid PDF certificate document."
+          "Please fill in certificate title, organization and date."
         );
 
         return;
       }
-    }
-
-    try {
-      setCertificateLoading(true);
-
-      const formData = new FormData();
-
-      formData.append(
-        "title",
-        certificateForm.title.trim()
-      );
-
-      formData.append(
-        "organization",
-        certificateForm.organization.trim()
-      );
-
-      formData.append(
-        "date",
-        certificateForm.date.trim()
-      );
-
-      formData.append(
-        "displayOrder",
-        String(
-          Number(
-            certificateForm.order
-          ) || 0
-        )
-      );
 
       if (
-        existingCertificateImage &&
-        typeof existingCertificateImage ===
-          "string"
+        !editingCertificate &&
+        !certificateDocumentFile
       ) {
-        formData.append(
-          "existingImageUrl",
-          existingCertificateImage
+        alert(
+          "Please upload a certificate PDF document."
         );
+
+        return;
       }
 
       if (
-        existingCertificateDocument &&
-        typeof existingCertificateDocument ===
-          "string"
-      ) {
-        formData.append(
-          "existingDocumentUrl",
-          existingCertificateDocument
-        );
-      }
-
-      if (
-        certificateImageFile instanceof
-        File
-      ) {
-        formData.append(
-          "image",
-          certificateImageFile
-        );
-      }
-
-      if (
-        certificateDocumentFile instanceof
-        File
-      ) {
-        formData.append(
-          "document",
-          certificateDocumentFile
-        );
-      }
-
-      console.log(
-        "Certificate PDF:",
         certificateDocumentFile
-      );
-
-      console.log(
-        "PDF name:",
-        certificateDocumentFile?.name
-      );
-
-      console.log(
-        "PDF type:",
-        certificateDocumentFile?.type
-      );
-
-      console.log(
-        "PDF size:",
-        certificateDocumentFile?.size
-      );
-
-      for (
-        const [
-          key,
-          value,
-        ] of formData.entries()
       ) {
-        if (value instanceof File) {
-          console.log(
-            "FormData " + key + ":",
-            value.name,
-            value.type,
-            value.size
+        const fileName =
+          certificateDocumentFile.name?.toLowerCase() ||
+          "";
+
+        const fileType =
+          certificateDocumentFile.type ||
+          "";
+
+        const isPdf =
+          fileType ===
+            "application/pdf" ||
+          fileName.endsWith(
+            ".pdf"
           );
-        } else {
-          console.log(
-            "FormData " + key + ":",
-            value
+
+        if (!isPdf) {
+          alert(
+            "Please select a valid PDF certificate document."
           );
+
+          return;
         }
       }
 
-      let response;
+      try {
+        setCertificateLoading(
+          true
+        );
 
-      if (editingCertificate) {
+        const formData =
+          new FormData();
+
         formData.append(
-          "id",
-          editingCertificate._id
+          "title",
+          certificateForm.title.trim()
         );
 
-        response = await fetch(
-          "/api/certificates",
-          {
-            method: "PUT",
-            body: formData,
-          }
+        formData.append(
+          "organization",
+          certificateForm.organization.trim()
         );
-      } else {
-        response = await fetch(
-          "/api/certificates",
-          {
-            method: "POST",
-            body: formData,
+
+        formData.append(
+          "date",
+          certificateForm.date.trim()
+        );
+
+        formData.append(
+          "displayOrder",
+          String(
+            Number(
+              certificateForm.order
+            ) || 0
+          )
+        );
+
+        if (
+          existingCertificateImage &&
+          typeof existingCertificateImage ===
+            "string"
+        ) {
+          formData.append(
+            "existingImageUrl",
+            existingCertificateImage
+          );
+        }
+
+        if (
+          existingCertificateDocument &&
+          typeof existingCertificateDocument ===
+            "string"
+        ) {
+          formData.append(
+            "existingDocumentUrl",
+            existingCertificateDocument
+          );
+        }
+
+        if (
+          certificateImageFile instanceof
+          File
+        ) {
+          formData.append(
+            "image",
+            certificateImageFile
+          );
+        }
+
+        if (
+          certificateDocumentFile instanceof
+          File
+        ) {
+          formData.append(
+            "document",
+            certificateDocumentFile
+          );
+        }
+
+        console.log(
+          "Certificate PDF:",
+          certificateDocumentFile
+        );
+
+        console.log(
+          "PDF name:",
+          certificateDocumentFile?.name
+        );
+
+        console.log(
+          "PDF type:",
+          certificateDocumentFile?.type
+        );
+
+        console.log(
+          "PDF size:",
+          certificateDocumentFile?.size
+        );
+
+        for (
+          const [
+            key,
+            value,
+          ] of formData.entries()
+        ) {
+          if (
+            value instanceof
+            File
+          ) {
+            console.log(
+              "FormData " +
+                key +
+                ":",
+              value.name,
+              value.type,
+              value.size
+            );
+          } else {
+            console.log(
+              "FormData " +
+                key +
+                ":",
+              value
+            );
           }
+        }
+
+        let response;
+
+        if (
+          editingCertificate
+        ) {
+          formData.append(
+            "id",
+            editingCertificate._id
+          );
+
+          response =
+            await fetch(
+              "/api/certificates",
+              {
+                method: "PUT",
+                body: formData,
+              }
+            );
+        } else {
+          response =
+            await fetch(
+              "/api/certificates",
+              {
+                method: "POST",
+                body: formData,
+              }
+            );
+        }
+
+        const data =
+          await response.json();
+
+        console.log(
+          "Certificate Submit Result:",
+          data
+        );
+
+        if (
+          !response.ok ||
+          !data.success
+        ) {
+          throw new Error(
+            data.message ||
+              "Something went wrong."
+          );
+        }
+
+        alert(
+          editingCertificate
+            ? "Certificate updated successfully!"
+            : "Certificate added successfully!"
+        );
+
+        resetCertificateForm();
+
+        await fetchCertificates();
+      } catch (error) {
+        console.error(
+          "Certificate Submit Error:",
+          error
+        );
+
+        alert(
+          error.message ||
+            "Something went wrong while saving certificate."
+        );
+      } finally {
+        setCertificateLoading(
+          false
         );
       }
-
-      const data = await response.json();
-
-      console.log(
-        "Certificate Submit Result:",
-        data
-      );
-
-      if (
-        !response.ok ||
-        !data.success
-      ) {
-        throw new Error(
-          data.message ||
-            "Something went wrong."
-        );
-      }
-
-      alert(
-        editingCertificate
-          ? "Certificate updated successfully!"
-          : "Certificate added successfully!"
-      );
-
-      resetCertificateForm();
-
-      await fetchCertificates();
-    } catch (error) {
-      console.error(
-        "Certificate Submit Error:",
-        error
-      );
-
-      alert(
-        error.message ||
-          "Something went wrong while saving certificate."
-      );
-    } finally {
-      setCertificateLoading(false);
-    }
-  };
+    };
 
   // =========================================================
   // EDIT CERTIFICATE
   // =========================================================
 
-  const handleEditCertificate = (certificate) => {
-    if (!certificate) return;
+  const handleEditCertificate =
+    (certificate) => {
+      if (!certificate) return;
 
-    setEditingCertificate(
-      certificate
-    );
-
-    setCertificateForm({
-      title:
-        certificate.title ||
-        "",
-
-      organization:
-        certificate.organization ||
-        "",
-
-      date:
-        certificate.date ||
-        "",
-
-      order:
-        certificate.displayOrder ??
-        certificate.order ??
-        0,
-    });
-
-    const imageUrl =
-      certificate.imageUrl ||
-      certificate.image ||
-      "";
-
-    const documentUrl =
-      certificate.documentUrl ||
-      certificate.credentialLink ||
-      "";
-
-    setExistingCertificateImage(
-      imageUrl
-    );
-
-    setExistingCertificateDocument(
-      documentUrl
-    );
-
-    setCertificateImagePreview(
-      imageUrl
-    );
-
-    setCertificateImageFile(null);
-
-    setCertificateDocumentFile(
-      null
-    );
-
-    setCertificateDocumentName(
-      documentUrl
-        ? "Existing certificate document"
-        : ""
-    );
-
-    const imageInput =
-      document.getElementById(
-        "certificate-image"
+      setEditingCertificate(
+        certificate
       );
 
-    const documentInput =
-      document.getElementById(
-        "certificate-document"
+      setCertificateForm({
+        title:
+          certificate.title ||
+          "",
+
+        organization:
+          certificate.organization ||
+          "",
+
+        date:
+          certificate.date ||
+          "",
+
+        order:
+          certificate.displayOrder ??
+          certificate.order ??
+          0,
+      });
+
+      const imageUrl =
+        certificate.imageUrl ||
+        certificate.image ||
+        "";
+
+      const documentUrl =
+        certificate.documentUrl ||
+        certificate.credentialLink ||
+        "";
+
+      setExistingCertificateImage(
+        imageUrl
       );
 
-    if (imageInput) {
-      imageInput.value = "";
-    }
+      setExistingCertificateDocument(
+        documentUrl
+      );
 
-    if (documentInput) {
-      documentInput.value = "";
-    }
+      setCertificateImagePreview(
+        imageUrl
+      );
 
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
+      setCertificateImageFile(
+        null
+      );
+
+      setCertificateDocumentFile(
+        null
+      );
+
+      setCertificateDocumentName(
+        documentUrl
+          ? "Existing certificate document"
+          : ""
+      );
+
+      const imageInput =
+        document.getElementById(
+          "certificate-image"
+        );
+
+      const documentInput =
+        document.getElementById(
+          "certificate-document"
+        );
+
+      if (imageInput) {
+        imageInput.value =
+          "";
+      }
+
+      if (documentInput) {
+        documentInput.value =
+          "";
+      }
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    };
 
   // =========================================================
   // DELETE CERTIFICATE
   // =========================================================
 
-  const handleDeleteCertificate = async (id) => {
-    if (!id) {
-      alert(
-        "Certificate ID is missing."
-      );
+  const handleDeleteCertificate =
+    async (id) => {
+      if (!id) {
+        alert(
+          "Certificate ID is missing."
+        );
 
-      return;
-    }
+        return;
+      }
 
-    const confirmed = window.confirm(
-      "Are you sure you want to delete this certificate?\n\nThis will permanently remove the certificate, image and PDF."
-    );
+      const confirmed =
+        window.confirm(
+          "Are you sure you want to delete this certificate?\n\nThis will permanently remove the certificate, image and PDF."
+        );
 
-    if (!confirmed) return;
+      if (!confirmed) return;
 
-    try {
-      setCertificateLoading(true);
+      try {
+        setCertificateLoading(
+          true
+        );
 
-      const response = await fetch(
-        "/api/certificates",
-        {
-          method: "DELETE",
+        const response =
+          await fetch(
+            "/api/certificates",
+            {
+              method: "DELETE",
 
-          headers: {
-            "Content-Type":
-              "application/json",
-          },
+              headers: {
+                "Content-Type":
+                  "application/json",
+              },
 
-          body: JSON.stringify({
-            id,
-          }),
+              body: JSON.stringify({
+                id,
+              }),
+            }
+          );
+
+        const data =
+          await response.json();
+
+        console.log(
+          "Delete Certificate Response:",
+          data
+        );
+
+        if (
+          !response.ok ||
+          !data.success
+        ) {
+          throw new Error(
+            data.message ||
+              "Failed to delete certificate."
+          );
         }
-      );
 
-      const data = await response.json();
+        setCertificates(
+          (prev) =>
+            prev.filter(
+              (certificate) =>
+                certificate._id !==
+                id
+            )
+        );
 
-      console.log(
-        "Delete Certificate Response:",
-        data
-      );
+        if (
+          editingCertificate?._id ===
+          id
+        ) {
+          resetCertificateForm();
+        }
 
-      if (
-        !response.ok ||
-        !data.success
-      ) {
-        throw new Error(
-          data.message ||
-            "Failed to delete certificate."
+        alert(
+          "Certificate deleted successfully!"
+        );
+      } catch (error) {
+        console.error(
+          "Delete Certificate Error:",
+          error
+        );
+
+        alert(
+          error.message ||
+            "Something went wrong while deleting certificate."
+        );
+      } finally {
+        setCertificateLoading(
+          false
         );
       }
-
-      setCertificates((prev) =>
-        prev.filter(
-          (certificate) =>
-            certificate._id !== id
-        )
-      );
-
-      if (
-        editingCertificate?._id ===
-        id
-      ) {
-        resetCertificateForm();
-      }
-
-      alert(
-        "Certificate deleted successfully!"
-      );
-    } catch (error) {
-      console.error(
-        "Delete Certificate Error:",
-        error
-      );
-
-      alert(
-        error.message ||
-          "Something went wrong while deleting certificate."
-      );
-    } finally {
-      setCertificateLoading(false);
-    }
-  };
+    };
 
   // =========================================================
   // CANCEL CERTIFICATE EDIT
   // =========================================================
 
-  const cancelCertificateEdit = () => {
-    resetCertificateForm();
-  };
+  const cancelCertificateEdit =
+    () => {
+      resetCertificateForm();
+    };
 
   // =========================================================
   // LOGOUT
   // =========================================================
 
-  const handleLogout = async () => {
-    try {
-      await fetch(
-        "/api/admin/logout",
-        {
-          method: "POST",
-          credentials: "include",
-        }
-      );
-    } catch (error) {
-      console.error(
-        "Admin logout error:",
-        error
-      );
-    } finally {
-      router.replace(
-        "/admin/login"
-      );
-    }
-  };
+  const handleLogout =
+    async () => {
+      try {
+        await fetch(
+          "/api/admin/logout",
+          {
+            method: "POST",
+            credentials: "include",
+          }
+        );
+      } catch (error) {
+        console.error(
+          "Admin logout error:",
+          error
+        );
+      } finally {
+        router.replace(
+          "/admin/login"
+        );
+      }
+    };
 
   // =========================================================
   // AUTHENTICATION GUARD
@@ -2969,7 +3370,9 @@ export default function AdminPanel() {
               <button
                 type="button"
                 onClick={() =>
-                  changeTab("upcomingProject")
+                  changeTab(
+                    "upcomingProject"
+                  )
                 }
                 className={`
                   group
@@ -2991,7 +3394,8 @@ export default function AdminPanel() {
                   sm:py-3
 
                   ${
-                    activeTab === "upcomingProject"
+                    activeTab ===
+                    "upcomingProject"
                       ? "bg-teal-600 text-white shadow-lg shadow-teal-900/20"
                       : "text-gray-300 hover:bg-gray-800 hover:text-white"
                   }
@@ -3007,14 +3411,17 @@ export default function AdminPanel() {
                     group-hover:scale-110
 
                     ${
-                      activeTab === "upcomingProject"
+                      activeTab ===
+                      "upcomingProject"
                         ? "text-white"
                         : "text-gray-400 group-hover:text-teal-400"
                     }
                   `}
                 />
 
-                <span>Upcoming Project</span>
+                <span>
+                  Upcoming Project
+                </span>
               </button>
 
               {/* =================================================
@@ -3120,14 +3527,17 @@ export default function AdminPanel() {
                       group-hover:scale-110
 
                       ${
-                        activeTab === "comments"
+                        activeTab ===
+                        "comments"
                           ? "text-white"
                           : "text-gray-400 group-hover:text-white"
                       }
                     `}
                   />
 
-                  <span>Comments</span>
+                  <span>
+                    Comments
+                  </span>
 
                 </span>
 
@@ -3143,7 +3553,8 @@ export default function AdminPanel() {
                     transition-all
 
                     ${
-                      activeTab === "comments"
+                      activeTab ===
+                      "comments"
                         ? "bg-white/10 text-white"
                         : "bg-violet-500/10 text-violet-300"
                     }
@@ -3249,25 +3660,33 @@ export default function AdminPanel() {
                 </p>
 
                 <p className="mt-0.5 truncate text-xs text-gray-500">
-                  {activeTab === "about"
+                  {activeTab ===
+                  "about"
                     ? "About Me"
-                    : activeTab === "upcomingProject"
+                    : activeTab ===
+                      "upcomingProject"
                     ? "Upcoming Project"
-                    : activeTab === "resume"
+                    : activeTab ===
+                      "resume"
                     ? "Resume"
-                    : activeTab === "comments"
+                    : activeTab ===
+                      "comments"
                     ? "Comments"
                     : activeTab
                         .charAt(0)
                         .toUpperCase() +
-                      activeTab.slice(1)}
+                      activeTab.slice(
+                        1
+                      )}
                 </p>
               </div>
 
               <button
                 type="button"
                 onClick={() =>
-                  setMobileSidebarOpen(true)
+                  setMobileSidebarOpen(
+                    true
+                  )
                 }
                 className="
                   inline-flex
@@ -3302,64 +3721,106 @@ export default function AdminPanel() {
                   ABOUT
               ================================================== */}
 
-              {activeTab === "about" && (
-                <About admin={adminProps} />
+              {activeTab ===
+                "about" && (
+                <About
+                  admin={
+                    adminProps
+                  }
+                />
               )}
 
               {/* =================================================
                   RESUME
               ================================================== */}
 
-              {activeTab === "resume" && (
-                <Resume admin={adminProps} />
+              {activeTab ===
+                "resume" && (
+                <Resume
+                  admin={
+                    adminProps
+                  }
+                />
               )}
 
               {/* =================================================
                   PROJECTS
               ================================================== */}
 
-              {activeTab === "projects" && (
-                <Projects admin={adminProps} />
+              {activeTab ===
+                "projects" && (
+                <Projects
+                  admin={
+                    adminProps
+                  }
+                />
               )}
 
               {/* =================================================
                   EDUCATION
               ================================================== */}
 
-              {activeTab === "education" && (
-                <Education admin={adminProps} />
+              {activeTab ===
+                "education" && (
+                <Education
+                  admin={
+                    adminProps
+                  }
+                />
               )}
 
               {/* =================================================
                   SKILLS
               ================================================== */}
 
-              {activeTab === "skills" && (
-                <Skills admin={adminProps} />
+              {activeTab ===
+                "skills" && (
+                <Skills
+                  admin={
+                    adminProps
+                  }
+                />
               )}
 
               {/* =================================================
                   CERTIFICATES
               ================================================== */}
 
-              {activeTab === "certificates" && (
-                <Certificates admin={adminProps} />
+              {activeTab ===
+                "certificates" && (
+                <Certificates
+                  admin={
+                    adminProps
+                  }
+                />
               )}
 
               {/* =================================================
                   UPCOMING PROJECT
               ================================================== */}
 
-              {activeTab === "upcomingProject" && (
-                <UpcomingProject admin={adminProps} />
+              {activeTab ===
+                "upcomingProject" && (
+                <UpcomingProject
+                  admin={
+                    adminProps
+                  }
+                />
               )}
+
+              
 
               {/* =================================================
                   COMMENTS
               ================================================== */}
 
-              {activeTab === "comments" && (
-                <Comments admin={adminProps} />
+              {activeTab ===
+                "comments" && (
+                <Comments
+                  admin={
+                    adminProps
+                  }
+                />
               )}
 
             </div>

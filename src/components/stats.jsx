@@ -62,7 +62,7 @@ const StatCard = ({ label, value, suffix, targetId, onTriggerScroll }) => {
     if (!hasStarted) return; 
 
     let start = 0;
-    const duration = 2000;
+    const duration = 800; // সময় কমিয়ে ৮০০ মিলিডেকেন্ড করা হয়েছে যাতে দ্রুত লোড হয়
     const increment = value / (duration / 16);
 
     const timer = setInterval(() => {
@@ -81,7 +81,7 @@ const StatCard = ({ label, value, suffix, targetId, onTriggerScroll }) => {
   return (
     <div 
       ref={countRef} 
-      onClick={() => targetId && onTriggerScroll(targetId)} // প্যারেন্ট ফাংশন কল করা হচ্ছে
+      onClick={() => targetId && onTriggerScroll(targetId)}
       className={`flex flex-col items-center justify-center p-5 md:p-6 bg-[rgba(13,31,53,0.3)] backdrop-blur-sm border border-[rgba(255,255,255,0.1)] rounded-2xl hover:border-[#00d4ff]/50 transition-all duration-300 group ${
         targetId ? "cursor-pointer active:scale-95" : ""
       }`}
@@ -106,12 +106,10 @@ export default function StatsSection() {
   // =========================================================
 
   const getArrayFromResponse = (data, possibleKeys = []) => {
-    // Direct array response
     if (Array.isArray(data)) {
       return data;
     }
 
-    // Common API response formats
     for (const key of possibleKeys) {
       if (Array.isArray(data?.[key])) {
         return data[key];
@@ -122,8 +120,6 @@ export default function StatsSection() {
       }
     }
 
-    // Some APIs may return:
-    // { success: true, data: [...] }
     if (Array.isArray(data?.data)) {
       return data.data;
     }
@@ -157,18 +153,9 @@ export default function StatsSection() {
           }),
         ]);
 
-      // =====================================================
-      // READ API DATA
-      // =====================================================
-
       const projectsData = await projectsResponse.json();
-      const certificatesData =
-        await certificatesResponse.json();
+      const certificatesData = await certificatesResponse.json();
       const skillsData = await skillsResponse.json();
-
-      // =====================================================
-      // GET ARRAYS
-      // =====================================================
 
       const projects = getArrayFromResponse(projectsData, [
         "projects",
@@ -192,10 +179,6 @@ export default function StatsSection() {
         "items",
       ]);
 
-      // =====================================================
-      // UPDATE STATS
-      // =====================================================
-
       setStats([
         {
           label: "Technologies",
@@ -203,33 +186,28 @@ export default function StatsSection() {
           suffix: "+",
           targetId: "technologies",
         },
-
         {
           label: "Projects Built",
           value: projects.length,
           suffix: "+",
           targetId: "projects",
         },
-
         {
           label: "Internship",
           value: 0,
           suffix: "+",
         },
-
         {
           label: "Publication",
           value: 0,
           suffix: "+",
         },
-
         {
           label: "Certifications",
           value: certificates.length,
           suffix: "+",
           targetId: "certificates",
         },
-
         {
           label: "Dedication",
           value: 100,
@@ -238,25 +216,15 @@ export default function StatsSection() {
       ]);
     } catch (error) {
       console.error("Stats API Error:", error);
-
-      // Keep default values if API fails
       setStats(defaultStats);
     } finally {
       setStatsLoading(false);
     }
   };
 
-  // =========================================================
-  // INITIAL LOAD
-  // =========================================================
-
   useEffect(() => {
     fetchStats();
   }, []);
-
-  // =========================================================
-  // AUTO REFRESH EVERY 30 SECONDS
-  // =========================================================
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -265,10 +233,6 @@ export default function StatsSection() {
 
     return () => clearInterval(interval);
   }, []);
-
-  // =========================================================
-  // REFRESH WHEN USER RETURNS TO TAB
-  // =========================================================
 
   useEffect(() => {
     const handleVisibilityChange = () => {
@@ -281,26 +245,14 @@ export default function StatsSection() {
       fetchStats();
     };
 
-    document.addEventListener(
-      "visibilitychange",
-      handleVisibilityChange
-    );
-
+    document.addEventListener("visibilitychange", handleVisibilityChange);
     window.addEventListener("focus", handleFocus);
 
     return () => {
-      document.removeEventListener(
-        "visibilitychange",
-        handleVisibilityChange
-      );
-
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
       window.removeEventListener("focus", handleFocus);
     };
   }, []);
-
-  // =========================================================
-  // SCROLL WITH CANDLE ANIMATION
-  // =========================================================
 
   const handleScrollWithAnimation = (targetId) => {
     if (isLoading) return;
@@ -308,8 +260,7 @@ export default function StatsSection() {
     setIsLoading(true);
 
     setTimeout(() => {
-      const targetSection =
-        document.getElementById(targetId);
+      const targetSection = document.getElementById(targetId);
 
       if (targetSection) {
         targetSection.scrollIntoView({
@@ -324,84 +275,50 @@ export default function StatsSection() {
 
   return (
     <section className="py-16 px-4 md:px-[5%] max-w-7xl mx-auto w-full relative">
-
-      {/* =====================================================
-          STATS GRID
-      ====================================================== */}
-
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
-
         {stats.map((stat, index) => (
           <StatCard
             key={stat.label || index}
             {...stat}
-            onTriggerScroll={
-              handleScrollWithAnimation
-            }
+            onTriggerScroll={handleScrollWithAnimation}
           />
         ))}
-
       </div>
-
-      {/* =====================================================
-          CANDLE LOADER
-      ====================================================== */}
 
       {isLoading && (
         <div className="fixed inset-0 bg-[#111] z-[9999] flex items-center justify-center pointer-events-auto backdrop-blur-sm overflow-hidden">
           <div className="wrapper">
             <div className="candles">
-
               <div className="light__wave"></div>
-
               <div className="candle1">
                 <div className="candle1__body">
-
                   <div className="candle1__eyes">
                     <span className="candle1__eyes-one"></span>
                     <span className="candle1__eyes-two"></span>
                   </div>
-
                   <div className="candle1__mouth"></div>
-
                 </div>
-
                 <div className="candle1__stick"></div>
               </div>
-
               <div className="candle2">
-
                 <div className="candle2__body">
-
                   <div className="candle2__eyes">
                     <div className="candle2__eyes-one"></div>
                     <div className="candle2__eyes-two"></div>
                   </div>
-
                 </div>
-
                 <div className="candle2__stick"></div>
-
               </div>
-
               <div className="candle2__fire"></div>
-
               <div className="sparkles-one"></div>
               <div className="sparkles-two"></div>
-
               <div className="candle__smoke-one"></div>
               <div className="candle__smoke-two"></div>
-
             </div>
-
             <div className="floor"></div>
-
           </div>
         </div>
       )}
-
-      {/* তোমার existing candle CSS এখানে একদম আগের মতোই থাকবে */}
-
     </section>
   );
 }

@@ -90,8 +90,8 @@ export default function AdminLogin() {
       {/* Main Responsive Card */}
       <div className="w-full max-w-5xl rounded-2xl sm:rounded-3xl border border-gray-800/80 bg-gray-900/70 backdrop-blur-2xl shadow-2xl overflow-hidden grid grid-cols-1 lg:grid-cols-2 animate-in fade-in zoom-in-95 duration-700">
         
-        {/* LEFT SIDE: Full Image & Background (Hidden on small mobile screens for clean layout) */}
-        <div className="relative hidden lg:flex flex-col justify-end p-8 xl:p-10 overflow-hidden border-r border-gray-800/50 group">
+        {/* LEFT / TOP SIDE: Full Image & Background (এখন এটি মোবাইলেও দেখা যাবে, মোবাইলে উচ্চতা h-56 এবং লার্জ স্ক্রিনে ফুল হাইট থাকবে) */}
+        <div className="relative flex flex-col justify-end h-56 sm:h-64 lg:h-auto p-6 sm:p-8 xl:p-10 overflow-hidden border-b lg:border-b-0 lg:border-r border-gray-800/50 group">
           <div className="absolute inset-0 z-0">
             <Image
               src="/log.jpg" 
@@ -104,9 +104,9 @@ export default function AdminLogin() {
             <div className="absolute inset-0 bg-gradient-to-t from-[#05070b]/90 via-[#05070b]/30 to-transparent" />
           </div>
 
-          {/* Designed Badge/Text at the Bottom of Left Image */}
+          {/* Designed Badge/Text at the Bottom of Image */}
           <div className="relative z-10 transform transition-transform duration-500 group-hover:-translate-y-1">
-            <div className="inline-flex items-center px-3.5 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-teal-500/30 text-teal-300 text-[10px] xl:text-[11px] font-bold tracking-widest uppercase shadow-lg">
+            <div className="inline-flex items-center px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-teal-500/30 text-teal-300 text-[9px] sm:text-[10px] xl:text-[11px] font-bold tracking-widest uppercase shadow-lg">
               WEB DEVELOPER & CYBER SECURITY ENTHUSIAST
             </div>
           </div>

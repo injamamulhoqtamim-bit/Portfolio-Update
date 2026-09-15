@@ -68,7 +68,7 @@ export default function AdminLogin() {
   return (
     <div className="relative flex min-h-screen items-center justify-center bg-[#05070b] p-3 sm:p-6 lg:p-8 text-white overflow-hidden">
       
-      {/* Custom CSS for Glowing Border Animation */}
+      {/* Custom CSS for Glowing Border, Button Light Rotation & Floating Icons Animation */}
       <style jsx>{`
         @keyframes borderBeam {
           0% {
@@ -81,6 +81,46 @@ export default function AdminLogin() {
         .animate-border-beam {
           animation: borderBeam 2.5s linear infinite;
         }
+
+        @keyframes btnLightRotate {
+          0% {
+            background-position: 0% 50%;
+          }
+          50% {
+            background-position: 100% 50%;
+          }
+          100% {
+            background-position: 0% 50%;
+          }
+        }
+        .btn-glow-border {
+          background: linear-gradient(60deg, #14b8a6, #06b6d4, #3b82f6, #14b8a6);
+          background-size: 300% 300%;
+          animation: btnLightRotate 4s ease infinite;
+        }
+
+        @keyframes floatUpCard {
+          0% {
+            transform: translateY(100%) scale(0.8);
+            opacity: 0;
+          }
+          20% {
+            opacity: 0.4;
+          }
+          80% {
+            opacity: 0.4;
+          }
+          100% {
+            transform: translateY(-120%) scale(1.2);
+            opacity: 0;
+          }
+        }
+
+        .floating-icon {
+          position: absolute;
+          bottom: 0;
+          animation: floatUpCard linear infinite;
+        }
       `}</style>
 
       {/* Background Ambient Glow Effects */}
@@ -88,9 +128,9 @@ export default function AdminLogin() {
       <div className="absolute -bottom-40 -right-40 w-72 h-72 sm:w-96 sm:h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none animate-pulse" />
 
       {/* Main Responsive Card */}
-      <div className="w-full max-w-5xl rounded-2xl sm:rounded-3xl border border-gray-800/80 bg-gray-900/70 backdrop-blur-2xl shadow-2xl overflow-hidden grid grid-cols-1 lg:grid-cols-2 animate-in fade-in zoom-in-95 duration-700">
+      <div className="w-full max-w-5xl rounded-2xl sm:rounded-3xl border border-gray-800/80 bg-gray-900/75 backdrop-blur-2xl shadow-2xl overflow-hidden grid grid-cols-1 lg:grid-cols-2 animate-in fade-in zoom-in-95 duration-700 relative z-10">
         
-        {/* LEFT / TOP SIDE: Full Image & Background (এখন এটি মোবাইলেও দেখা যাবে, মোবাইলে উচ্চতা h-56 এবং লার্জ স্ক্রিনে ফুল হাইট থাকবে) */}
+        {/* LEFT / TOP SIDE: Full Image & Background */}
         <div className="relative flex flex-col justify-end h-56 sm:h-64 lg:h-auto p-6 sm:p-8 xl:p-10 overflow-hidden border-b lg:border-b-0 lg:border-r border-gray-800/50 group">
           <div className="absolute inset-0 z-0">
             <Image
@@ -112,14 +152,38 @@ export default function AdminLogin() {
           </div>
         </div>
 
-        {/* RIGHT SIDE: Professional Responsive Login Form */}
-        <div className="flex flex-col justify-center p-6 sm:p-10 lg:p-12 relative w-full">
+        {/* RIGHT SIDE: Professional Responsive Login Form with Floating Tech/Cyber Icons Background */}
+        <div className="flex flex-col justify-center p-6 sm:p-10 lg:p-12 relative w-full overflow-hidden">
           
+          {/* Cyber Security & Web Development Floating Background Icons */}
+          <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
+            {/* Terminal / Code Icon */}
+            <div className="floating-icon text-teal-400/30 left-[12%]" style={{ animationDuration: '6s', animationDelay: '0s' }}>
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5" /></svg>
+            </div>
+            {/* Shield / Cyber Security Icon */}
+            <div className="floating-icon text-cyan-400/30 left-[32%]" style={{ animationDuration: '8s', animationDelay: '2s' }}>
+              <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" /></svg>
+            </div>
+            {/* Lock / Security Icon */}
+            <div className="floating-icon text-blue-400/30 left-[55%]" style={{ animationDuration: '7s', animationDelay: '1s' }}>
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" /></svg>
+            </div>
+            {/* Globe / Web Development Icon */}
+            <div className="floating-icon text-teal-300/30 left-[75%]" style={{ animationDuration: '9s', animationDelay: '3s' }}>
+              <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.25m-15.686 0A8.959 8.959 0 013 12c0-.778.099-1.533.284-2.25m0 0A11.959 11.959 0 0112 10.5c2.998 0 5.74 1.1 7.843 2.918" /></svg>
+            </div>
+            {/* Cpu / Chip Icon */}
+            <div className="floating-icon text-indigo-400/30 left-[88%]" style={{ animationDuration: '7.5s', animationDelay: '2.5s' }}>
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 002.25-2.25V6.75a2.25 2.25 0 00-2.25-2.25H6.75A2.25 2.25 0 004.5 6.75v10.5a2.25 2.25 0 002.25 2.25z" /></svg>
+            </div>
+          </div>
+
           {/* Header */}
-          <div className="mb-6 sm:mb-8 text-center lg:text-left">
+          <div className="mb-6 sm:mb-8 text-center lg:text-left relative z-10">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-400 text-xs font-semibold mb-3 tracking-wider uppercase">
               <span className="w-2 h-2 rounded-full bg-teal-400 animate-ping"></span>
-              Secure Access
+              Authorized Personal Only
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-100 to-teal-400 font-syne tracking-tight">
               Injamamul Hoq
@@ -131,7 +195,7 @@ export default function AdminLogin() {
 
           {/* Error Message */}
           {error && (
-            <div className="mb-6 flex items-center gap-3 rounded-2xl border border-red-500/30 bg-red-500/10 px-4 py-3.5 text-xs sm:text-sm text-red-400 animate-in fade-in slide-in-from-top-2 duration-300">
+            <div className="mb-6 flex items-center gap-3 rounded-2xl border border-red-500/30 bg-red-500/10 px-4 py-3.5 text-xs sm:text-sm text-red-400 animate-in fade-in slide-in-from-top-2 duration-300 relative z-10">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 flex-shrink-0 text-red-400">
                 <path fillRule="evenodd" d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z" clipRule="evenodd" />
               </svg>
@@ -140,7 +204,7 @@ export default function AdminLogin() {
           )}
 
           {/* Login Form */}
-          <form onSubmit={handleLogin} className="space-y-4 sm:space-y-5">
+          <form onSubmit={handleLogin} className="space-y-4 sm:space-y-5 relative z-10">
             {/* Gmail Input */}
             <div>
               <label className="mb-2 block text-xs sm:text-sm font-medium text-gray-300">
@@ -202,29 +266,27 @@ export default function AdminLogin() {
               </div>
             </div>
 
-            {/* Login Button */}
-            <button
-              type="submit"
-              disabled={loading}
-              className="relative w-full overflow-hidden rounded-xl sm:rounded-2xl bg-gray-900/90 border border-teal-500/40 py-3.5 sm:py-4 font-semibold text-white shadow-xl shadow-teal-500/10 transition-all duration-500 hover:border-teal-300 hover:shadow-teal-400/30 hover:scale-[1.01] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70 group mt-2"
-            >
-              {/* Moving Neon Light Beam Across Border */}
-              <span className="absolute inset-x-0 bottom-0 h-[2.5px] bg-gradient-to-r from-transparent via-teal-400 to-transparent animate-border-beam" />
-              <span className="absolute inset-x-0 top-0 h-[1.5px] bg-gradient-to-r from-transparent via-cyan-300 to-transparent" />
-              
-              {/* Hover Glow Effect */}
-              <div className="absolute inset-0 bg-gradient-to-r from-teal-500/20 via-cyan-500/10 to-teal-500/20 opacity-0 transition-opacity duration-500 group-hover:opacity-100 blur-sm" />
-              
-              <span className="relative flex items-center justify-center gap-2 text-sm sm:text-base text-teal-300 group-hover:text-white transition-colors duration-300 font-medium tracking-wide">
-                {loading && (
-                  <svg className="animate-spin -ml-1 mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-                )}
-                {loading ? "Verifying..." : "Login to Dashboard"}
-              </span>
-            </button>
+            {/* Updated Glowing & Bolder Login Button */}
+            <div className="relative p-[2px] rounded-xl sm:rounded-2xl btn-glow-border shadow-lg shadow-teal-500/20 group mt-4">
+              <button
+                type="submit"
+                disabled={loading}
+                className="relative w-full overflow-hidden rounded-[10px] sm:rounded-[14px] bg-[#0b0f17] py-3.5 sm:py-4 font-bold text-white transition-all duration-300 hover:bg-transparent active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70"
+              >
+                {/* Background Glow on Hover */}
+                <div className="absolute inset-0 bg-teal-400/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                
+                <span className="relative flex items-center justify-center gap-2 text-sm sm:text-base text-teal-300 group-hover:text-white transition-colors duration-300 tracking-wider font-bold">
+                  {loading && (
+                    <svg className="animate-spin -ml-1 mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                  )}
+                  {loading ? "Verifying..." : "Login to Dashboard"}
+                </span>
+              </button>
+            </div>
           </form>
 
         </div>

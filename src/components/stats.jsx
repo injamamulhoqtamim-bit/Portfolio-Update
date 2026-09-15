@@ -38,31 +38,14 @@ const defaultStats = [
   },
 ];
 
-const StatCard = ({ label, value, suffix, targetId, onTriggerScroll }) => {
+const StatCard = ({ label, value, suffix, targetId, onTriggerScroll, hasStarted }) => {
   const [count, setCount] = useState(0);
-  const countRef = useRef(null);
-  const [hasStarted, setHasStarted] = useState(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setHasStarted(true);
-        }
-      },
-      { threshold: 0.5 }
-    );
-
-    if (countRef.current) observer.observe(countRef.current);
-
-    return () => observer.disconnect();
-  }, []);
 
   useEffect(() => {
     if (!hasStarted) return; 
 
     let start = 0;
-    const duration = 800; // সময় কমিয়ে ৮০০ মিলিডেকেন্ড করা হয়েছে যাতে দ্রুত লোড হয়
+    const duration = 800; // ৮০০ মিলিসেকেন্ডে অ্যানিমেশন শেষ হবে
     const increment = value / (duration / 16);
 
     const timer = setInterval(() => {
@@ -80,7 +63,6 @@ const StatCard = ({ label, value, suffix, targetId, onTriggerScroll }) => {
 
   return (
     <div 
-      ref={countRef} 
       onClick={() => targetId && onTriggerScroll(targetId)}
       className={`flex flex-col items-center justify-center p-5 md:p-6 bg-[rgba(13,31,53,0.3)] backdrop-blur-sm border border-[rgba(255,255,255,0.1)] rounded-2xl hover:border-[#00d4ff]/50 transition-all duration-300 group ${
         targetId ? "cursor-pointer active:scale-95" : ""
@@ -100,11 +82,38 @@ export default function StatsSection() {
   const [isLoading, setIsLoading] = useState(false);
   const [stats, setStats] = useState(defaultStats);
   const [statsLoading, setStatsLoading] = useState(true);
+  
+  // একসঙ্গে অ্যানিমেশন শুরু করার জন্য সেকশনের স্টেট
+  const [hasStarted, setHasStarted] = useState(false);
+  const sectionRef = useRef(null);
+
+  // =========================================================
+  // SECTION IN-VIEW OBSERVER (সবগুলো একসঙ্গে ট্রিগার করার জন্য)
+  // =========================================================
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setHasStarted(true);
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
+    };
+  }, []);
 
   // =========================================================
   // GET ARRAY FROM API RESPONSE
   // =========================================================
-
   const getArrayFromResponse = (data, possibleKeys = []) => {
     if (Array.isArray(data)) {
       return data;
@@ -130,7 +139,6 @@ export default function StatsSection() {
   // =========================================================
   // FETCH LIVE STATS
   // =========================================================
-
   const fetchStats = async () => {
     try {
       setStatsLoading(true);
@@ -274,13 +282,14 @@ export default function StatsSection() {
   };
 
   return (
-    <section className="py-16 px-4 md:px-[5%] max-w-7xl mx-auto w-full relative">
+    <section ref={sectionRef} className="py-16 px-4 md:px-[5%] max-w-7xl mx-auto w-full relative">
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
         {stats.map((stat, index) => (
           <StatCard
             key={stat.label || index}
             {...stat}
             onTriggerScroll={handleScrollWithAnimation}
+            hasStarted={hasStarted}
           />
         ))}
       </div>

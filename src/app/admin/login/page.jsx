@@ -178,7 +178,7 @@ function AdminLoginContent() {
           PAGE
       ===================================================== */}
 
-      <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#05070b] p-3 text-white sm:p-5 md:p-6 lg:p-8">
+      <div className="relative flex min-h-screen w-full items-center justify-center overflow-hidden bg-[#05070b] p-3 text-white sm:p-5 md:p-6 lg:p-8">
 
         {/* ===================================================
             PAGE ANIMATIONS
@@ -417,14 +417,11 @@ function AdminLoginContent() {
 
           .popup-emoji {
             animation:
-              emojiEnter 0.7s
+              emojiEnter
+              0.7s
               cubic-bezier(0.16, 1, 0.3, 1)
               both;
           }
-
-          /* =================================================
-             INDIVIDUAL EMOJI ANIMATION
-          ================================================= */
 
           .popup-emoji-face {
             display: inline-block;
@@ -434,7 +431,8 @@ function AdminLoginContent() {
 
           .popup-emoji-face.laugh {
             animation:
-              emojiLaugh 1.8s
+              emojiLaugh
+              1.8s
               ease-in-out
               0.7s
               infinite;
@@ -442,7 +440,8 @@ function AdminLoginContent() {
 
           .popup-emoji-face.dizzy {
             animation:
-              emojiDizzy 1.6s
+              emojiDizzy
+              1.6s
               ease-in-out
               0.7s
               infinite;
@@ -450,7 +449,8 @@ function AdminLoginContent() {
 
           .popup-emoji-face.skull {
             animation:
-              emojiSkull 2s
+              emojiSkull
+              2s
               ease-in-out
               0.7s
               infinite;
@@ -458,7 +458,8 @@ function AdminLoginContent() {
 
           .popup-emoji-face.stop {
             animation:
-              emojiStop 1.7s
+              emojiStop
+              1.7s
               ease-in-out
               0.7s
               infinite;
@@ -578,10 +579,10 @@ function AdminLoginContent() {
           }
 
           /* =================================================
-             MOBILE RESPONSIVE TWEAKS
+             SMALL SCREEN RESPONSIVE ADJUSTMENTS
           ================================================= */
 
-          @media (max-width: 640px) {
+          @media (max-width: 639px) {
             .popup-card {
               max-height: calc(100vh - 2rem);
               overflow-y: auto;
@@ -589,9 +590,8 @@ function AdminLoginContent() {
           }
 
           @media (prefers-reduced-motion: reduce) {
-            .animate-border-beam,
-            .btn-glow-border,
             .floating-icon,
+            .btn-glow-border,
             .popup-backdrop,
             .popup-card,
             .popup-glow,
@@ -601,7 +601,8 @@ function AdminLoginContent() {
             .dot-1,
             .dot-2,
             .dot-3 {
-              animation: none !important;
+              animation-duration: 0.01ms !important;
+              animation-iteration-count: 1 !important;
             }
           }
         `}</style>
@@ -618,13 +619,13 @@ function AdminLoginContent() {
             LOGIN CARD
         ===================================================== */}
 
-        <div className="relative z-10 grid w-full max-w-5xl overflow-hidden rounded-2xl border border-gray-800/80 bg-gray-900/75 shadow-2xl backdrop-blur-2xl sm:rounded-3xl lg:grid-cols-2">
+        <div className="relative z-10 grid w-full max-w-5xl grid-cols-1 overflow-hidden rounded-2xl border border-gray-800/80 bg-gray-900/75 shadow-2xl backdrop-blur-2xl sm:rounded-3xl lg:grid-cols-2">
 
           {/* ===================================================
               LEFT IMAGE
           =================================================== */}
 
-          <div className="group relative flex h-52 flex-col justify-end overflow-hidden border-b border-gray-800/50 p-5 sm:h-64 sm:p-8 lg:h-auto lg:min-h-[650px] lg:border-b-0 lg:border-r xl:p-10">
+          <div className="group relative flex h-52 flex-col justify-end overflow-hidden border-b border-gray-800/50 p-5 sm:h-64 sm:p-8 lg:h-auto lg:min-h-[620px] lg:border-b-0 lg:border-r xl:p-10">
 
             <div className="absolute inset-0 z-0">
               <Image
@@ -636,13 +637,15 @@ function AdminLoginContent() {
                 className="object-cover object-center transition-transform duration-1000 group-hover:scale-105"
               />
 
-              <div className="absolute inset-0 bg-gradient-to-t from-[#05070b]/95 via-[#05070b]/35 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#05070b]/90 via-[#05070b]/30 to-transparent" />
             </div>
 
             <div className="relative z-10 transition-transform duration-500 group-hover:-translate-y-1">
-              <div className="inline-flex max-w-full items-center rounded-full border border-teal-500/30 bg-black/40 px-3 py-1 text-[8px] font-bold uppercase tracking-[0.12em] text-teal-300 shadow-lg backdrop-blur-md sm:px-3.5 sm:py-1.5 sm:text-[10px] sm:tracking-widest xl:text-[11px]">
+
+              <div className="inline-flex max-w-full items-center rounded-full border border-teal-500/30 bg-black/40 px-3 py-1 text-[8px] font-bold uppercase tracking-[0.14em] text-teal-300 shadow-lg backdrop-blur-md sm:px-3.5 sm:py-1.5 sm:text-[10px] sm:tracking-widest xl:text-[11px]">
                 WEB DEVELOPER & CYBER SECURITY ENTHUSIAST
               </div>
+
             </div>
           </div>
 
@@ -650,13 +653,14 @@ function AdminLoginContent() {
               RIGHT LOGIN AREA
           =================================================== */}
 
-          <div className="relative flex w-full flex-col justify-center overflow-hidden p-5 sm:p-8 md:p-10 lg:p-10 xl:p-12">
+          <div className="relative flex w-full min-w-0 flex-col justify-center overflow-hidden p-5 sm:p-8 md:p-10 lg:p-10 xl:p-12">
 
             {/* =================================================
                 FLOATING ICONS
             ================================================= */}
 
             <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+
               <div
                 className="floating-icon left-[12%] text-teal-400/30"
                 style={{
@@ -664,6 +668,7 @@ function AdminLoginContent() {
                   animationDelay: "0s",
                 }}
               >
+
                 <svg
                   className="h-6 w-6"
                   fill="none"
@@ -677,6 +682,7 @@ function AdminLoginContent() {
                     d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5"
                   />
                 </svg>
+
               </div>
 
               <div
@@ -686,6 +692,7 @@ function AdminLoginContent() {
                   animationDelay: "2s",
                 }}
               >
+
                 <svg
                   className="h-7 w-7"
                   fill="none"
@@ -699,7 +706,9 @@ function AdminLoginContent() {
                     d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"
                   />
                 </svg>
+
               </div>
+
             </div>
 
             {/* =================================================
@@ -707,20 +716,24 @@ function AdminLoginContent() {
             ================================================= */}
 
             <div className="relative z-10 mb-6 text-center sm:mb-8 lg:text-left">
-              <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-teal-500/20 bg-teal-500/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-teal-400 sm:text-xs">
-                <span className="h-2 w-2 animate-ping rounded-full bg-teal-400" />
+
+              <div className="mb-3 inline-flex max-w-full items-center gap-2 rounded-full border border-teal-500/20 bg-teal-500/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-teal-400 sm:px-3 sm:py-1 sm:text-xs sm:tracking-wider">
+
+                <span className="h-2 w-2 shrink-0 animate-ping rounded-full bg-teal-400" />
+
                 Authorized Personal Only
+
               </div>
 
-              <h1 className="bg-gradient-to-r from-white via-gray-100 to-teal-400 bg-clip-text text-2xl font-extrabold tracking-tight text-transparent sm:text-3xl">
+              <h1 className="font-syne bg-gradient-to-r from-white via-gray-100 to-teal-400 bg-clip-text text-2xl font-extrabold tracking-tight text-transparent sm:text-3xl">
                 Injamamul Hoq
               </h1>
 
-              <p className="mt-2 text-xs leading-5 text-gray-400 sm:text-sm sm:leading-6">
+              <p className="mx-auto mt-2 max-w-md text-xs leading-5 text-gray-400 sm:text-sm sm:leading-6 lg:mx-0">
                 Why are you here? This dashboard is not for you.
-                <br className="hidden sm:block" />
                 Go eat some muri. 😂
               </p>
+
             </div>
 
             {/* =================================================
@@ -728,7 +741,8 @@ function AdminLoginContent() {
             ================================================= */}
 
             {error && (
-              <div className="relative z-10 mb-5 flex items-start gap-3 rounded-2xl border border-red-500/30 bg-red-500/10 px-4 py-3.5 text-xs text-red-400 sm:mb-6 sm:text-sm">
+              <div className="relative z-10 mb-5 flex items-start gap-3 rounded-2xl border border-red-500/30 bg-red-500/10 px-4 py-3.5 text-xs leading-5 text-red-400 sm:mb-6 sm:text-sm">
+
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -743,6 +757,7 @@ function AdminLoginContent() {
                 </svg>
 
                 <span>{error}</span>
+
               </div>
             )}
 
@@ -754,15 +769,19 @@ function AdminLoginContent() {
               onSubmit={handleLogin}
               className="relative z-10 space-y-4 sm:space-y-5"
             >
+
               {/* Gmail */}
 
               <div>
+
                 <label className="mb-2 block text-xs font-medium text-gray-300 sm:text-sm">
                   Gmail
                 </label>
 
                 <div className="group relative">
+
                   <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-gray-400 transition-colors group-focus-within:text-teal-400">
+
                     <svg
                       className="h-5 w-5"
                       fill="none"
@@ -776,6 +795,7 @@ function AdminLoginContent() {
                         d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
                       />
                     </svg>
+
                   </span>
 
                   <input
@@ -788,18 +808,23 @@ function AdminLoginContent() {
                     required
                     className="w-full rounded-xl border border-gray-700/80 bg-gray-800/40 py-3 pl-11 pr-4 text-sm text-white outline-none transition-all duration-300 placeholder:text-gray-500 focus:border-teal-500 focus:bg-gray-800/80 focus:ring-4 focus:ring-teal-500/10 disabled:cursor-not-allowed disabled:opacity-60 sm:rounded-2xl sm:py-3.5 sm:text-base"
                   />
+
                 </div>
+
               </div>
 
               {/* Password */}
 
               <div>
+
                 <label className="mb-2 block text-xs font-medium text-gray-300 sm:text-sm">
                   Password
                 </label>
 
                 <div className="group relative">
+
                   <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-gray-400 transition-colors group-focus-within:text-teal-400">
+
                     <svg
                       className="h-5 w-5"
                       fill="none"
@@ -813,6 +838,7 @@ function AdminLoginContent() {
                         d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z"
                       />
                     </svg>
+
                   </span>
 
                   <input
@@ -839,6 +865,7 @@ function AdminLoginContent() {
                     }
                     className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 transition hover:text-teal-400 disabled:cursor-not-allowed"
                   >
+
                     {showPassword ? (
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -890,8 +917,11 @@ function AdminLoginContent() {
                         <circle cx="12" cy="12" r="3" />
                       </svg>
                     )}
+
                   </button>
+
                 </div>
+
               </div>
 
               {/* =================================================
@@ -899,14 +929,17 @@ function AdminLoginContent() {
               ================================================= */}
 
               <div className="group relative mt-4 rounded-xl p-[2px] shadow-lg shadow-teal-500/20 sm:rounded-2xl btn-glow-border">
+
                 <button
                   type="submit"
                   disabled={loading || googleLoading}
                   className="relative w-full overflow-hidden rounded-[10px] bg-[#0b0f17] py-3.5 font-bold text-white transition-all duration-300 hover:bg-transparent active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70 sm:rounded-[14px] sm:py-4"
                 >
+
                   <div className="absolute inset-0 bg-teal-400/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
                   <span className="relative flex items-center justify-center gap-2 text-sm font-bold tracking-wider text-teal-300 transition-colors duration-300 group-hover:text-white sm:text-base">
+
                     {loading && (
                       <svg
                         className="-ml-1 mr-2 h-5 w-5 animate-spin text-white"
@@ -932,9 +965,13 @@ function AdminLoginContent() {
                     )}
 
                     {loading ? "Verifying..." : "LOGIN"}
+
                   </span>
+
                 </button>
+
               </div>
+
             </form>
 
             {/* =================================================
@@ -942,6 +979,7 @@ function AdminLoginContent() {
             ================================================= */}
 
             <div className="relative z-10 my-5 flex items-center justify-center sm:my-6">
+
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-gray-800" />
               </div>
@@ -949,6 +987,7 @@ function AdminLoginContent() {
               <div className="relative bg-[#090d14] px-3 text-xs font-medium uppercase tracking-wider text-gray-500">
                 Or
               </div>
+
             </div>
 
             {/* =================================================
@@ -956,6 +995,7 @@ function AdminLoginContent() {
             ================================================= */}
 
             <div className="group relative z-10 mt-1">
+
               {/* Outer Glow */}
 
               <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-r from-teal-500/0 via-teal-400/50 to-cyan-400/0 opacity-0 blur-md transition-all duration-500 group-hover:opacity-100" />
@@ -966,6 +1006,7 @@ function AdminLoginContent() {
                 disabled={googleLoading || loading}
                 className="relative w-full overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.035] px-4 py-3 text-white shadow-[0_8px_30px_rgba(0,0,0,0.25)] backdrop-blur-xl transition-all duration-500 hover:-translate-y-[2px] hover:border-teal-400/30 hover:bg-white/[0.06] hover:shadow-[0_12px_40px_rgba(20,184,166,0.14)] active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60 sm:px-5 sm:py-3.5"
               >
+
                 {/* Moving Shine */}
 
                 <span className="pointer-events-none absolute inset-y-0 -left-[120%] w-[70%] rotate-[18deg] bg-gradient-to-r from-transparent via-white/10 to-transparent transition-all duration-1000 group-hover:left-[140%]" />
@@ -976,12 +1017,14 @@ function AdminLoginContent() {
 
                 {/* Button Content */}
 
-                <span className="relative flex items-center gap-3">
+                <span className="relative flex min-w-0 items-center gap-3">
+
                   {googleLoading ? (
                     <>
                       {/* Loading Icon */}
 
                       <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-teal-400/20 bg-teal-400/5">
+
                         <svg
                           className="h-5 w-5 animate-spin text-teal-300"
                           xmlns="http://www.w3.org/2000/svg"
@@ -1003,11 +1046,12 @@ function AdminLoginContent() {
                             d="M21 12a9 9 0 01-9 9v-2.5a6.5 6.5 0 006.5-6.5H21z"
                           />
                         </svg>
+
                       </span>
 
                       {/* Loading Text */}
 
-                      <span className="flex items-center text-sm text-gray-200 sm:text-[15px]">
+                      <span className="flex min-w-0 items-center text-sm text-gray-200 sm:text-[15px]">
                         Connecting
                         <span className="dot-1 ml-0.5">.</span>
                         <span className="dot-2">.</span>
@@ -1050,14 +1094,16 @@ function AdminLoginContent() {
                           GOOGLE BUTTON TEXT
                       ================================================= */}
 
-                      <span className="flex flex-col items-start leading-tight">
-                        <span className="text-[9px] font-medium uppercase tracking-[0.18em] text-gray-500 transition-colors duration-300 group-hover:text-teal-400/70 sm:text-[10px]">
+                      <span className="flex min-w-0 flex-col items-start leading-tight">
+
+                        <span className="truncate text-[9px] font-medium uppercase tracking-[0.12em] text-gray-500 transition-colors duration-300 group-hover:text-teal-400/70 sm:text-[10px] sm:tracking-[0.18em]">
                           Secure authentication
                         </span>
 
-                        <span className="mt-0.5 text-sm font-semibold text-gray-100 transition-colors duration-300 group-hover:text-white sm:text-[15px]">
+                        <span className="mt-0.5 truncate text-sm font-semibold text-gray-100 transition-colors duration-300 group-hover:text-white sm:text-[15px]">
                           Continue with Google
                         </span>
+
                       </span>
 
                       {/* =================================================
@@ -1065,6 +1111,7 @@ function AdminLoginContent() {
                       ================================================= */}
 
                       <span className="ml-auto flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-white/[0.06] bg-white/[0.025] text-gray-500 transition-all duration-500 group-hover:translate-x-1 group-hover:border-teal-400/20 group-hover:bg-teal-400/5 group-hover:text-teal-300">
+
                         <svg
                           className="h-4 w-4"
                           fill="none"
@@ -1078,12 +1125,18 @@ function AdminLoginContent() {
                             d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
                           />
                         </svg>
+
                       </span>
+
                     </>
                   )}
+
                 </span>
+
               </button>
+
             </div>
+
           </div>
         </div>
       </div>
@@ -1094,17 +1147,19 @@ function AdminLoginContent() {
 
       {showPopup && (
         <div
-          className="popup-backdrop fixed inset-0 z-[9999] flex items-center justify-center bg-black/75 p-3 backdrop-blur-md sm:p-4"
+          className="popup-backdrop fixed inset-0 z-[9999] flex items-center justify-center overflow-y-auto bg-black/75 p-3 backdrop-blur-md sm:p-4"
           role="dialog"
           aria-modal="true"
           aria-labelledby="admin-popup-title"
         >
+
           {/* =================================================
               BACKGROUND GLOW
           ================================================= */}
 
           <div className="pointer-events-none absolute inset-0 overflow-hidden">
-            <div className="popup-glow absolute left-1/2 top-1/2 h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full bg-teal-500/10 blur-3xl sm:h-96 sm:w-96" />
+
+            <div className="popup-glow absolute left-1/2 top-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-teal-500/10 blur-3xl sm:h-96 sm:w-96" />
 
             <div className="absolute left-[10%] top-[15%] h-2 w-2 animate-ping rounded-full bg-teal-400/70" />
 
@@ -1121,6 +1176,7 @@ function AdminLoginContent() {
                 animationDelay: "1s",
               }}
             />
+
           </div>
 
           {/* =================================================
@@ -1128,15 +1184,18 @@ function AdminLoginContent() {
           ================================================= */}
 
           <div
-            className="popup-card relative w-full max-w-md overflow-hidden rounded-[24px] border border-gray-700/80 bg-[#090d14]/95 shadow-[0_25px_100px_rgba(0,0,0,0.65)] backdrop-blur-2xl sm:rounded-[28px]"
+            className="popup-card relative my-auto w-full max-w-md overflow-hidden rounded-[24px] border border-gray-700/80 bg-[#090d14]/95 shadow-[0_25px_100px_rgba(0,0,0,0.65)] backdrop-blur-2xl sm:rounded-[28px]"
             onClick={(e) => e.stopPropagation()}
           >
+
             {/* =================================================
                 TOP ANIMATED LINE
             ================================================= */}
 
             <div className="absolute left-0 right-0 top-0 h-[2px] overflow-hidden">
+
               <div className="popup-shimmer h-full w-1/2 bg-gradient-to-r from-transparent via-teal-400 to-transparent" />
+
             </div>
 
             {/* =================================================
@@ -1152,11 +1211,13 @@ function AdminLoginContent() {
             ================================================= */}
 
             <div className="relative px-5 py-7 text-center sm:px-9 sm:py-10">
+
               {/* =================================================
                   EMOJI
               ================================================= */}
 
-              <div className="popup-emoji mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full border border-teal-500/20 bg-teal-500/10 shadow-[0_0_45px_rgba(20,184,166,0.15)] sm:mb-5 sm:h-24 sm:w-24">
+              <div className="popup-emoji mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-full border border-teal-500/20 bg-teal-500/10 shadow-[0_0_45px_rgba(20,184,166,0.15)] sm:h-24 sm:w-24">
+
                 <span
                   className={`popup-emoji-face text-5xl leading-none sm:text-6xl ${
                     popupType === "UnauthorizedGmail"
@@ -1170,16 +1231,19 @@ function AdminLoginContent() {
                 >
                   {popup.emoji}
                 </span>
+
               </div>
 
               {/* =================================================
                   BADGE
               ================================================= */}
 
-              <div className="mb-3 inline-flex max-w-full items-center gap-2 rounded-full border border-teal-500/20 bg-teal-500/10 px-3 py-1.5 text-[9px] font-bold tracking-[0.14em] text-teal-300 sm:px-3.5 sm:text-xs sm:tracking-[0.18em]">
+              <div className="mb-3 inline-flex max-w-full items-center gap-2 rounded-full border border-teal-500/20 bg-teal-500/10 px-3 py-1.5 text-[9px] font-bold tracking-[0.12em] text-teal-300 sm:px-3.5 sm:text-[10px] sm:tracking-[0.18em]">
+
                 <span className="h-1.5 w-1.5 shrink-0 animate-pulse rounded-full bg-teal-400" />
 
-                <span className="break-words">{popup.badge}</span>
+                <span className="truncate">{popup.badge}</span>
+
               </div>
 
               {/* =================================================
@@ -1188,7 +1252,7 @@ function AdminLoginContent() {
 
               <h2
                 id="admin-popup-title"
-                className="text-xl font-extrabold leading-tight tracking-tight text-white sm:text-3xl"
+                className="text-xl font-extrabold leading-tight tracking-tight text-white sm:text-2xl md:text-3xl"
               >
                 {popup.title}
               </h2>
@@ -1197,7 +1261,7 @@ function AdminLoginContent() {
                   DESCRIPTION
               ================================================= */}
 
-              <p className="mt-4 text-xs leading-6 text-gray-300 sm:text-base sm:leading-7">
+              <p className="mt-4 text-xs leading-6 text-gray-300 sm:text-sm sm:leading-7 md:text-base">
                 {popup.description}
               </p>
 
@@ -1205,10 +1269,12 @@ function AdminLoginContent() {
                   FUNNY EXTRA
               ================================================= */}
 
-              <div className="mt-5 rounded-2xl border border-gray-800 bg-black/20 px-4 py-3.5 sm:px-4 sm:py-4">
-                <p className="text-[11px] leading-5 text-gray-400 sm:text-sm sm:leading-6">
+              <div className="mt-5 rounded-2xl border border-gray-800 bg-black/20 px-3.5 py-3.5 sm:px-4 sm:py-4">
+
+                <p className="text-[11px] leading-5 text-gray-400 sm:text-xs sm:leading-6 md:text-sm">
                   {popup.extra}
                 </p>
+
               </div>
 
               {/* =================================================
@@ -1220,7 +1286,9 @@ function AdminLoginContent() {
                 onClick={closePopup}
                 className="popup-button group relative mt-6 w-full overflow-hidden rounded-2xl bg-gradient-to-r from-teal-500 via-cyan-400 to-blue-500 p-[1.5px] shadow-lg shadow-teal-500/10 transition-all duration-300 hover:scale-[1.01] active:scale-[0.98] sm:mt-7"
               >
-                <span className="relative flex items-center justify-center gap-2 rounded-[14px] bg-[#0b0f17] px-4 py-3 text-xs font-bold tracking-wide text-teal-300 transition-all duration-300 group-hover:bg-transparent group-hover:text-white sm:px-5 sm:py-3.5 sm:text-base">
+
+                <span className="relative flex items-center justify-center gap-2 rounded-[14px] bg-[#0b0f17] px-4 py-3.5 text-xs font-bold tracking-wide text-teal-300 transition-all duration-300 group-hover:bg-transparent group-hover:text-white sm:px-5 sm:py-3.5 sm:text-sm md:text-base">
+
                   <span className="popup-button-icon">
                     {popupType === "GoogleAuthFailed" ||
                     popupType === "ServerError"
@@ -1229,16 +1297,19 @@ function AdminLoginContent() {
                   </span>
 
                   {popup.button}
+
                 </span>
+
               </button>
 
               {/* =================================================
                   FOOTER
               ================================================= */}
 
-              <p className="mt-4 text-[8px] uppercase tracking-[0.16em] text-gray-600 sm:mt-5 sm:text-[10px] sm:tracking-[0.2em]">
+              <p className="mt-4 text-[8px] uppercase tracking-[0.14em] text-gray-600 sm:mt-5 sm:text-[9px] sm:tracking-[0.2em] md:text-[10px]">
                 Private Admin Area - No Guests Allowed 🔐
               </p>
+
             </div>
           </div>
         </div>
@@ -1256,13 +1327,16 @@ export default function AdminLogin() {
     <Suspense
       fallback={
         <div className="flex min-h-screen items-center justify-center bg-[#05070b] px-4 text-teal-400">
+
           <div className="flex items-center gap-3 text-sm">
+
             <svg
               className="h-5 w-5 animate-spin"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
             >
+
               <circle
                 className="opacity-20"
                 cx="12"
@@ -1277,10 +1351,13 @@ export default function AdminLogin() {
                 fill="currentColor"
                 d="M21 12a9 9 0 01-9 9v-2.5a6.5 6.5 0 006.5-6.5H21z"
               />
+
             </svg>
 
             Loading admin login...
+
           </div>
+
         </div>
       }
     >

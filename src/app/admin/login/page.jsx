@@ -27,13 +27,40 @@ function AdminLoginContent() {
   useEffect(() => {
     const errorType = searchParams.get("error");
 
-    if (!errorType) {
-      return;
+    if (errorType) {
+      setPopupType(errorType);
+      setShowPopup(true);
+      setGoogleLoading(false);
     }
 
-    setPopupType(errorType);
-    setShowPopup(true);
-    setGoogleLoading(false);
+    /*
+      IMPORTANT:
+
+      When the user clicks "Continue with Google", googleLoading
+      becomes true.
+
+      If the user goes to Google and then presses browser Back,
+      the browser can restore this page from bfcache instead of
+      mounting the component again.
+
+      In that situation the old googleLoading state can remain true,
+      which causes "Connecting..." to stay visible.
+
+      pageshow handles browser restore / bfcache.
+      popstate handles browser Back/Forward navigation.
+    */
+
+    const resetGoogleLoading = () => {
+      setGoogleLoading(false);
+    };
+
+    window.addEventListener("pageshow", resetGoogleLoading);
+    window.addEventListener("popstate", resetGoogleLoading);
+
+    return () => {
+      window.removeEventListener("pageshow", resetGoogleLoading);
+      window.removeEventListener("popstate", resetGoogleLoading);
+    };
   }, [searchParams]);
 
   /* =========================================================
@@ -964,7 +991,9 @@ function AdminLoginContent() {
                       </svg>
                     )}
 
-                    {loading ? "Verifying..." : "লগইন কইরা ফালাও, কেউ দেখবো না!"}
+                    {loading
+                      ? "Verifying..."
+                      : "লগইন কইরা ফালাও, কেউ দেখবো না!"}
 
                   </span>
 

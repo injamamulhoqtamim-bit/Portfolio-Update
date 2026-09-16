@@ -6,6 +6,7 @@ export const runtime = "nodejs";
 
 export async function GET(request) {
   const url = new URL(request.url);
+
   const code = url.searchParams.get("code");
 
   /* =========================================================
@@ -26,10 +27,17 @@ export async function GET(request) {
        2. CHECK REQUIRED ENV VARIABLES
     ========================================================= */
 
-    const googleClientId = process.env.GOOGLE_CLIENT_ID;
-    const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
-    const adminEmail = process.env.ADMIN_EMAIL;
-    const adminSecret = process.env.ADMIN_SECRET;
+    const googleClientId =
+      process.env.GOOGLE_CLIENT_ID;
+
+    const googleClientSecret =
+      process.env.GOOGLE_CLIENT_SECRET;
+
+    const adminEmail =
+      process.env.ADMIN_EMAIL;
+
+    const adminSecret =
+      process.env.ADMIN_SECRET;
 
     if (
       !googleClientId ||
@@ -51,12 +59,32 @@ export async function GET(request) {
 
     /* =========================================================
        3. GOOGLE REDIRECT URI
+       
+       Priority:
+       1. NEXT_PUBLIC_SITE_URL
+       2. Current request origin
+       
+       Local:
+       http://localhost:3000/api/auth/google/callback
+       
+       Production:
+       https://injamamul.vercel.app/api/auth/google/callback
     ========================================================= */
 
-    const redirectUri = `${
+    const siteUrl =
       process.env.NEXT_PUBLIC_SITE_URL ||
-      "http://localhost:3000"
-    }/api/auth/google/callback`;
+      request.nextUrl.origin;
+
+    const cleanSiteUrl =
+      siteUrl.replace(/\/$/, "");
+
+    const redirectUri =
+      `${cleanSiteUrl}/api/auth/google/callback`;
+
+    console.log(
+      "🔐 Google Callback Redirect URI:",
+      redirectUri
+    );
 
     /* =========================================================
        4. EXCHANGE GOOGLE CODE FOR ACCESS TOKEN
@@ -66,22 +94,34 @@ export async function GET(request) {
       "https://oauth2.googleapis.com/token",
       {
         method: "POST",
+
         headers: {
           "Content-Type":
             "application/x-www-form-urlencoded",
         },
+
         body: new URLSearchParams({
           code,
-          client_id: googleClientId,
-          client_secret: googleClientSecret,
-          redirect_uri: redirectUri,
-          grant_type: "authorization_code",
+
+          client_id:
+            googleClientId,
+
+          client_secret:
+            googleClientSecret,
+
+          redirect_uri:
+            redirectUri,
+
+          grant_type:
+            "authorization_code",
         }),
+
         cache: "no-store",
       }
     );
 
-    const tokenData = await resToken.json();
+    const tokenData =
+      await resToken.json();
 
     if (
       !resToken.ok ||
@@ -108,13 +148,16 @@ export async function GET(request) {
       "https://www.googleapis.com/oauth2/v1/userinfo?alt=json",
       {
         headers: {
-          Authorization: `Bearer ${tokenData.access_token}`,
+          Authorization:
+            `Bearer ${tokenData.access_token}`,
         },
+
         cache: "no-store",
       }
     );
 
-    const userData = await resUser.json();
+    const userData =
+      await resUser.json();
 
     if (
       !resUser.ok ||
@@ -137,25 +180,26 @@ export async function GET(request) {
        6. AUTHORIZE ONLY ONE ADMIN GMAIL
     ========================================================= */
 
-    const googleEmail = String(
-      userData.email
-    )
-      .trim()
-      .toLowerCase();
+    const googleEmail =
+      String(userData.email)
+        .trim()
+        .toLowerCase();
 
-    const authorizedEmail = String(
-      adminEmail
-    )
-      .trim()
-      .toLowerCase();
+    const authorizedEmail =
+      String(adminEmail)
+        .trim()
+        .toLowerCase();
 
-    /* ---------------------------------------------------------
-       IMPORTANT:
-       Only ADMIN_EMAIL is allowed.
-       Any other Google account is rejected.
-    --------------------------------------------------------- */
+    /*
+     * IMPORTANT:
+     *
+     * Only ADMIN_EMAIL is allowed.
+     * Any other Google account will be rejected.
+     */
 
-    if (googleEmail !== authorizedEmail) {
+    if (
+      googleEmail !== authorizedEmail
+    ) {
       console.warn(
         "🚫 Unauthorized Google Admin Login Attempt:",
         googleEmail
@@ -173,41 +217,59 @@ export async function GET(request) {
        7. CREATE ADMIN JWT
     ========================================================= */
 
-    const secretKey = new TextEncoder().encode(
-      adminSecret
-    );
+    const secretKey =
+      new TextEncoder().encode(
+        adminSecret
+      );
 
-    const adminToken = await new SignJWT({
-      email: googleEmail,
-      role: "admin",
-      name: userData.name || "Admin",
-      picture: userData.picture || "",
-      authProvider: "google",
-    })
-      .setProtectedHeader({
-        alg: "HS256",
-        typ: "JWT",
+    const adminToken =
+      await new SignJWT({
+        email: googleEmail,
+
+        role: "admin",
+
+        name:
+          userData.name ||
+          "Admin",
+
+        picture:
+          userData.picture ||
+          "",
+
+        authProvider:
+          "google",
       })
-      .setIssuedAt()
-      .setExpirationTime("8h")
-      .sign(secretKey);
+        .setProtectedHeader({
+          alg: "HS256",
+          typ: "JWT",
+        })
+        .setIssuedAt()
+        .setExpirationTime("8h")
+        .sign(secretKey);
 
     /* =========================================================
        8. SET ADMIN COOKIE
     ========================================================= */
 
-    const cookieStore = await cookies();
+    const cookieStore =
+      await cookies();
 
     cookieStore.set(
       "admin_token",
       adminToken,
       {
         httpOnly: true,
+
         secure:
-          process.env.NODE_ENV === "production",
+          process.env.NODE_ENV ===
+          "production",
+
         sameSite: "lax",
+
         path: "/",
-        maxAge: 60 * 60 * 8,
+
+        maxAge:
+          60 * 60 * 8,
       }
     );
 
@@ -220,10 +282,15 @@ export async function GET(request) {
       "",
       {
         httpOnly: true,
+
         secure:
-          process.env.NODE_ENV === "production",
+          process.env.NODE_ENV ===
+          "production",
+
         sameSite: "lax",
+
         path: "/",
+
         maxAge: 0,
       }
     );

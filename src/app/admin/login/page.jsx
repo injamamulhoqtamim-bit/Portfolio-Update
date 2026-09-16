@@ -155,7 +155,7 @@ function AdminLoginContent() {
           "This Gmail isn't on the VIP list. This is my admin panel, not a public Wi-Fi hotspot!",
         extra:
           "Only the owner's Gmail gets the admin pass. Go eat some muri and come back with the right one. 🍚🤣",
-        button: "ঠিক আছে বস, মুরি খাইতে যাই! 😂",
+        button: "বের হওয়ার রাস্তাটা এইদিকে, ভাগ!😂",
       };
     }
 
